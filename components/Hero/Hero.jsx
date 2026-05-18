@@ -110,7 +110,18 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
         >
-          <TerminalWindow />
+          <div className={styles.terminalScene}>
+            <div className={styles.termBg1} aria-hidden="true">
+              <TerminalWindow initialSeq={1} initialLine={5} />
+            </div>
+            <div className={styles.termBg2} aria-hidden="true">
+              <TerminalWindow initialSeq={2} initialLine={3} />
+            </div>
+            <div className={styles.termMain}>
+              <TerminalWindow />
+            </div>
+            <div className={styles.vignette} aria-hidden="true" />
+          </div>
         </motion.div>
       </div>
     </section>

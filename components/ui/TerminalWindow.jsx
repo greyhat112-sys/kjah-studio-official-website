@@ -54,9 +54,12 @@ const sequences = [
   },
 ];
 
-export default function TerminalWindow() {
-  const [seqIndex, setSeqIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(0);
+export default function TerminalWindow({ initialSeq = 0, initialLine = 0 }) {
+  const [seqIndex, setSeqIndex] = useState(initialSeq % sequences.length);
+  const [visibleCount, setVisibleCount] = useState(() => {
+    const s = sequences[initialSeq % sequences.length];
+    return Math.min(initialLine, s.lines.length);
+  });
 
   useEffect(() => {
     const current = sequences[seqIndex];

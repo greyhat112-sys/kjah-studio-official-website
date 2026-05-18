@@ -4,6 +4,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.5] — 2026-05-19
+
+### Changed
+- **Hero terminal — multi-window depth effect** — replaced single terminal with a layered scene of 3 terminals. Background terminals (`initialSeq`, `initialLine` props) start mid-execution to simulate active parallel builds. Foreground terminal sits at z-index 3; background ones are at 0.18/0.13 opacity with `filter: blur(1.5–2px)`, offset off-screen edges. A four-sided linear-gradient vignette (z-index 4) fades all edges to `--black`, unifying the scene.
+- `TerminalWindow` gains `initialSeq` and `initialLine` props so instances can start at any point in any sequence.
+
+---
+
 ## [1.0.4] — 2026-05-19
 
 ### Added
