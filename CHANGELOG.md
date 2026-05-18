@@ -4,6 +4,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.6] — 2026-05-19
+
+### Fixed
+- **TerminalWindow CSS module** — rewrote `TerminalWindow.module.css` to match the JSX class names introduced in 1.0.5. Old names (`.titleBar`, `.trafficLights`, `.titleText`, `.cursorLine`, `.cmdText`, `.lineText`) replaced with the new names used in JSX (`.header`, `.dot`, `.label`, `.cursorRow`, `.lineCmd`, `.rest`, `.tag`, `.ok`, `.tagDone`, `.restDone`, `.lineDone`).
+- **TerminalWindow prop API** — reconciled prop mismatch left mid-refactor. Hero was passing `initialSeq` / `initialLine` (v1.0.5 multi-window design) but the component had been partially updated to `agentId` / `startDelay`. Restored `initialSeq` / `initialLine` as the canonical props. Background terminals with `initialSeq` pinned loop their own sequence; the foreground terminal (no props) auto-cycles through all four agents.
+
+---
+
 ## [1.0.5] — 2026-05-19
 
 ### Changed
