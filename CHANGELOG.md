@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.3] — 2026-05-19
+
+### Added
+- **Hero stat counter animation on load** — Numbers in the hero stats row (4, 6, 100%, 10+) now count up from 0 when the page loads. Counter.jsx gains an optional `delay` prop; Hero passes `delay={1.4}` to sync the count-start with the stats fadeUp animation (1.3s delay) so numbers begin counting right as they become visible.
+
+---
+
 ## [1.0.2] — 2026-05-19
 
 ### Fixed
