@@ -1,0 +1,47 @@
+.grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: var(--sp-md); margin-top: var(--sp-3xl);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: var(--sp-xl);
+  display: flex; flex-direction: column; gap: var(--sp-lg);
+}
+
+.stars { display: flex; gap: 3px; }
+.stars span { font-size: 12px; color: var(--kjah-amber); }
+
+.quote {
+  font-size: 14px; line-height: 1.75;
+  color: var(--text-sec); flex: 1;
+}
+
+.author {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--border);
+}
+
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-vis);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.initials {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--text-sec); line-height: 1;
+}
+
+.name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500; color: var(--text-pri);
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .grid { grid-template-columns: 1fr; } }

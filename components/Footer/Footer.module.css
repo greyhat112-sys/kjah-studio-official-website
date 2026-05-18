@@ -1,0 +1,26 @@
+.footer { border-top: 1px solid var(--border); padding: var(--sp-xl) 0; }
+
+.inner {
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: var(--sp-md); max-width: 1200px;
+  margin: 0 auto; padding: 0 var(--sp-xl);
+}
+
+.brand { display: flex; align-items: center; gap: var(--sp-sm); }
+
+.copy {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.04em; color: var(--text-off);
+}
+
+.nav { display: flex; list-style: none; gap: var(--sp-xl); }
+
+.nav a {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-off);
+  transition: color 200ms ease-out;
+}
+
+.nav a:hover { color: var(--text-sec); }

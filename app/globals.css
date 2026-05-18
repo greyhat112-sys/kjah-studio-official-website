@@ -1,0 +1,133 @@
+/* ── TOKENS ─────────────────────────────── */
+:root {
+  --black:          #000000;
+  --surface:        #111111;
+  --surface-raised: #1A1A1A;
+  --border:         #222222;
+  --border-vis:     #333333;
+  --text-off:       #666666;
+  --text-sec:       #999999;
+  --text-pri:       #E8E8E8;
+  --text-disp:      #FFFFFF;
+  --kjah-cyan:      #4DDFF0;
+  --kjah-amber:     #FDD03C;
+  --kjah-pink:      #E05070;
+  --sp-xs: 4px; --sp-sm: 8px; --sp-md: 16px;
+  --sp-lg: 24px; --sp-xl: 32px; --sp-2xl: 48px;
+  --sp-3xl: 64px; --sp-4xl: 96px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --black:          #F5F5F5;
+    --surface:        #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border:         #E8E8E8;
+    --border-vis:     #CCCCCC;
+    --text-off:       #999999;
+    --text-sec:       #666666;
+    --text-pri:       #1A1A1A;
+    --text-disp:      #000000;
+  }
+}
+
+/* ── RESET ──────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (hover: hover) {
+  html, a, button, [role="button"] { cursor: none !important; }
+}
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background: var(--black);
+  color: var(--text-pri);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; }
+
+/* ── LAYOUT ─────────────────────────────── */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--sp-xl);
+}
+
+/* ── BUTTONS ────────────────────────────── */
+.btn-p {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: #000; background: var(--kjah-cyan);
+  border: none; border-radius: 999px;
+  padding: 13px 28px; display: inline-block;
+  cursor: pointer; transition: opacity 200ms ease-out;
+}
+.btn-p:hover { opacity: 0.8; }
+
+.btn-s {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-sec); background: transparent;
+  border: 1px solid var(--border-vis); border-radius: 999px;
+  padding: 13px 28px; display: inline-block;
+  cursor: pointer; transition: all 200ms ease-out;
+}
+.btn-s:hover { color: var(--text-disp); border-color: var(--text-sec); }
+
+/* ── SECTION BASE ───────────────────────── */
+.section {
+  padding: var(--sp-4xl) 0;
+  border-top: 1px solid var(--border);
+}
+.section-bg {
+  position: relative; overflow: hidden;
+}
+.section-bg::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, var(--border-vis) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.6;
+}
+.section-bg .wrap { position: relative; z-index: 1; }
+.s-orb {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70vw; max-width: 860px; height: 70vw; max-height: 860px;
+  background-image: url('/assets/brand/gradient-orb.png');
+  background-size: contain; background-repeat: no-repeat;
+  background-position: center;
+  filter: blur(80px);
+  opacity: 0.12; pointer-events: none; z-index: 0;
+}
+.s-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-off);
+  margin-bottom: var(--sp-lg);
+}
+.s-head {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(32px, 4vw, 48px); font-weight: 700;
+  line-height: 1.05; letter-spacing: -0.02em;
+  color: var(--text-disp); margin-bottom: var(--sp-md);
+}
+.s-body {
+  font-size: 16px; line-height: 1.7;
+  color: var(--text-sec); max-width: 520px;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--text-off);
+  border: 1px solid var(--border-vis);
+  border-radius: 4px; padding: 3px 8px;
+}
+
+@media (max-width: 540px) {
+  .wrap { padding: 0 var(--sp-md); }
+}

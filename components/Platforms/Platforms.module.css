@@ -1,0 +1,34 @@
+.platforms {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: var(--sp-md) 0;
+}
+
+.inner {
+  display: flex; align-items: center;
+  justify-content: center; gap: var(--sp-2xl);
+  flex-wrap: wrap; max-width: 1200px;
+  margin: 0 auto; padding: 0 var(--sp-xl);
+}
+
+.label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-off);
+  white-space: nowrap;
+}
+
+.div { width: 1px; height: 12px; background: var(--border-vis); }
+
+.item {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-off);
+  white-space: nowrap; transition: color 200ms ease-out;
+}
+
+.item:hover { color: var(--text-sec); }
+
+@media (max-width: 540px) {
+  .inner { gap: var(--sp-lg); }
+}

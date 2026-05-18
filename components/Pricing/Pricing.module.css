@@ -1,0 +1,83 @@
+.grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md); margin-top: var(--sp-3xl); max-width: 860px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-vis);
+  border-radius: 12px; padding: var(--sp-xl);
+  position: relative;
+}
+
+.cardAmber { border-color: var(--kjah-amber); }
+
+.badge {
+  position: absolute; top: -13px; left: var(--sp-xl);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--kjah-amber); color: #000;
+  padding: 4px 12px; border-radius: 999px;
+}
+
+.tier {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: var(--sp-lg);
+}
+
+.tierCyan  { color: var(--kjah-cyan); }
+.tierAmber { color: var(--kjah-amber); }
+
+.price {
+  font-family: 'Doto', 'Space Mono', monospace;
+  font-size: 52px; font-weight: 700;
+  color: var(--text-disp); letter-spacing: -0.01em; line-height: 1;
+}
+
+.price sup { font-size: 24px; vertical-align: super; letter-spacing: 0; }
+
+.note {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-off); margin-top: 6px; margin-bottom: var(--sp-xl);
+}
+
+.div { border: none; border-top: 1px solid var(--border); margin-bottom: var(--sp-lg); }
+
+.features {
+  list-style: none; display: flex; flex-direction: column;
+  gap: var(--sp-md); margin-bottom: var(--sp-xl);
+}
+
+.feat { display: flex; flex-direction: column; gap: 6px; }
+
+.featRow { display: flex; justify-content: space-between; align-items: center; }
+
+.featName {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--text-sec);
+}
+
+.featVal {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.04em; color: var(--text-pri);
+}
+
+.segBar { display: flex; gap: 2px; height: 4px; }
+.seg { flex: 1; height: 4px; background: var(--border); }
+.cyan  { background: var(--kjah-cyan); }
+.amber { background: var(--kjah-amber); }
+
+.incl {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+.inclCyan  { color: var(--kjah-cyan); }
+.inclAmber { color: var(--kjah-amber); }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; max-width: 480px; }
+}
