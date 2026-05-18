@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.2] — 2026-05-19
+
+### Fixed
+- **Hero headline word-break** — "BUILDS." was splitting as "BUI / LDS." on narrow viewports. Replaced single `chars` array with `lines = ['SMART', 'BUILDS.']`; each word now renders as its own `display: block` container with `white-space: nowrap`, so the full word always stays on one line. Character stagger animation preserved.
+
+### Meta
+- CHANGELOG and memory files now auto-updated and pushed after every change (standing workflow rule).
+
+---
+
 ## [1.0.0] — 2026-05-19
 
 ### Initial Release — Next.js Migration & Full Build

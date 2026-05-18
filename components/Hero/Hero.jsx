@@ -5,7 +5,7 @@ import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
 import styles from './Hero.module.css';
 
-const chars = 'SMART BUILDS.'.split('');
+const lines = ['SMART', 'BUILDS.'];
 
 const containerVariants = {
   hidden: {},
@@ -53,14 +53,18 @@ export default function Hero() {
             animate="visible"
             aria-label="Smart Builds."
           >
-            {chars.map((char, i) => (
-              <motion.span
-                key={i}
-                variants={charVariants}
-                style={{ display: char === ' ' ? 'inline' : 'inline-block', whiteSpace: 'pre' }}
-              >
-                {char}
-              </motion.span>
+            {lines.map((word, wi) => (
+              <div key={wi} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+                {word.split('').map((char, ci) => (
+                  <motion.span
+                    key={ci}
+                    variants={charVariants}
+                    style={{ display: 'inline-block' }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </div>
             ))}
           </motion.h1>
 
