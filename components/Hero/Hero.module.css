@@ -87,13 +87,7 @@
 }
 
 .right {
-  display: flex; align-items: flex-start; justify-content: center;
-  align-self: start; margin-top: -48px;
-}
-
-.phone {
-  width: 130%; max-width: 740px;
-  height: auto; object-fit: contain; margin-right: -15%;
+  display: flex; align-items: center; justify-content: flex-end;
 }
 
 @media (max-width: 900px) {

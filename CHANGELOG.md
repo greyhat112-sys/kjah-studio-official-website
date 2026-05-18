@@ -4,6 +4,15 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.4] — 2026-05-19
+
+### Added
+- **TerminalWindow component** (`components/ui/TerminalWindow.jsx`) — replaces the static hero image with an animated terminal window. Cycles through three client build sequences (fitness coaching, e-commerce, coaching academy), revealing lines one-by-one with realistic timing delays. Features: macOS-style traffic-light title bar, cyan status tags (`[SCAN]`, `[BUILD]`, `[FUNNL]`, `[AUTO]`, `[INTG]`, `[DEPLOY]`), amber metric values, cyan LIVE status, blinking cursor, AnimatePresence fade between sequences every ~5s.
+- Removed static hero image (`next/image`) from Hero — replaced with `TerminalWindow`.
+- Cleaned up `Hero.module.css`: removed `.phone` class and image-specific offsets on `.right`.
+
+---
+
 ## [1.0.3] — 2026-05-19
 
 ### Added

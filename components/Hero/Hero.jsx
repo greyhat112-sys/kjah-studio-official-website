@@ -1,8 +1,8 @@
 'use client';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
+import TerminalWindow from '@/components/ui/TerminalWindow';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
@@ -110,14 +110,7 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
         >
-          <Image
-            src="/assets/brand/hero-image.png"
-            alt="KJAH Studio digital builds"
-            width={740}
-            height={600}
-            className={styles.phone}
-            priority
-          />
+          <TerminalWindow />
         </motion.div>
       </div>
     </section>
