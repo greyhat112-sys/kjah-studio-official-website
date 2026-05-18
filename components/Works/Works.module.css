@@ -20,7 +20,9 @@
   overflow: hidden; transition: border-color 200ms ease-out;
 }
 
-.card:hover { border-color: var(--kjah-cyan); }
+@media (hover: hover) {
+  .card:hover { border-color: var(--kjah-cyan); }
+}
 
 .thumb {
   aspect-ratio: 16/9;
@@ -35,9 +37,11 @@
   transition: transform 500ms ease-out, filter 500ms ease-out;
 }
 
-.card:hover .img {
-  transform: scale(1.06);
-  filter: brightness(0.45);
+@media (hover: hover) {
+  .card:hover .img {
+    transform: scale(1.06);
+    filter: brightness(0.45);
+  }
 }
 
 .overlay {
@@ -49,7 +53,9 @@
   transition: opacity 300ms ease-out;
 }
 
-.card:hover .overlay { opacity: 1; }
+@media (hover: hover) {
+  .card:hover .overlay { opacity: 1; }
+}
 
 .overlayNiche {
   font-family: 'Space Mono', monospace;

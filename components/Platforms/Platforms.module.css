@@ -15,7 +15,6 @@
   font-family: 'Space Mono', monospace;
   font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-off);
-  white-space: nowrap;
 }
 
 .div { width: 1px; height: 12px; background: var(--border-vis); }
@@ -24,11 +23,12 @@
   font-family: 'Space Mono', monospace;
   font-size: 11px; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--text-off);
-  white-space: nowrap; transition: color 200ms ease-out;
+  transition: color 200ms ease-out;
 }
 
 .item:hover { color: var(--text-sec); }
 
 @media (max-width: 540px) {
-  .inner { gap: var(--sp-lg); }
+  .inner { gap: var(--sp-sm) var(--sp-lg); padding: var(--sp-sm) var(--sp-md); }
+  .div { display: none; }
 }

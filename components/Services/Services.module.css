@@ -15,14 +15,14 @@
 
 .num {
   font-family: 'Doto', 'Space Mono', monospace;
-  font-size: 64px; font-weight: 700;
+  font-size: clamp(40px, 8vw, 64px); font-weight: 700;
   color: var(--border-vis); line-height: 1;
   letter-spacing: -0.01em; margin-bottom: var(--sp-lg);
 }
 
 .title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 22px; font-weight: 700;
+  font-size: clamp(18px, 3vw, 22px); font-weight: 700;
   letter-spacing: -0.01em; color: var(--text-disp);
   margin-bottom: var(--sp-sm);
 }
@@ -36,4 +36,8 @@
   .grid { grid-template-columns: 1fr; }
   .card { border-right: none; border-bottom: 1px solid var(--border); }
   .card:last-child { border-bottom: none; }
+}
+
+@media (max-width: 540px) {
+  .card { padding: var(--sp-xl) var(--sp-md); }
 }

@@ -100,8 +100,14 @@
   .inner { grid-template-columns: 1fr; }
   .right { display: none; }
   .orb { display: none; }
+  .actions { margin-bottom: var(--sp-2xl); }
 }
 
 @media (max-width: 540px) {
   .inner { padding: var(--sp-3xl) var(--sp-md); }
+  .display { font-size: clamp(48px, 14vw, 72px); }
+  .hl { font-size: 16px; }
+  .stats { grid-template-columns: 1fr 1fr; gap: var(--sp-lg) 0; }
+  .statVal { font-size: 28px; }
+  .statLbl { font-size: 9px; }
 }

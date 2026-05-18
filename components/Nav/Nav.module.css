@@ -59,4 +59,5 @@
 
 @media (max-width: 900px) {
   .links { display: none; }
+  .inner { padding: 0 var(--sp-md); }
 }

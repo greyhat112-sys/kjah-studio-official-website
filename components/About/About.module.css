@@ -48,5 +48,10 @@
 }
 
 @media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
+  .layout { grid-template-columns: 1fr; gap: var(--sp-2xl); }
+}
+
+@media (max-width: 540px) {
+  .teamGrid { grid-template-columns: 1fr; }
+  .layout { margin-top: var(--sp-2xl); }
 }

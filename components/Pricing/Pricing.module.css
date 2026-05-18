@@ -31,7 +31,7 @@
 
 .price {
   font-family: 'Doto', 'Space Mono', monospace;
-  font-size: 52px; font-weight: 700;
+  font-size: clamp(36px, 8vw, 52px); font-weight: 700;
   color: var(--text-disp); letter-spacing: -0.01em; line-height: 1;
 }
 
@@ -80,4 +80,9 @@
 
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; max-width: 480px; }
+}
+
+@media (max-width: 540px) {
+  .card { padding: var(--sp-lg) var(--sp-md); }
+  .grid { max-width: 100%; }
 }
