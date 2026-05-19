@@ -35,7 +35,8 @@ components/
     AnimatedSection.jsx — scroll-triggered fade+slide reveal wrapper
     Counter.jsx         — animated number counter
     MagneticButton.jsx  — cursor-following magnetic pull on hover
-    TerminalWindow.jsx  — animated terminal (hero right column)
+    TerminalWindow.jsx  — animated terminal (unused in hero; kept for reuse)
+    TerminalTile.jsx    — compact terminal tile for the hero 2×3 grid (Blackbox-style)
 ```
 
 ## DotGrid — how it works
@@ -46,6 +47,16 @@ components/
 - Perlin noise is added to displaced dots for organic jitter.
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
+
+## DotGrid visibility — which sections show it
+The canvas sits behind all content. Sections block it by declaring `background: var(--black)`. Current state:
+- **Dot grid visible:** Hero, Works
+- **Solid black background:** Platforms, Services, About, Pricing, Testimonials, CTA, Footer
+- Controlled via `background: var(--black)` on the global `.section` class + local root classes. Works uses `className="section section-transparent"` to opt out.
+- **Rule:** if you add a new section and don't want the dots showing, ensure its root element has `background: var(--black)`.
+
+## Hero terminal grid
+`components/ui/TerminalTile.jsx` — 6 compact tiles in a 2×3 grid covering the right half of the hero viewport (`termGridWrapper`: `position: absolute; left: 50%; right: 0; top/bottom: 0`). Agents: WEBSITE, FUNNEL, AUTOMATION, DEPLOY, CRM, EMAIL. Each tile pins to its `seqIndex`, animates lines in, status dot cyan → amber on done, auto-restarts. Stagger delays prevent all tiles animating in sync. Hidden at ≤900px.
 
 ## Stacking context
 - `DotGrid` canvas: `z-index: 0` (fixed, behind everything)

@@ -4,6 +4,31 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.9] — 2026-05-19
+
+### Changed
+- **Section backgrounds** — All sections except Hero and Works now carry an explicit `background: var(--black)` so the interactive DotGrid canvas only shows through the Hero and Works (client portfolio) sections. Sections affected: Platforms, Services, About, Pricing, Testimonials, CTA, Footer.
+- `app/globals.css` — added `background: var(--black)` to `.section` (covers Services, About, Pricing, Testimonials) and a `.section-transparent` utility override.
+- `components/Works/Works.jsx` — section uses `className="section section-transparent"` to stay see-through against the canvas.
+- `components/Platforms/Platforms.module.css`, `components/CTA/CTA.module.css`, `components/Footer/Footer.module.css` — `background: var(--black)` added to each root class.
+
+---
+
+## [1.0.8] — 2026-05-19
+
+### Changed
+- **Hero terminal scene → Blackbox-style 2-column grid** — replaced the single layered `TerminalWindow` depth effect with a 2×3 grid of compact `TerminalTile` components covering the right half of the hero viewport, inspired by Blackbox AI's hero section.
+
+### Added
+- `components/ui/TerminalTile.jsx` — compact terminal tile component. Six agents run in parallel (WEBSITE, FUNNEL, AUTOMATION, DEPLOY, CRM, EMAIL) with staggered `startDelay` offsets so they're always at different points in their sequence. Status dot: cyan while running, shifts to amber on sequence complete, then auto-restarts after 3.2s pause.
+- `components/ui/TerminalTile.module.css` — flat grid-cell style: no border-radius, 10px Space Mono, compact header with right-aligned status dot.
+
+### Hero layout changes
+- `components/Hero/Hero.jsx` — removed `terminalScene` / `TerminalWindow` imports. Terminal grid is now a `motion.div` (`termGridWrapper`) positioned `position: absolute; left: 50%; right: 0; top: 0; bottom: 0` inside the hero, rendering 6 `TerminalTile` instances with `TILE_DELAYS = [0, 700, 1400, 350, 1050, 1750]ms`.
+- `components/Hero/Hero.module.css` — removed `.terminalScene`, `.termMain`, `.termBg1`, `.termBg2`, `.vignette`. Added `.termGridWrapper`, `.termGrid` (2-col × 3-row CSS grid filling full height), `.termGridVignette` (left + top/bottom gradient fades). `.inner` simplified to single-column with `max-width: 560px` on `.left`.
+
+---
+
 ## [1.0.7] — 2026-05-19
 
 ### Added
