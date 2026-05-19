@@ -4,6 +4,23 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.0.7] — 2026-05-19
+
+### Added
+- **Interactive DotGrid component** (`components/ui/DotGrid.jsx`) — replaces the static CSS `radial-gradient` dot pattern with a canvas-based implementation using physics ported 1:1 from Google Stitch's production source. Algorithm: lerp factor `E=0.035` (each frame dots move 3.5% toward target — produces the signature float/lag), repel radius `W=725px`, cubic displacement easing (`proximity³ × T`), Perlin noise layered on displaced dots for organic jitter, colour shift from `--border-vis` grey toward `--kjah-cyan` / `--kjah-amber` as proximity increases, opacity fade near bottom of viewport and near cursor. Canvas is `position: fixed` full-viewport; dots are page-anchored via `scrollY % S` phase offset. Per-dot state stores displacement `dx/dy` rather than absolute positions so scroll doesn't corrupt lerp continuity.
+- `components/ui/DotGrid.module.css` — `position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.6`.
+
+### Changed
+- `app/layout.js` — `<DotGrid />` inserted before `<Cursor />`; `{children}` wrapped in `<div className="page-content">` (z-index: 1) so page content sits above the canvas layer.
+- `app/globals.css` — removed `.section-bg::before` static dot grid. Added `.page-content { position: relative; z-index: 1; }`.
+- `components/Hero/Hero.jsx` — removed `<div className={styles.dots} />` element.
+- `components/Hero/Hero.module.css` — removed `.dots` rule.
+
+### Dependencies
+- `puppeteer` added as devDependency (used during development to screenshot pages; not used at runtime).
+
+---
+
 ## [1.0.6] — 2026-05-19
 
 ### Fixed

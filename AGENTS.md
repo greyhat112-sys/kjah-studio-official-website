@@ -3,3 +3,68 @@
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
+
+---
+
+# KJAH Studio — Codebase Notes for Agents
+
+## Stack
+- **Next.js 16 App Router** · **React 19** · **Framer Motion 12** · **CSS Modules** (no Tailwind)
+- Single-page site — all sections composed in `app/page.js`
+
+## Architecture
+```
+app/
+  layout.js       — root layout: fonts, DotGrid, Cursor, page-content wrapper
+  page.js         — composes all 10 section components
+  globals.css     — design tokens, reset, shared utilities
+components/
+  Nav/            — fixed nav, active section tracking, scroll state
+  Hero/           — two-column hero, Doto character reveal, TerminalWindow
+  Platforms/      — platform logo bar
+  Services/       — 3-card service grid
+  About/          — two-column about + glassmorphism team cards
+  Pricing/        — two-tier pricing with segmented progress bars
+  Works/          — 18-card works grid with hover overlay
+  Testimonials/   — 5-card testimonial grid
+  CTA/            — final call-to-action
+  Footer/         — logo + nav links
+  ui/
+    Cursor.jsx          — custom cyan cursor with lagging ring (z-index 9999/9998)
+    DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
+    AnimatedSection.jsx — scroll-triggered fade+slide reveal wrapper
+    Counter.jsx         — animated number counter
+    MagneticButton.jsx  — cursor-following magnetic pull on hover
+    TerminalWindow.jsx  — animated terminal (hero right column)
+```
+
+## DotGrid — how it works
+`components/ui/DotGrid.jsx` is a `position: fixed` canvas covering the full viewport. Physics are ported 1:1 from Google Stitch's production source:
+- Each dot stores a lerped **displacement** (`dx`, `dy`) from its grid origin — not an absolute position.
+- Every frame: compute target displacement (zero when no cursor, repel vector when cursor nearby), then `dot.dx += (target - dot.dx) * 0.035`. The `0.035` lerp factor is the entire physics system — it creates the float/lag.
+- Repel uses cubic easing: `proximity³ × 28px` max push.
+- Perlin noise is added to displaced dots for organic jitter.
+- Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
+- Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
+
+## Stacking context
+- `DotGrid` canvas: `z-index: 0` (fixed, behind everything)
+- `.page-content` wrapper: `z-index: 1` (all sections live here)
+- `Cursor` dot/ring: `z-index: 9999/9998`
+
+## Design tokens (globals.css)
+```css
+--kjah-cyan:  #4DDFF0
+--kjah-amber: #FDD03C
+--kjah-pink:  #E05070
+--black / --surface / --surface-raised / --border / --border-vis
+--text-off / --text-sec / --text-pri / --text-disp
+```
+Light mode inverts the full token set via `@media (prefers-color-scheme: light)`.
+
+## Typography
+| Role | Font | Usage |
+|------|------|-------|
+| Display | Doto (ROND=0, wght=700) | Hero headline, stat numbers, pricing |
+| Body/UI | Space Grotesk 300–700 | Section headings, body, cards |
+| Labels | Space Mono 400/700 | ALL CAPS labels, nav, tags, buttons |
