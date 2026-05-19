@@ -7,21 +7,6 @@ import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.4 } },
-};
-
-const charVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } },
-};
-
-const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay } },
-});
-
 const stats = [
   { value: '4',   suffix: '',  label: 'Core Specialists', cyan: false },
   { value: '6',   suffix: '',  label: 'Platforms',        cyan: false },
@@ -29,7 +14,6 @@ const stats = [
   { value: '10',  suffix: '+', label: 'Projects Shipped', cyan: false },
 ];
 
-// Stagger offsets so each tile starts mid-execution at a different point
 const TILE_DELAYS = [0, 700, 1400, 350, 1050, 1750];
 
 export default function Hero() {
@@ -37,7 +21,7 @@ export default function Hero() {
     <section className={styles.hero}>
       <div className={styles.orb} aria-hidden="true" />
 
-      {/* Terminal grid — absolutely positioned over the right half */}
+      {/* Terminal grid — decorative, desktop only, Framer Motion fine here */}
       <motion.div
         className={styles.termGridWrapper}
         initial={{ opacity: 0 }}
@@ -56,58 +40,27 @@ export default function Hero() {
       <div className={styles.inner}>
         <div className={styles.left}>
 
-          <motion.p
-            className={styles.eyebrow}
-            variants={fadeUp(0.1)}
-            initial="hidden"
-            animate="visible"
-          >
+          {/* CSS animations — visible from first paint, no JS required */}
+          <p className={styles.eyebrow}>
             Digital Studio &mdash; Websites &middot; Funnels &middot; Automation
-          </motion.p>
+          </p>
 
-          <motion.h1
-            className={styles.display}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            aria-label="Smart Builds."
-          >
+          <h1 className={styles.display} aria-label="Smart Builds.">
             {lines.map((word, wi) => (
-              <div key={wi} style={{ display: 'block', whiteSpace: 'nowrap' }}>
-                {word.split('').map((char, ci) => (
-                  <motion.span key={ci} variants={charVariants} style={{ display: 'inline-block' }}>
-                    {char}
-                  </motion.span>
-                ))}
-              </div>
+              <span key={wi} className={styles[`displayLine${wi}`]} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+                {word}
+              </span>
             ))}
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            className={styles.hl}
-            variants={fadeUp(0.9)}
-            initial="hidden"
-            animate="visible"
-          >
-            Real growth. Zero headache.
-          </motion.p>
+          <p className={styles.hl}>Real growth. Zero headache.</p>
 
-          <motion.div
-            className={styles.actions}
-            variants={fadeUp(1.1)}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className={styles.actions}>
             <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>
             <MagneticButton href="#works"   className="btn-s">View Our Work</MagneticButton>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className={styles.stats}
-            variants={fadeUp(1.3)}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className={styles.stats}>
             {stats.map((s) => (
               <div key={s.label}>
                 <div className={`${styles.statVal} ${s.cyan ? styles.statCyan : ''}`}>
@@ -116,7 +69,7 @@ export default function Hero() {
                 <div className={styles.statLbl}>{s.label}</div>
               </div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </div>
