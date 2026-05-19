@@ -81,7 +81,9 @@ a { text-decoration: none; }
 .section {
   padding: var(--sp-4xl) 0;
   border-top: 1px solid var(--border);
+  background: var(--black);
 }
+.section-transparent { background: transparent !important; }
 .section-bg {
   position: relative; overflow: hidden;
 }

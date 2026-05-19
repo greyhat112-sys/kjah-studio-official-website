@@ -66,7 +66,7 @@ export default function Works() {
   const inView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section className="section" id="works">
+    <section className="section section-transparent" id="works">
       <div className="wrap">
         <div className={styles.header}>
           <div>
