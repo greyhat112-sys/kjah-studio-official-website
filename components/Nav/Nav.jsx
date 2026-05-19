@@ -19,13 +19,25 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Track scroll depth for nav background — independent of menu state
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-      if (menuOpen) setMenuOpen(false);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close menu on real scroll — delayed 200ms so iOS chrome-resize micro-scrolls don't fire it
+  useEffect(() => {
+    if (!menuOpen) return;
+    let listener = null;
+    const timer = setTimeout(() => {
+      listener = () => setMenuOpen(false);
+      window.addEventListener('scroll', listener, { passive: true });
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+      if (listener) window.removeEventListener('scroll', listener);
+    };
   }, [menuOpen]);
 
   useEffect(() => {
