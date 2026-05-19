@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import styles from './Nav.module.css';
 
@@ -50,12 +50,7 @@ export default function Nav() {
 
   return (
     <>
-      <motion.nav
-        className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-      >
+      <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
           <Link href="/" className={styles.logo}>
             <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
@@ -89,7 +84,7 @@ export default function Nav() {
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       <AnimatePresence>
         {menuOpen && (
