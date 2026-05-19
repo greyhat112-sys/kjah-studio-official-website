@@ -80,10 +80,16 @@ Light mode inverts the full token set via `@media (prefers-color-scheme: light)`
 **Never use `initial={{ opacity: 0 }}` (or any `initial` with invisible values) on elements that are server-rendered and visible above the fold.** Framer Motion writes `initial` values as inline styles in the SSR HTML. On slow connections or before React hydrates, the element stays permanently invisible. Fix: use CSS `@keyframes` with `animation-fill-mode: both` instead. Framer Motion is acceptable for decorative desktop-only elements (e.g. the hero terminal grid) that won't cause blank sections if delayed.
 
 ## Nav — mobile behaviour
-On mobile (≤900px) the desktop link list is hidden and **no hamburger menu exists**. Instead, a section label (`— Services`, `— About`, etc.) appears on the right side of the nav using the same IntersectionObserver that tracks the active section on desktop. This eliminates all mobile tap/event issues. Do not add a hamburger back without good reason.
+On mobile (≤900px) the desktop link list is hidden and **no hamburger menu exists**. Instead, a section label (`— Services`, `— About`, etc.) appears on the right side of the nav using the same IntersectionObserver that tracks the active section on desktop. The label is hidden while the user is in the hero section (`scrollY < 50vh`) and clears `active` back to `''` so no label shows. This eliminates all mobile tap/event issues. Do not add a hamburger back without good reason.
 
 ## Counter
 `components/ui/Counter.jsx` uses `setInterval` (not `requestAnimationFrame`). iOS Safari throttles rAF for elements inside a `opacity: 0` ancestor — the `.stats` container has a CSS entrance animation with `fill-mode: both`, so it starts at `opacity: 0`. rAF inside it never fires until the animation completes. `setInterval` is immune to this throttle.
+
+## Hero terminal grid
+On desktop the grid fades in via a CSS `@keyframes termFadeIn` animation (1.2s, 0.5s delay). On mobile (≤900px) the animation is disabled and the grid is shown at `opacity: 0.15` as a background silhouette — wide enough to span full width (`left: 0`). Adjust the opacity value in `.termGridWrapper` inside the `@media (max-width: 900px)` block in `Hero.module.css`.
+
+## DotGrid opacity
+The canvas dot grid is `opacity: 0.6` on desktop and `opacity: 0.25` on mobile (≤900px) via a media query in `DotGrid.module.css`.
 
 ## Typography
 | Role | Font | Usage |

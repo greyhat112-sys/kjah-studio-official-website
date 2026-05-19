@@ -49,5 +49,7 @@ components/
 ## Key decisions
 
 - **No Framer Motion on SSR-rendered elements** — `initial={{ opacity: 0 }}` gets written into the SSR HTML; on slow/mobile devices the page stays invisible until React hydrates. Entrance animations use CSS `@keyframes` instead.
-- **Mobile nav is a section label**, not a hamburger menu. The current section name (e.g. `— About`) appears on the right of the nav as the user scrolls.
-- **Counter uses `setInterval`** not `requestAnimationFrame` — iOS Safari throttles rAF for elements inside a `opacity: 0` ancestor (CSS animation fill-mode), causing counters to freeze at 0.
+- **Mobile nav is a section label**, not a hamburger menu. The current section name (e.g. `— About`) appears on the right of the nav as the user scrolls. Hidden while in the hero section (`scrollY < 50vh`).
+- **Counter uses `setInterval`** not `requestAnimationFrame` — iOS Safari throttles rAF for elements inside an `opacity: 0` ancestor (CSS animation fill-mode), causing counters to freeze at 0.
+- **Hero terminal grid**: full opacity on desktop (CSS fade-in), 15% opacity silhouette on mobile spanning full width.
+- **DotGrid**: 60% opacity on desktop, 25% on mobile.

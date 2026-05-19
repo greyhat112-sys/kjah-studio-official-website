@@ -54,4 +54,6 @@
 @media (max-width: 540px) {
   .teamGrid { grid-template-columns: 1fr 1fr; }
   .layout { margin-top: var(--sp-2xl); }
+  .card { text-align: center; }
+  .portrait { margin-left: auto; margin-right: auto; }
 }

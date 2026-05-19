@@ -82,12 +82,18 @@
 }
 
 /* ── Terminal grid ──────────────────────── */
+@keyframes termFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 .termGridWrapper {
   position: absolute;
   left: 50%; right: 0;
   top: 0; bottom: 0;
   z-index: 0;
   pointer-events: none;
+  animation: termFadeIn 1.2s ease-out 0.5s both;
 }
 
 .termGrid {
@@ -125,7 +131,11 @@
 
 /* ── Responsive ─────────────────────────── */
 @media (max-width: 900px) {
-  .termGridWrapper { display: none; }
+  .termGridWrapper {
+    left: 0;
+    opacity: 0.15;
+    animation: none;
+  }
   .orb { display: none; }
   .actions { margin-bottom: var(--sp-2xl); }
 }

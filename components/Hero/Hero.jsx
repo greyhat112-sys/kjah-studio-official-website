@@ -1,5 +1,4 @@
 'use client';
-import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
 import TerminalTile from '@/components/ui/TerminalTile';
@@ -21,21 +20,15 @@ export default function Hero() {
     <section className={styles.hero}>
       <div className={styles.orb} aria-hidden="true" />
 
-      {/* Terminal grid — decorative, desktop only, Framer Motion fine here */}
-      <motion.div
-        className={styles.termGridWrapper}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.5 }}
-        aria-hidden="true"
-      >
+      {/* Terminal grid — faint silhouette on mobile, full opacity on desktop */}
+      <div className={styles.termGridWrapper} aria-hidden="true">
         <div className={styles.termGrid}>
           {TILE_DELAYS.map((delay, i) => (
             <TerminalTile key={i} seqIndex={i} startDelay={delay} />
           ))}
         </div>
         <div className={styles.termGridVignette} />
-      </motion.div>
+      </div>
 
       <div className={styles.inner}>
         <div className={styles.left}>
