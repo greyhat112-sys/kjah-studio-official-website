@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
-import TerminalWindow from '@/components/ui/TerminalWindow';
+import TerminalTile from '@/components/ui/TerminalTile';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
@@ -23,16 +23,36 @@ const fadeUp = (delay = 0) => ({
 });
 
 const stats = [
-  { value: '4', suffix: '', label: 'Core Specialists', cyan: false },
-  { value: '6', suffix: '', label: 'Platforms', cyan: false },
-  { value: '100', suffix: '%', label: 'Done For You', cyan: true },
-  { value: '10', suffix: '+', label: 'Projects Shipped', cyan: false },
+  { value: '4',   suffix: '',  label: 'Core Specialists', cyan: false },
+  { value: '6',   suffix: '',  label: 'Platforms',        cyan: false },
+  { value: '100', suffix: '%', label: 'Done For You',     cyan: true  },
+  { value: '10',  suffix: '+', label: 'Projects Shipped', cyan: false },
 ];
+
+// Stagger offsets so each tile starts mid-execution at a different point
+const TILE_DELAYS = [0, 700, 1400, 350, 1050, 1750];
 
 export default function Hero() {
   return (
     <section className={styles.hero}>
       <div className={styles.orb} aria-hidden="true" />
+
+      {/* Terminal grid — absolutely positioned over the right half */}
+      <motion.div
+        className={styles.termGridWrapper}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.5 }}
+        aria-hidden="true"
+      >
+        <div className={styles.termGrid}>
+          {TILE_DELAYS.map((delay, i) => (
+            <TerminalTile key={i} seqIndex={i} startDelay={delay} />
+          ))}
+        </div>
+        <div className={styles.termGridVignette} />
+      </motion.div>
+
       <div className={styles.inner}>
         <div className={styles.left}>
 
@@ -55,11 +75,7 @@ export default function Hero() {
             {lines.map((word, wi) => (
               <div key={wi} style={{ display: 'block', whiteSpace: 'nowrap' }}>
                 {word.split('').map((char, ci) => (
-                  <motion.span
-                    key={ci}
-                    variants={charVariants}
-                    style={{ display: 'inline-block' }}
-                  >
+                  <motion.span key={ci} variants={charVariants} style={{ display: 'inline-block' }}>
                     {char}
                   </motion.span>
                 ))}
@@ -83,7 +99,7 @@ export default function Hero() {
             animate="visible"
           >
             <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>
-            <MagneticButton href="#works" className="btn-s">View Our Work</MagneticButton>
+            <MagneticButton href="#works"   className="btn-s">View Our Work</MagneticButton>
           </motion.div>
 
           <motion.div
@@ -103,25 +119,6 @@ export default function Hero() {
           </motion.div>
 
         </div>
-        <motion.div
-          className={styles.right}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
-        >
-          <div className={styles.terminalScene}>
-            <div className={styles.termBg1} aria-hidden="true">
-              <TerminalWindow initialSeq={1} initialLine={5} />
-            </div>
-            <div className={styles.termBg2} aria-hidden="true">
-              <TerminalWindow initialSeq={2} initialLine={3} />
-            </div>
-            <div className={styles.termMain}>
-              <TerminalWindow />
-            </div>
-            <div className={styles.vignette} aria-hidden="true" />
-          </div>
-        </motion.div>
       </div>
     </section>
   );

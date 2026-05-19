@@ -1,7 +1,8 @@
 .hero {
   min-height: 100vh; padding-top: 60px;
   display: flex; flex-direction: column;
-  justify-content: center; position: relative; overflow: hidden;
+  justify-content: center;
+  position: relative; overflow: hidden;
 }
 
 .orb {
@@ -15,16 +16,16 @@
   opacity: 0.12; pointer-events: none;
 }
 
+/* ── Layout ─────────────────────────────── */
 .inner {
   position: relative; z-index: 1;
   padding: var(--sp-4xl) var(--sp-xl);
   max-width: 1200px; margin: 0 auto; width: 100%;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: var(--sp-3xl); align-items: center;
 }
 
-.left {}
+.left { max-width: 560px; }
 
+/* ── Left column text ───────────────────── */
 .eyebrow {
   font-family: 'Space Mono', monospace;
   font-size: 11px; letter-spacing: 0.12em;
@@ -60,7 +61,8 @@
 }
 
 .stats {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(4, auto);
+  justify-content: start; gap: 0 var(--sp-xl);
   border-top: 1px solid var(--border);
   padding-top: var(--sp-xl);
 }
@@ -79,58 +81,34 @@
   text-transform: uppercase; color: var(--text-off); margin-top: 4px;
 }
 
-.right {
-  display: flex; align-items: center; justify-content: flex-end;
-  overflow: hidden;
-}
-
-/* ── Terminal scene ─────────────────────── */
-.terminalScene {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.termMain {
-  position: relative;
-  z-index: 3;
-}
-
-.termBg1 {
+/* ── Terminal grid ──────────────────────── */
+.termGridWrapper {
   position: absolute;
-  top: -28px; left: -72px;
-  width: 100%;
-  opacity: 0.18;
-  filter: blur(1.5px);
+  left: 50%; right: 0;
+  top: 0; bottom: 0;
+  z-index: 0;
   pointer-events: none;
-  z-index: 1;
 }
 
-.termBg2 {
-  position: absolute;
-  bottom: -38px; right: -68px;
-  width: 100%;
-  opacity: 0.13;
-  filter: blur(2px);
-  pointer-events: none;
-  z-index: 2;
+.termGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  height: 100%;
+  border-left: 1px solid var(--border);
 }
 
-.vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
+.termGridVignette {
+  position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(to right,  var(--black) 0%, transparent 24%),
-    linear-gradient(to left,   var(--black) 0%, transparent 24%),
-    linear-gradient(to bottom, var(--black) 0%, transparent 20%),
-    linear-gradient(to top,    var(--black) 0%, transparent 20%);
+    linear-gradient(to right,  var(--black) 0%, transparent 35%),
+    linear-gradient(to top,    var(--black) 0%, transparent 18%),
+    linear-gradient(to bottom, var(--black) 0%, transparent 12%);
 }
 
+/* ── Responsive ─────────────────────────── */
 @media (max-width: 900px) {
-  .inner { grid-template-columns: 1fr; }
-  .right { display: none; }
+  .termGridWrapper { display: none; }
   .orb { display: none; }
   .actions { margin-bottom: var(--sp-2xl); }
 }
