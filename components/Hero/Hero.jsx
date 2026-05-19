@@ -64,7 +64,7 @@ export default function Hero() {
             {stats.map((s) => (
               <div key={s.label}>
                 <div className={`${styles.statVal} ${s.cyan ? styles.statCyan : ''}`}>
-                  <Counter value={s.value} suffix={s.suffix} delay={1.4} />
+                  <Counter value={s.value} suffix={s.suffix} delay={1.8} />
                 </div>
                 <div className={styles.statLbl}>{s.label}</div>
               </div>

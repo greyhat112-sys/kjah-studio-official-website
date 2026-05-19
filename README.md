@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# KJAH Studio — Official Website
 
-## Getting Started
+Marketing website for KJAH Studio, a digital agency specialising in websites, sales funnels, and automation systems.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) · **React 19** · **Framer Motion 12** · **CSS Modules**
+- No Tailwind — all styling via CSS Modules + design tokens in `globals.css`
+
+## Dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> ⚠️ **iOS Safari testing:** the Turbopack dev server outputs modern JS that WebKit can't parse — all `useEffect` / interactivity silently fails on real devices. Always test on the production build:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run build && npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+```
+app/
+  layout.js       — root layout: fonts, DotGrid background, Cursor
+  page.js         — composes all section components
+  globals.css     — design tokens, reset, shared utilities
+components/
+  Nav/            — fixed nav; active section label on mobile (no hamburger)
+  Hero/           — headline, stats counters, terminal tile grid (desktop)
+  Platforms/      — platform logo bar
+  Services/       — 3-card service grid
+  About/          — two-column about + team cards
+  Pricing/        — two-tier pricing
+  Works/          — 18-card portfolio grid
+  Testimonials/   — review cards
+  CTA/            — call-to-action
+  Footer/
+  ui/
+    Cursor.jsx        — custom cursor (hidden on touch devices)
+    DotGrid.jsx       — canvas dot grid background (fixed, z-index 0)
+    Counter.jsx       — animated number counter (setInterval-based)
+    MagneticButton.jsx
+    TerminalTile.jsx
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Key decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **No Framer Motion on SSR-rendered elements** — `initial={{ opacity: 0 }}` gets written into the SSR HTML; on slow/mobile devices the page stays invisible until React hydrates. Entrance animations use CSS `@keyframes` instead.
+- **Mobile nav is a section label**, not a hamburger menu. The current section name (e.g. `— About`) appears on the right of the nav as the user scrolls.
+- **Counter uses `setInterval`** not `requestAnimationFrame` — iOS Safari throttles rAF for elements inside a `opacity: 0` ancestor (CSS animation fill-mode), causing counters to freeze at 0.

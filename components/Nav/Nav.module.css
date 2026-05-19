@@ -1,14 +1,8 @@
-@keyframes navSlideDown {
-  from { opacity: 0; transform: translateY(-60px); }
-  to   { opacity: 1; transform: none; }
-}
-
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 200;
   height: 60px;
   background: rgba(0,0,0,0.6);
   border-bottom: 1px solid transparent;
-  animation: navSlideDown 0.5s cubic-bezier(0.25,0.1,0.25,1) both;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: background 300ms ease-out, border-color 300ms ease-out;
@@ -68,58 +62,17 @@
   display: flex; align-items: center; gap: var(--sp-sm);
 }
 
-/* ── Hamburger button ───────────────────── */
-.hamburger {
+/* ── Mobile section label ───────────────── */
+.sectionLabel {
   display: none;
-  flex-direction: column; justify-content: center; align-items: center;
-  gap: 5px; width: 36px; height: 36px;
-  background: none; border: none; cursor: pointer; padding: 6px;
-  flex-shrink: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--kjah-cyan);
 }
-
-.hamburger span {
-  display: block; width: 20px; height: 1.5px;
-  background: var(--text-disp); border-radius: 2px;
-  transition: transform 250ms ease, opacity 250ms ease;
-  transform-origin: center;
-}
-
-.hamburgerOpen span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.hamburgerOpen span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburgerOpen span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-/* ── Mobile full-screen menu ────────────── */
-.mobileMenu {
-  position: fixed;
-  top: 60px; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: var(--sp-3xl);
-  z-index: 199;
-  border-top: 1px solid var(--border);
-}
-
-.mobileLinks {
-  list-style: none; display: flex;
-  flex-direction: column; align-items: center;
-  gap: var(--sp-xl);
-}
-
-.mobileLink {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 36px; font-weight: 700;
-  letter-spacing: -0.02em; color: var(--text-sec);
-  transition: color 200ms ease-out;
-}
-
-.mobileLink:hover, .mobileLink.active { color: var(--text-disp); }
 
 @media (max-width: 900px) {
   .links { display: none; }
   .inner { padding: 0 var(--sp-md); }
-  .hamburger { display: flex; }
   .ctaWrap { display: none; }
+  .sectionLabel { display: block; }
 }

@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import styles from './Nav.module.css';
 
@@ -17,33 +17,12 @@ const links = [
 export default function Nav() {
   const [active, setActive] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Track scroll depth for nav background — independent of menu state
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  // Close menu on real scroll — delayed 200ms so iOS chrome-resize micro-scrolls don't fire it
-  useEffect(() => {
-    if (!menuOpen) return;
-    let listener = null;
-    const timer = setTimeout(() => {
-      listener = () => setMenuOpen(false);
-      window.addEventListener('scroll', listener, { passive: true });
-    }, 200);
-    return () => {
-      clearTimeout(timer);
-      if (listener) window.removeEventListener('scroll', listener);
-    };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
 
   useEffect(() => {
     const ids = links.map((l) => l.href.slice(1));
@@ -60,72 +39,41 @@ export default function Nav() {
     return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
-  return (
-    <>
-      <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-        <div className={styles.inner}>
-          <Link href="/" className={styles.logo}>
-            <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
-            <span className={styles.wordmark}>KJAH Studio</span>
-          </Link>
-          <ul className={styles.links}>
-            {links.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
-                >
-                  {l.label}
-                  {active === l.href.slice(1) && (
-                    <motion.span className={styles.activeDot} layoutId="navDot" />
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className={styles.navRight}>
-            <span className={styles.ctaWrap}>
-              <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
-            </span>
-            <button
-              className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            >
-              <span /><span /><span />
-            </button>
-          </div>
-        </div>
-      </nav>
+  const activeLabel = links.find((l) => l.href.slice(1) === active)?.label ?? '';
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className={styles.mobileMenu}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-          >
-            <ul className={styles.mobileLinks}>
-              {links.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className={`${styles.mobileLink} ${active === l.href.slice(1) ? styles.active : ''}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <MagneticButton href="#contact" className="btn-p" onClick={() => setMenuOpen(false)}>
-              Book a Call
-            </MagneticButton>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+  return (
+    <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
+      <div className={styles.inner}>
+        <Link href="/" className={styles.logo}>
+          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
+          <span className={styles.wordmark}>KJAH Studio</span>
+        </Link>
+
+        <ul className={styles.links}>
+          {links.map((l) => (
+            <li key={l.href}>
+              <Link
+                href={l.href}
+                className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
+              >
+                {l.label}
+                {active === l.href.slice(1) && (
+                  <motion.span className={styles.activeDot} layoutId="navDot" />
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className={styles.navRight}>
+          <span className={styles.ctaWrap}>
+            <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
+          </span>
+          {activeLabel && (
+            <span className={styles.sectionLabel}>— {activeLabel}</span>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 }

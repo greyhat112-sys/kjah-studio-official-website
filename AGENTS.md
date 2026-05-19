@@ -8,6 +8,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
+## ⚠️ Critical — iOS Safari / mobile testing
+The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**
+
 ## Stack
 - **Next.js 16 App Router** · **React 19** · **Framer Motion 12** · **CSS Modules** (no Tailwind)
 - Single-page site — all sections composed in `app/page.js`
@@ -19,7 +22,7 @@ app/
   page.js         — composes all 10 section components
   globals.css     — design tokens, reset, shared utilities
 components/
-  Nav/            — fixed nav, active section tracking, scroll state
+  Nav/            — fixed nav; desktop: link list + CTA; mobile: section label (no hamburger)
   Hero/           — two-column hero, Doto character reveal, TerminalWindow
   Platforms/      — platform logo bar
   Services/       — 3-card service grid
@@ -72,6 +75,15 @@ The canvas sits behind all content. Sections block it by declaring `background: 
 --text-off / --text-sec / --text-pri / --text-disp
 ```
 Light mode inverts the full token set via `@media (prefers-color-scheme: light)`.
+
+## Framer Motion — SSR rules
+**Never use `initial={{ opacity: 0 }}` (or any `initial` with invisible values) on elements that are server-rendered and visible above the fold.** Framer Motion writes `initial` values as inline styles in the SSR HTML. On slow connections or before React hydrates, the element stays permanently invisible. Fix: use CSS `@keyframes` with `animation-fill-mode: both` instead. Framer Motion is acceptable for decorative desktop-only elements (e.g. the hero terminal grid) that won't cause blank sections if delayed.
+
+## Nav — mobile behaviour
+On mobile (≤900px) the desktop link list is hidden and **no hamburger menu exists**. Instead, a section label (`— Services`, `— About`, etc.) appears on the right side of the nav using the same IntersectionObserver that tracks the active section on desktop. This eliminates all mobile tap/event issues. Do not add a hamburger back without good reason.
+
+## Counter
+`components/ui/Counter.jsx` uses `setInterval` (not `requestAnimationFrame`). iOS Safari throttles rAF for elements inside a `opacity: 0` ancestor — the `.stats` container has a CSS entrance animation with `fill-mode: both`, so it starts at `opacity: 0`. rAF inside it never fires until the animation completes. `setInterval` is immune to this throttle.
 
 ## Typography
 | Role | Font | Usage |
