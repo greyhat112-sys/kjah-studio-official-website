@@ -13,9 +13,9 @@ const team = [
 
 export default function About() {
   const headRef = useRef(null);
-  const headInView = useInView(headRef, { once: true, margin: '-80px' });
+  const headInView = useInView(headRef, { once: true, margin: '-10px' });
   const gridRef = useRef(null);
-  const gridInView = useInView(gridRef, { once: true, margin: '-80px' });
+  const gridInView = useInView(gridRef, { once: true, margin: '-10px' });
 
   return (
     <section className="section section-bg" id="about">

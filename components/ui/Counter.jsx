@@ -4,7 +4,7 @@ import { useInView } from 'framer-motion';
 
 export default function Counter({ value, suffix = '', delay = 0 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const inView = useInView(ref, { once: true, margin: '-10px' });
   const [display, setDisplay] = useState(0);
   const numericValue = parseFloat(value);
 

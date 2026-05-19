@@ -31,9 +31,9 @@ const cardVariants = {
 
 export default function Services() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const inView = useInView(ref, { once: true, margin: '-10px' });
   const headRef = useRef(null);
-  const headInView = useInView(headRef, { once: true, margin: '-80px' });
+  const headInView = useInView(headRef, { once: true, margin: '-10px' });
 
   return (
     <section className="section" id="services">

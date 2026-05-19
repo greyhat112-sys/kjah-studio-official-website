@@ -63,7 +63,7 @@ function WorkCard({ w }) {
 
 export default function Works() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
+  const inView = useInView(ref, { once: true, margin: '-10px' });
 
   return (
     <section className="section section-transparent" id="works">
