@@ -52,6 +52,6 @@
 }
 
 @media (max-width: 540px) {
-  .teamGrid { grid-template-columns: 1fr; }
+  .teamGrid { grid-template-columns: 1fr 1fr; }
   .layout { margin-top: var(--sp-2xl); }
 }

@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.1.0] — 2026-05-20
+
+### Changed — Full Mobile & Tablet Responsiveness
+
+- **Mobile hamburger nav** — `Nav.jsx` + `Nav.module.css` rewritten. At ≤900px the desktop link list and CTA button hide; a hamburger button (3-bars → X on open) appears. Tapping opens a full-screen overlay (`position: fixed; top: 60px`) with large Space Grotesk section links and a cyan "BOOK A CALL" CTA. `AnimatePresence` fade+slide entrance/exit. Body scroll is locked while the menu is open.
+- **Section padding** — global `.section` mobile padding reduced from `--sp-3xl` (64px) to `--sp-2xl` (48px) at ≤540px. Cuts ~576px of dead vertical space across all 9 sections.
+- **Hero stats grid** — fixed column gap: changed `gap: var(--sp-lg) 0` → `gap: var(--sp-lg) var(--sp-md)` at ≤540px so the 2×2 stat grid has breathing room between columns.
+- **Works grid** — kept 2-column layout at ≤540px (`1fr 1fr` with `gap: var(--sp-sm)`) instead of collapsing to 1-column. Reduces the 18-card Works section height by ~2700px on mobile.
+- **About team grid** — kept 2-column at ≤540px (was collapsing to 1-col). Portrait cards are compact enough to read at 2-col on 390px screens.
+- **Pricing grid** — added `margin-inline: auto` to center the max-width: 860px grid within its wrapper at all breakpoints.
+- **Page height** — total mobile page height reduced from 14,277px → 9,604px (32% reduction).
+
+---
+
 ## [1.0.9] — 2026-05-19
 
 ### Changed

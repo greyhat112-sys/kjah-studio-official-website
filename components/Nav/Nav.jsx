@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import styles from './Nav.module.css';
 
@@ -17,12 +17,21 @@ const links = [
 export default function Nav() {
   const [active, setActive] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      if (menuOpen) setMenuOpen(false);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   useEffect(() => {
     const ids = links.map((l) => l.href.slice(1));
@@ -40,34 +49,76 @@ export default function Nav() {
   }, []);
 
   return (
-    <motion.nav
-      className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
-      initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-    >
-      <div className={styles.inner}>
-        <Link href="/" className={styles.logo}>
-          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
-          <span className={styles.wordmark}>KJAH Studio</span>
-        </Link>
-        <ul className={styles.links}>
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
-              >
-                {l.label}
-                {active === l.href.slice(1) && (
-                  <motion.span className={styles.activeDot} layoutId="navDot" />
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
-      </div>
-    </motion.nav>
+    <>
+      <motion.nav
+        className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
+        initial={{ y: -60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <div className={styles.inner}>
+          <Link href="/" className={styles.logo}>
+            <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
+            <span className={styles.wordmark}>KJAH Studio</span>
+          </Link>
+          <ul className={styles.links}>
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
+                >
+                  {l.label}
+                  {active === l.href.slice(1) && (
+                    <motion.span className={styles.activeDot} layoutId="navDot" />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.navRight}>
+            <span className={styles.ctaWrap}>
+              <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
+            </span>
+            <button
+              className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </motion.nav>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className={styles.mobileMenu}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            <ul className={styles.mobileLinks}>
+              {links.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={`${styles.mobileLink} ${active === l.href.slice(1) ? styles.active : ''}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <MagneticButton href="#contact" className="btn-p" onClick={() => setMenuOpen(false)}>
+              Book a Call
+            </MagneticButton>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

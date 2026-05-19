@@ -117,7 +117,7 @@
   .inner { padding: var(--sp-3xl) var(--sp-md); }
   .display { font-size: clamp(48px, 14vw, 72px); }
   .hl { font-size: 16px; }
-  .stats { grid-template-columns: 1fr 1fr; gap: var(--sp-lg) 0; }
+  .stats { grid-template-columns: 1fr 1fr; gap: var(--sp-lg) var(--sp-md); }
   .statVal { font-size: 28px; }
   .statLbl { font-size: 9px; }
 }
