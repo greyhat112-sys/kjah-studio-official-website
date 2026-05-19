@@ -32,7 +32,6 @@ const stats = [
 export default function Hero() {
   return (
     <section className={styles.hero}>
-      <div className={styles.dots} aria-hidden="true" />
       <div className={styles.orb} aria-hidden="true" />
       <div className={styles.inner}>
         <div className={styles.left}>

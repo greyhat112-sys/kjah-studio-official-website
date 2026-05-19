@@ -1,5 +1,6 @@
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import Cursor from '@/components/ui/Cursor';
+import DotGrid from '@/components/ui/DotGrid';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -34,8 +35,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <DotGrid />
         <Cursor />
-        {children}
+        <div className="page-content">
+          {children}
+        </div>
       </body>
     </html>
   );

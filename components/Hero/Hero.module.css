@@ -4,13 +4,6 @@
   justify-content: center; position: relative; overflow: hidden;
 }
 
-.dots {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image: radial-gradient(circle, var(--border-vis) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.6;
-}
-
 .orb {
   position: absolute; right: 16%; top: 50%;
   transform: translateY(-50%);

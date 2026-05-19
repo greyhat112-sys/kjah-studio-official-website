@@ -85,14 +85,9 @@ a { text-decoration: none; }
 .section-bg {
   position: relative; overflow: hidden;
 }
-.section-bg::before {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image: radial-gradient(circle, var(--border-vis) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.6;
-}
 .section-bg .wrap { position: relative; z-index: 1; }
+
+.page-content { position: relative; z-index: 1; }
 .s-orb {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
