@@ -1,6 +1,4 @@
 'use client';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import styles from './Services.module.css';
 
 const services = [
@@ -21,51 +19,24 @@ const services = [
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: i * 0.12 },
-  }),
-};
-
 export default function Services() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-10px' });
-  const headRef = useRef(null);
-  const headInView = useInView(headRef, { once: true, margin: '-10px' });
-
   return (
     <section className="section" id="services">
       <div className="wrap">
-        <motion.div
-          ref={headRef}
-          initial={{ opacity: 0, y: 24 }}
-          animate={headInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <p className="s-tag">— What we build</p>
-          <h2 className="s-head">Three pillars.<br />One team.</h2>
-          <p className="s-body">Full-stack digital builds: design to deployment, back-end to automation. We hand you a system, not just a page.</p>
-        </motion.div>
+        <p className="s-tag">— What we build</p>
+        <h2 className="s-head">Three pillars.<br />One team.</h2>
+        <p className="s-body">Full-stack digital builds: design to deployment, back-end to automation. We hand you a system, not just a page.</p>
 
-        <div ref={ref} className={styles.grid}>
-          {services.map((s, i) => (
-            <motion.div
-              key={s.num}
-              className={styles.card}
-              custom={i}
-              variants={cardVariants}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-            >
+        <div className={styles.grid}>
+          {services.map((s) => (
+            <div key={s.num} className={styles.card}>
               <div className={styles.num} aria-hidden="true">{s.num}</div>
               <h3 className={styles.title}>{s.title}</h3>
               <p className={styles.desc}>{s.desc}</p>
               <div className="tags">
                 {s.tags.map((t) => <span key={t} className="tag">{t}</span>)}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

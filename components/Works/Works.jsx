@@ -1,7 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import styles from './Works.module.css';
 
 const works = [
@@ -25,19 +23,9 @@ const works = [
   { img: 'lox-stylist-business', alt: 'Lox Stylist Business coaching funnel', niche: 'Beauty / Coaching', title: 'Lox Stylist Business', type: 'Coaching Funnel · ClickFunnels' },
 ];
 
-const gridVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
-};
-
 function WorkCard({ w }) {
   return (
-    <motion.article className={styles.card} variants={cardVariants}>
+    <article className={styles.card}>
       <div className={styles.thumb}>
         <Image
           src={`/assets/works/${w.img}.jpg`}
@@ -57,14 +45,11 @@ function WorkCard({ w }) {
         <div className={styles.title}>{w.title}</div>
         <div className={styles.type}>{w.type}</div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export default function Works() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-10px' });
-
   return (
     <section className="section section-transparent" id="works">
       <div className="wrap">
@@ -75,15 +60,9 @@ export default function Works() {
           </div>
           <p className={styles.count}>{works.length} projects</p>
         </div>
-        <motion.div
-          ref={ref}
-          className={styles.grid}
-          variants={gridVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-        >
+        <div className={styles.grid}>
           {works.map((w) => <WorkCard key={w.img} w={w} />)}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
