@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.3] — 2026-05-20
+
+### Changed — Terminal Typewriter Effect
+- **TerminalTile** — rewrote animation as a character-by-character typewriter. Each line types out one char at a time before colour/styling applies. `cmd` lines feel like human typing (48–120ms/char); output lines stream faster (16–40ms/char). Cursor tracks at the end of the line being typed. When a line finishes typing, the process pause (lineDelay) happens before the next line starts — so BUILD/DEPLOY steps visibly wait 0.7–2.1s between output, making it feel like real work.
+- Completed lines snap from plain mono text → full styled colour on completion (tag cyan, rest grey, ok cyan).
+- Removed `lineIn` CSS animation from completed lines — typewriter replaces it.
+- Added `.typingLine` CSS class for the in-progress line.
+
+---
+
 ## [1.2.2] — 2026-05-20
 
 ### Changed — Terminal & Orb Polish

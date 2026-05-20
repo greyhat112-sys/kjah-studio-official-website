@@ -77,67 +77,118 @@ const tiles = [
   },
 ];
 
+function getLineText(line) {
+  if (line.type === 'cmd') return line.text;
+  if (line.type === 'done') return `${line.tag}  ${line.rest}`;
+  return `${line.tag}  ${line.rest}${line.s ? `  ${line.s}` : ''}`;
+}
+
+// Per-character delay — cmd feels like human typing, output like streaming
+function charDelay(line) {
+  if (line.type === 'cmd') return 48 + Math.random() * 72; // 48–120ms
+  return 16 + Math.random() * 24;                          // 16–40ms
+}
+
+// Pause after a line finishes typing — simulates actual work happening
 function lineDelay(line) {
-  const r = () => Math.random();
-  if (line.type === 'cmd')                                      return 400  + r() * 500;   // 400–900ms  — typing the command
-  if (line.type === 'done')                                     return 500  + r() * 400;   // 500–900ms  — final result
-  if (line.tag?.includes('BUILD') || line.tag?.includes('DEPLOY')) return 1100 + r() * 1800; // 1.1–2.9s   — heavy work
-  if (line.tag?.includes('INTG')  || line.tag?.includes('SCAN'))   return 800  + r() * 1200; // 0.8–2.0s   — integration
-  return 600 + r() * 800;                                                                  // 0.6–1.4s   — init/check
+  if (line.type === 'cmd')                                      return 180 + Math.random() * 260;
+  if (line.type === 'done')                                     return 280 + Math.random() * 280;
+  if (line.tag?.includes('BUILD') || line.tag?.includes('DEPLOY')) return 700 + Math.random() * 1400;
+  if (line.tag?.includes('INTG')  || line.tag?.includes('SCAN'))   return 500 + Math.random() * 900;
+  return 280 + Math.random() * 480;
+}
+
+function CompletedLine({ line, i }) {
+  if (line.type === 'cmd') return (
+    <div key={i} className={styles.cmd}>{line.text}</div>
+  );
+  if (line.type === 'done') return (
+    <div key={i} className={styles.lineDone}>
+      <span className={styles.tagDone}>{line.tag}</span>
+      <span className={styles.restDone}>&nbsp;&nbsp;{line.rest}</span>
+    </div>
+  );
+  return (
+    <div key={i} className={styles.line}>
+      <span className={styles.tag}>{line.tag}</span>
+      <span className={styles.rest}>&nbsp;&nbsp;{line.rest}</span>
+      {line.s && <span className={styles.ok}>{line.s}</span>}
+    </div>
+  );
 }
 
 export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
-  const tile   = tiles[seqIndex % tiles.length];
-  const [visible, setVisible] = useState(0);
-  const [ready,   setReady]   = useState(false);
+  const tile = tiles[seqIndex % tiles.length];
+  const [done,   setDone]   = useState(0);    // completed line count
+  const [typing, setTyping] = useState('');   // partial text of current line
+  const [phase,  setPhase]  = useState('init'); // init | typing | pause | complete
 
+  const lineIdx = done;
+  const line    = tile.lines[lineIdx];
+  const full    = line ? getLineText(line) : '';
+  const isDone  = phase === 'complete';
+
+  // Initial start delay (first run only)
   useEffect(() => {
-    const id = setTimeout(() => setReady(true), startDelay);
+    if (phase !== 'init') return;
+    const id = setTimeout(() => setPhase('typing'), startDelay);
     return () => clearTimeout(id);
-  }, [startDelay]);
+  }, [phase, startDelay]);
 
+  // Type one character at a time
   useEffect(() => {
-    if (!ready) return;
-    if (visible >= tile.lines.length) {
-      // Stay in done state 10–18 seconds before restarting
-      const id = setTimeout(() => setVisible(0), 10000 + Math.random() * 8000);
-      return () => clearTimeout(id);
-    }
-    const id = setTimeout(() => setVisible(v => v + 1), lineDelay(tile.lines[visible]));
+    if (phase !== 'typing' || !line) return;
+    if (typing.length >= full.length) { setPhase('pause'); return; }
+    const id = setTimeout(
+      () => setTyping(full.slice(0, typing.length + 1)),
+      charDelay(line)
+    );
     return () => clearTimeout(id);
-  }, [visible, ready, tile]);
+  }, [phase, typing, full, line]);
 
-  const done = visible >= tile.lines.length;
+  // Pause between lines (simulates actual work running)
+  useEffect(() => {
+    if (phase !== 'pause' || !line) return;
+    const id = setTimeout(() => {
+      const next = done + 1;
+      setDone(next);
+      setTyping('');
+      setPhase(next >= tile.lines.length ? 'complete' : 'typing');
+    }, lineDelay(line));
+    return () => clearTimeout(id);
+  }, [phase, line, done, tile.lines.length]);
+
+  // Hold complete state, then restart
+  useEffect(() => {
+    if (phase !== 'complete') return;
+    const id = setTimeout(() => {
+      setDone(0);
+      setTyping('');
+      setPhase('typing'); // no startDelay on restart
+    }, 10000 + Math.random() * 8000);
+    return () => clearTimeout(id);
+  }, [phase]);
 
   return (
     <div className={styles.tile}>
       <div className={styles.header}>
         <span className={styles.label}>AGENT-{tile.id} // {tile.task}</span>
-        <span className={`${styles.dot} ${done ? styles.dotDone : ''}`} />
+        <span className={`${styles.dot} ${isDone ? styles.dotDone : ''}`} />
       </div>
       <div className={styles.body}>
-        {tile.lines.slice(0, visible).map((line, i) => {
-          if (line.type === 'cmd') return (
-            <div key={i} className={styles.cmd}>{line.text}</div>
-          );
-          if (line.type === 'done') return (
-            <div key={i} className={styles.lineDone}>
-              <span className={styles.tagDone}>{line.tag}</span>
-              <span className={styles.restDone}>{line.rest}</span>
-            </div>
-          );
-          return (
-            <div key={i} className={styles.line}>
-              <span className={styles.tag}>{line.tag}</span>
-              <span className={styles.rest}>{line.rest}</span>
-              {line.s && <span className={styles.ok}>{line.s}</span>}
-            </div>
-          );
-        })}
-        <div className={styles.cursorRow}>
-          {done && <span className={styles.prompt}>{'>'}</span>}
-          <span className={styles.cursor} />
-        </div>
+        {tile.lines.slice(0, done).map((l, i) => (
+          <CompletedLine key={i} line={l} i={i} />
+        ))}
+        {typing ? (
+          <div className={styles.typingLine}>
+            {typing}<span className={styles.cursor} />
+          </div>
+        ) : (
+          <div className={styles.cursorRow}>
+            {isDone && <span className={styles.prompt}>{'>'}</span>}
+            <span className={styles.cursor} />
+          </div>
+        )}
       </div>
     </div>
   );

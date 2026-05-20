@@ -52,7 +52,6 @@
   letter-spacing: 0.02em;
   line-height: 1.85;
   margin-bottom: 2px;
-  animation: lineIn 0.3s ease-out both;
 }
 
 .line {
@@ -60,7 +59,6 @@
   align-items: baseline;
   gap: 8px;
   line-height: 1.85;
-  animation: lineIn 0.3s ease-out both;
   font-family: 'Space Mono', monospace;
 }
 
@@ -70,8 +68,18 @@
   gap: 8px;
   line-height: 1.85;
   margin-top: 2px;
-  animation: lineIn 0.3s ease-out both;
   font-family: 'Space Mono', monospace;
+}
+
+/* Active typing line — plain mono, cursor inline */
+.typingLine {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-sec);
+  letter-spacing: 0.02em;
+  line-height: 1.85;
+  display: flex;
+  align-items: baseline;
 }
 
 .tag {

@@ -101,14 +101,23 @@ The canvas dot grid is `opacity: 0.6` on desktop and `opacity: 0.25` on mobile (
 `.orb` in `Hero.module.css` is `position: absolute; left: -5%; top: -10%` — bleeds off the top-left corner. Size: `38vw / 480px`. `opacity: 0.07` (intentionally subtle). Hidden on mobile (`display: none` at ≤900px). Do not increase opacity past 0.1 or recentre it — it's a background accent, not a feature.
 
 ## Hero terminal tile timing
-`TerminalTile.jsx` uses a `lineDelay(line)` function to randomise per-line delays based on tag type:
-- `cmd`: 400–900ms
-- `BUILD` / `DEPLOY`: 1100–2900ms (heavy work)
-- `INTG` / `SCAN`: 800–2000ms
-- `INIT` / `CHECK`: 600–1400ms
-- `done`: 500–900ms
+`TerminalTile.jsx` uses a **typewriter effect**: characters appear one at a time, then styling (colours) snaps on when the line is complete. Two delay functions:
+
+`charDelay(line)` — per-character interval:
+- `cmd` (user typing): 48–120ms/char
+- output lines: 16–40ms/char
+
+`lineDelay(line)` — pause after line finishes typing (simulates work running):
+- `cmd`: 180–440ms
+- `BUILD` / `DEPLOY`: 700–2100ms
+- `INTG` / `SCAN`: 500–1400ms
+- `INIT` / `CHECK` / other: 280–760ms
+- `done`: 280–560ms
 - Restart hold: 10,000–18,000ms after sequence completes.
-Tile start offsets in `Hero.jsx`: `[0, 3200, 6800, 1600, 5100, 9400]`ms — wide enough that tiles are never in sync. Do not collapse these back to short intervals.
+
+Phase state machine: `init → typing → pause → typing → … → complete → typing (restart)`
+
+Tile start offsets in `Hero.jsx`: `[0, 3200, 6800, 1600, 5100, 9400]`ms — wide enough that tiles are never in sync. Do not collapse these.
 
 ## Typography
 | Role | Font | Usage |
