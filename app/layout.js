@@ -21,9 +21,60 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata = {
-  title: 'KJAH Studio — Websites, Funnels & Automation',
+  metadataBase: new URL('https://kjahstudio.com'),
+  title: {
+    default: 'KJAH Studio — Websites, Funnels & Automation',
+    template: '%s | KJAH Studio',
+  },
   description:
-    'KJAH Studio builds smart websites, funnels, and automation systems to attract more leads, work smarter, and grow online — without the tech headache.',
+    'KJAH Studio builds done-for-you websites, sales funnels, and automation systems for coaches, e-commerce brands, and service businesses. Attract more leads, convert more clients, and grow online — without the tech headache.',
+  keywords: [
+    'website design agency',
+    'sales funnel builder',
+    'marketing automation agency',
+    'done for you website',
+    'done for you funnel',
+    'HighLevel agency',
+    'ClickFunnels expert',
+    'email automation',
+    'CRM setup',
+    'digital marketing agency',
+    'KJAH Studio',
+    'funnel specialist',
+    'automation expert',
+    'web design agency',
+  ],
+  authors: [{ name: 'KJAH Studio', url: 'https://kjahstudio.com' }],
+  creator: 'KJAH Studio',
+  publisher: 'KJAH Studio',
+  alternates: { canonical: 'https://kjahstudio.com' },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://kjahstudio.com',
+    siteName: 'KJAH Studio',
+    title: 'KJAH Studio — Websites, Funnels & Automation',
+    description:
+      'Done-for-you websites, sales funnels, and automation systems. We build digital engines that attract leads, convert clients, and grow your business.',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'KJAH Studio — Smart Websites, Funnels & Automation' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'KJAH Studio — Websites, Funnels & Automation',
+    description: 'Done-for-you websites, sales funnels, and automation systems that grow your business.',
+    images: ['/opengraph-image'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {

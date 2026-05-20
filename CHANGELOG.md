@@ -4,6 +4,18 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.3.0] — 2026-05-20
+
+### Added — SEO Optimization
+
+- **`app/layout.js`** — expanded `metadata` export: `metadataBase`, title template, keywords array, `alternates.canonical`, full `openGraph` block (type, locale, url, siteName, image), `twitter` card, `robots` / `googleBot` directives.
+- **`app/opengraph-image.jsx`** — edge-runtime `ImageResponse` generates a 1200×630 OG image on demand. Black background, KJAH cyan accent, headline, subline, service tags, domain watermark. Used by both OG and Twitter card.
+- **`app/sitemap.js`** — generates `/sitemap.xml` pointing to `https://kjahstudio.com` with weekly change frequency.
+- **`app/robots.js`** — generates `/robots.txt`: allow all, sitemap reference.
+- **`app/page.js`** — `ProfessionalService` JSON-LD structured data injected via `<script type="application/ld+json">`. Includes name, url, logo, email, priceRange, areaServed, serviceType, and `hasOfferCatalog` with three service offers.
+
+---
+
 ## [1.2.5] — 2026-05-20
 
 ### Added — Lenis Smooth Scrolling
