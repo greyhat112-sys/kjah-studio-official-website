@@ -25,7 +25,15 @@ export default function About() {
           <div className={styles.teamGrid}>
             {team.map((m) => (
               <div key={m.title} className={styles.card}>
-                <Image src={m.portrait} alt="" width={200} height={200} className={styles.portrait} aria-hidden="true" />
+                <Image
+                  src={m.portrait}
+                  alt={m.title}
+                  width={200}
+                  height={200}
+                  className={styles.portrait}
+                  loading="lazy"
+                  sizes="(max-width: 900px) 40vw, 160px"
+                />
                 <div className={styles.role}>{m.role}</div>
                 <div className={styles.title}>{m.title}</div>
                 <div className={styles.spec}>{m.spec}</div>

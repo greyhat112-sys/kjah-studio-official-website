@@ -50,7 +50,7 @@ export default function Nav() {
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
-          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
+          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" priority />
           <span className={styles.wordmark}>KJAH Studio</span>
         </Link>
 

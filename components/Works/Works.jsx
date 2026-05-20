@@ -34,6 +34,7 @@ function WorkCard({ w }) {
           height={540}
           className={styles.img}
           loading="lazy"
+          sizes="(max-width: 540px) calc(100vw - 32px), (max-width: 900px) calc(50vw - 24px), calc(33vw - 24px)"
         />
         <div className={styles.overlay}>
           <span className={styles.overlayNiche}>{w.niche}</span>
