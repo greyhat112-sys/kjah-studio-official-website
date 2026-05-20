@@ -98,7 +98,17 @@ On desktop the grid fades in via a CSS `@keyframes termFadeIn` animation (1.2s, 
 The canvas dot grid is `opacity: 0.6` on desktop and `opacity: 0.25` on mobile (≤900px) via a media query in `DotGrid.module.css`.
 
 ## Hero gradient orb
-`.orb` in `Hero.module.css` is `position: absolute; left: -5%; top: -10%` — bleeds off the top-left corner. `opacity: 0.07` (intentionally subtle). Hidden on mobile (`display: none` at ≤900px). Do not increase opacity past 0.1 or recentre it — it's a background accent, not a feature.
+`.orb` in `Hero.module.css` is `position: absolute; left: -5%; top: -10%` — bleeds off the top-left corner. Size: `38vw / 480px`. `opacity: 0.07` (intentionally subtle). Hidden on mobile (`display: none` at ≤900px). Do not increase opacity past 0.1 or recentre it — it's a background accent, not a feature.
+
+## Hero terminal tile timing
+`TerminalTile.jsx` uses a `lineDelay(line)` function to randomise per-line delays based on tag type:
+- `cmd`: 400–900ms
+- `BUILD` / `DEPLOY`: 1100–2900ms (heavy work)
+- `INTG` / `SCAN`: 800–2000ms
+- `INIT` / `CHECK`: 600–1400ms
+- `done`: 500–900ms
+- Restart hold: 10,000–18,000ms after sequence completes.
+Tile start offsets in `Hero.jsx`: `[0, 3200, 6800, 1600, 5100, 9400]`ms — wide enough that tiles are never in sync. Do not collapse these back to short intervals.
 
 ## Typography
 | Role | Font | Usage |

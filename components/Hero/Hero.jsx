@@ -13,7 +13,7 @@ const stats = [
   { value: '10',  suffix: '+', label: 'Projects Shipped', cyan: false },
 ];
 
-const TILE_DELAYS = [0, 700, 1400, 350, 1050, 1750];
+const TILE_DELAYS = [0, 3200, 6800, 1600, 5100, 9400];
 
 export default function Hero() {
   return (

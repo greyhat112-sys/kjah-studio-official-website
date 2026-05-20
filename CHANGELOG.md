@@ -4,6 +4,17 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.2] — 2026-05-20
+
+### Changed — Terminal & Orb Polish
+- **Terminal timing** — rewrote per-line delay logic in `TerminalTile.jsx`. Lines now wait a random amount based on type: BUILD/DEPLOY steps 1.1–2.9s, INTG/SCAN 0.8–2.0s, INIT/CHECK 0.6–1.4s, cmd 0.4–0.9s. Sequences feel like real work instead of a scripted slideshow.
+- **Terminal restart delay** — done state now holds for 10–18 seconds (was 3.2s) before restarting, so tiles spend meaningful time in their completed state.
+- **Tile start offsets** — `TILE_DELAYS` widened from `[0,700,1400,350,1050,1750]` to `[0,3200,6800,1600,5100,9400]`ms so tiles are never in sync and drift further apart over time.
+- **Line reveal animation** — slowed from `0.1s` to `0.3s` ease-out for a softer appearance.
+- **Hero gradient orb** — reduced size from `60vw / 780px` to `38vw / 480px`.
+
+---
+
 ## [1.2.1] — 2026-05-20
 
 ### Changed

@@ -8,7 +8,7 @@
 .orb {
   position: absolute; left: -5%; top: -10%;
   transform: none;
-  width: 60vw; max-width: 780px; height: 60vw; max-height: 780px;
+  width: 38vw; max-width: 480px; height: 38vw; max-height: 480px;
   background-image: url('/assets/brand/gradient-orb.png');
   background-size: contain; background-repeat: no-repeat;
   background-position: center;

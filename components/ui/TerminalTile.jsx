@@ -77,6 +77,15 @@ const tiles = [
   },
 ];
 
+function lineDelay(line) {
+  const r = () => Math.random();
+  if (line.type === 'cmd')                                      return 400  + r() * 500;   // 400–900ms  — typing the command
+  if (line.type === 'done')                                     return 500  + r() * 400;   // 500–900ms  — final result
+  if (line.tag?.includes('BUILD') || line.tag?.includes('DEPLOY')) return 1100 + r() * 1800; // 1.1–2.9s   — heavy work
+  if (line.tag?.includes('INTG')  || line.tag?.includes('SCAN'))   return 800  + r() * 1200; // 0.8–2.0s   — integration
+  return 600 + r() * 800;                                                                  // 0.6–1.4s   — init/check
+}
+
 export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
   const tile   = tiles[seqIndex % tiles.length];
   const [visible, setVisible] = useState(0);
@@ -90,11 +99,11 @@ export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
   useEffect(() => {
     if (!ready) return;
     if (visible >= tile.lines.length) {
-      const id = setTimeout(() => setVisible(0), 3200);
+      // Stay in done state 10–18 seconds before restarting
+      const id = setTimeout(() => setVisible(0), 10000 + Math.random() * 8000);
       return () => clearTimeout(id);
     }
-    const delay = tile.lines[visible].type === 'cmd' ? 360 : 95;
-    const id = setTimeout(() => setVisible(v => v + 1), delay);
+    const id = setTimeout(() => setVisible(v => v + 1), lineDelay(tile.lines[visible]));
     return () => clearTimeout(id);
   }, [visible, ready, tile]);
 
