@@ -59,8 +59,8 @@ components/
 
 ## DotGrid visibility — which sections show it
 The canvas sits behind all content. Sections block it by declaring `background: var(--black)`. Current state:
-- **Dot grid visible:** Hero, Works
-- **Solid black background:** Platforms, Services, About, Pricing, Testimonials, CTA, Footer
+- **Dot grid visible:** Hero, About, Works
+- **Solid black background:** Platforms, Services, Pricing, Testimonials, CTA, Footer
 - Controlled via `background: var(--black)` on the global `.section` class + local root classes. Works uses `className="section section-transparent"` to opt out.
 - **Rule:** if you add a new section and don't want the dots showing, ensure its root element has `background: var(--black)`.
 
@@ -80,7 +80,7 @@ The canvas sits behind all content. Sections block it by declaring `background: 
 --black / --surface / --surface-raised / --border / --border-vis
 --text-off / --text-sec / --text-pri / --text-disp
 ```
-Light mode inverts the full token set via `@media (prefers-color-scheme: light)`.
+The site is **always dark** — `color-scheme: dark` on `:root` and `<meta name="color-scheme" content="dark">` in layout.js prevent iOS Safari and other browsers from applying system light mode. There is no light mode override.
 
 ## Framer Motion — SSR rules
 **Never use `initial={{ opacity: 0 }}` (or any `initial` with invisible values) on elements that are server-rendered and visible above the fold.** Framer Motion writes `initial` values as inline styles in the SSR HTML. On slow connections or before React hydrates, the element stays permanently invisible. Fix: use CSS `@keyframes` with `animation-fill-mode: both` instead. Framer Motion is acceptable for decorative desktop-only elements (e.g. the hero terminal grid) that won't cause blank sections if delayed.

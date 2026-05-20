@@ -1,5 +1,6 @@
 /* ── TOKENS ─────────────────────────────── */
 :root {
+  color-scheme: dark;
   --black:          #000000;
   --surface:        #111111;
   --surface-raised: #1A1A1A;
@@ -15,20 +16,6 @@
   --sp-xs: 4px; --sp-sm: 8px; --sp-md: 16px;
   --sp-lg: 24px; --sp-xl: 32px; --sp-2xl: 48px;
   --sp-3xl: 64px; --sp-4xl: 96px;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --black:          #F5F5F5;
-    --surface:        #FFFFFF;
-    --surface-raised: #F0F0F0;
-    --border:         #E8E8E8;
-    --border-vis:     #CCCCCC;
-    --text-off:       #999999;
-    --text-sec:       #666666;
-    --text-pri:       #1A1A1A;
-    --text-disp:      #000000;
-  }
 }
 
 /* ── RESET ──────────────────────────────── */

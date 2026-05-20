@@ -119,9 +119,11 @@ function CompletedLine({ line, i }) {
 
 export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
   const tile = tiles[seqIndex % tiles.length];
-  const [done,   setDone]   = useState(0);    // completed line count
-  const [typing, setTyping] = useState('');   // partial text of current line
-  const [phase,  setPhase]  = useState('init'); // init | typing | pause | complete
+  const [done,   setDone]   = useState(0);
+  const [typing, setTyping] = useState('');
+  const [phase,  setPhase]  = useState('init');
+  // Random blink offset so cursors across tiles are never in sync
+  const [blinkDelay] = useState(() => `${-(Math.random() * 1.4).toFixed(2)}s`);
 
   const lineIdx = done;
   const line    = tile.lines[lineIdx];
@@ -181,12 +183,12 @@ export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
         ))}
         {typing ? (
           <div className={styles.typingLine}>
-            {typing}<span className={styles.cursor} />
+            {typing}<span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
           </div>
         ) : (
           <div className={styles.cursorRow}>
             {isDone && <span className={styles.prompt}>{'>'}</span>}
-            <span className={styles.cursor} />
+            <span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
           </div>
         )}
       </div>

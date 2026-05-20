@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.4] — 2026-05-20
+
+### Fixed
+- **Cursor blink sync** — each `TerminalTile` now generates a random `animationDelay` on mount (`-(0–1.4s)`) applied to its cursor element. Cursors across all 6 tiles blink out of phase naturally.
+- **Terminal opacity** — `termFadeIn` keyframe `to` value reduced from `opacity: 1` → `opacity: 0.45` so the grid reads as background context, not foreground UI.
+- **About section dot grid** — removed `section-bg` + gradient orb; replaced with `section-transparent` so the interactive DotGrid canvas shows through the Who We Are section.
+- **iOS Safari light mode** — removed `@media (prefers-color-scheme: light)` token override that was inverting the entire colour scheme on devices with system light mode. Added `color-scheme: dark` to `:root` in `globals.css` and `<meta name="color-scheme" content="dark">` in `layout.js`. Site now stays dark regardless of device system setting.
+
+---
+
 ## [1.2.3] — 2026-05-20
 
 ### Changed — Terminal Typewriter Effect
