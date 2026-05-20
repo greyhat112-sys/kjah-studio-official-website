@@ -75,6 +75,24 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/assets/brand/logo.png', type: 'image/png' },
+    ],
+    apple: [{ url: '/assets/brand/logo.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.json',
+  applicationName: 'KJAH Studio',
+  appleWebApp: {
+    capable: true,
+    title: 'KJAH Studio',
+    statusBarStyle: 'black-translucent',
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -82,6 +100,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable}`}>
       <head>
         <meta name="color-scheme" content="dark" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="msapplication-config" content="none" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
