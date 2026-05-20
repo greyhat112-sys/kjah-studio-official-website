@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
+import { useBooking } from '@/contexts/BookingContext';
 import styles from './Nav.module.css';
 
 const links = [
@@ -17,6 +18,7 @@ const links = [
 export default function Nav() {
   const [active, setActive] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const { openBooking } = useBooking();
 
   useEffect(() => {
     const onScroll = () => {
@@ -70,7 +72,7 @@ export default function Nav() {
 
         <div className={styles.navRight}>
           <span className={styles.ctaWrap}>
-            <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
+            <MagneticButton onClick={openBooking} className="btn-p">Book a Call</MagneticButton>
           </span>
           {activeLabel && (
             <span className={styles.sectionLabel}>— {activeLabel}</span>

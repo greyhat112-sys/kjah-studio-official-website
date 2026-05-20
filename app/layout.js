@@ -1,6 +1,8 @@
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import Cursor from '@/components/ui/Cursor';
 import DotGrid from '@/components/ui/DotGrid';
+import { BookingProvider } from '@/contexts/BookingContext';
+import BookingModal from '@/components/BookingModal/BookingModal';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -35,11 +37,14 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <DotGrid />
-        <Cursor />
-        <div className="page-content">
-          {children}
-        </div>
+        <BookingProvider>
+          <DotGrid />
+          <Cursor />
+          <BookingModal />
+          <div className="page-content">
+            {children}
+          </div>
+        </BookingProvider>
       </body>
     </html>
   );
