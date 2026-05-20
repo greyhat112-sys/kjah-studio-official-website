@@ -42,8 +42,32 @@ components/
     Counter.jsx         — animated number counter
     MagneticButton.jsx  — cursor-following magnetic pull on hover; renders <a> with href or <button> with onClick
     TerminalWindow.jsx  — animated terminal (unused in hero; kept for reuse)
-    TerminalTile.jsx    — compact terminal tile for the hero 2×3 grid (Blackbox-style)
+    TerminalTile.jsx    — typewriter terminal tile for the hero 2×3 grid (Blackbox-style)
+    SmoothScroll.jsx    — Lenis smooth scroll init (desktop wheel only, smoothTouch: false)
+app/
+  opengraph-image.jsx — edge-runtime ImageResponse, 1200×630 branded OG image
+  sitemap.js          — generates /sitemap.xml (kjahstudio.com, weekly)
+  robots.js           — generates /robots.txt (allow all, sitemap ref)
+public/
+  manifest.json              — PWA web app manifest
+  favicon.ico / apple-touch-icon.png / android-chrome-192×192 / 512×512
 ```
+
+## Image optimization
+`next.config.mjs` has `formats: ['image/avif', 'image/webp']` — Vercel serves compressed images automatically. **Always add a `sizes` prop to every `<Image>` component.** Without it, Next.js serves the full `width` value regardless of display size, negating the optimization. Example for a 3-column grid: `sizes="(max-width: 540px) 100vw, (max-width: 900px) 50vw, 33vw"`.
+
+## Dark mode lock
+The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<meta name="color-scheme" content="dark">` in `layout.js` prevent any browser/OS from applying light mode. Do not add `@media (prefers-color-scheme: light)` overrides.
+
+## Smooth scroll
+`SmoothScroll.jsx` initialises Lenis with `smoothTouch: false` — iOS/touch scroll stays native. Anchor link clicks are intercepted at `document` level and routed through `lenis.scrollTo(href, { offset: -72 })`. `scroll-behavior: auto` is set on `html` (not `smooth`) to avoid double-scroll conflict with Lenis.
+
+## SEO
+- `app/layout.js` — full `metadata` export with `metadataBase`, OG, Twitter card, robots, canonical, keywords, icons, manifest, appleWebApp.
+- `app/opengraph-image.jsx` — edge-runtime branded OG image (1200×630).
+- `app/sitemap.js` / `app/robots.js` — auto-generate `/sitemap.xml` and `/robots.txt`.
+- `app/page.js` — `ProfessionalService` JSON-LD schema with offer catalog.
+- Submit sitemap to Google Search Console: `https://kjahstudio.com/sitemap.xml`.
 
 ## Booking modal
 `contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The Calendly embed URL is themed with `background_color=000000&text_color=ffffff&primary_color=4ddff0`.

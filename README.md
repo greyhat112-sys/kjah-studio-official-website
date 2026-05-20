@@ -44,15 +44,29 @@ components/
     DotGrid.jsx       — canvas dot grid background (fixed, z-index 0)
     Counter.jsx       — animated number counter (setInterval-based)
     MagneticButton.jsx
-    TerminalTile.jsx
+    TerminalTile.jsx  — typewriter terminal animation (6 agents)
+    SmoothScroll.jsx  — Lenis smooth scroll (desktop wheel only)
 contexts/
   BookingContext.jsx — shared isOpen state for the booking modal
+app/
+  opengraph-image.jsx — edge-runtime 1200×630 OG image
+  sitemap.js          — /sitemap.xml
+  robots.js           — /robots.txt
+public/
+  manifest.json             — PWA web app manifest
+  favicon.ico               — browser tab icon
+  apple-touch-icon.png      — iOS home screen icon (180×180)
+  android-chrome-192x192.png
+  android-chrome-512x512.png
 ```
 
 ## Key decisions
 
-- **No Framer Motion on SSR-rendered elements** — `initial={{ opacity: 0 }}` gets written into the SSR HTML; on slow/mobile devices the page stays invisible until React hydrates. Entrance animations use CSS `@keyframes` instead.
-- **Mobile nav is a section label**, not a hamburger menu. The current section name (e.g. `— About`) appears on the right of the nav as the user scrolls. Hidden while in the hero section (`scrollY < 50vh`).
-- **Counter uses `setInterval`** not `requestAnimationFrame` — iOS Safari throttles rAF for elements inside an `opacity: 0` ancestor (CSS animation fill-mode), causing counters to freeze at 0.
-- **Hero terminal grid**: full opacity on desktop (CSS fade-in), 15% opacity silhouette on mobile spanning full width.
+- **Always dark** — `color-scheme: dark` on `:root` + `<meta name="color-scheme" content="dark">` prevents iOS Safari and all browsers from applying system light mode. No light mode exists.
+- **No Framer Motion on SSR-rendered elements** — `initial={{ opacity: 0 }}` gets written into SSR HTML; on slow/mobile devices elements stay invisible until hydration. Entrance animations use CSS `@keyframes` instead.
+- **Mobile nav is a section label**, not a hamburger. The current section name (`— About`) appears on the right as the user scrolls. Hidden while in the hero section (`scrollY < 50vh`).
+- **Counter uses `setInterval`** not `requestAnimationFrame` — iOS Safari throttles rAF inside an `opacity: 0` ancestor (CSS fill-mode), counters freeze at 0.
+- **Hero terminal grid**: full opacity on desktop (CSS fade-in at 45%), 15% silhouette on mobile.
 - **DotGrid**: 60% opacity on desktop, 25% on mobile.
+- **Lenis**: smooth wheel scroll on desktop only (`smoothTouch: false`). Intercepts anchor clicks with `-72px` nav offset.
+- **Image optimization**: `next.config.mjs` serves AVIF/WebP. Always set `sizes` prop on `<Image>` components — without it Next.js defaults to the full `width` value regardless of display size.

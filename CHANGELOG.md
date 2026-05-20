@@ -4,6 +4,43 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.3.4] — 2026-05-20
+
+### Performance — Image Optimization & Core Web Vitals
+- **`next.config.mjs`** — removed `unoptimized: true`; enabled AVIF + WebP formats. Next.js now serves compressed images automatically on Vercel. Team portraits drop from 300–420KB PNG → ~30–50KB WebP (~90% reduction). Works images drop from 80–108KB JPEG → ~20–35KB WebP (~70% reduction).
+- **Works images** — added `sizes` prop: `(max-width: 540px) calc(100vw - 32px), (max-width: 900px) calc(50vw - 24px), calc(33vw - 24px)`. Browser now downloads correctly-sized images instead of the full 960px source.
+- **About portraits** — added `sizes` and explicit `loading="lazy"`; fixed empty `alt=""` → `alt={m.title}`.
+- **Nav logo** — added `priority` prop (above-fold, preloaded by browser immediately).
+- **Doto font** — reverted `media="print"` async trick; `onLoad` string attributes are not supported in React JSX. Kept as standard blocking stylesheet with `font-display: swap`.
+
+---
+
+## [1.3.3] — 2026-05-20
+
+### Fixed — About card background
+- `About.module.css` — card background changed from `rgba(255,255,255,0.04)` (invisible against transparent section) to `rgba(10,10,10,0.82)`. Cards are now clearly visible with the DotGrid canvas showing through.
+
+---
+
+## [1.3.2] — 2026-05-20
+
+### Added — Favicon set, Web App Manifest, PWA meta tags
+- **`public/favicon.ico`**, **`public/apple-touch-icon.png`** (180×180), **`public/android-chrome-192x192.png`**, **`public/android-chrome-512x512.png`** — full favicon set added to `/public/`.
+- **`public/manifest.json`** — updated icons to reference proper android-chrome files with `maskable` purpose.
+- **`app/layout.js` metadata** — `icons` field updated to point to real favicon files; added `applicationName`, `appleWebApp` (capable, title, statusBarStyle), `formatDetection: { telephone: false }`, `manifest` link.
+- **`<head>`** — added `theme-color: #000000`, `msapplication-TileColor`, `msapplication-config: none`.
+
+---
+
+## [1.3.1] — 2026-05-20
+
+### Added — Lenis Smooth Scrolling
+- **`lenis`** added as a dependency (`^1.3.1`).
+- **`components/ui/SmoothScroll.jsx`** — client component that initialises Lenis on mount. Settings: `duration: 1.2`, exponential ease, `smoothWheel: true`, `smoothTouch: false` (iOS/touch stays native). Intercepts all `a[href^="#"]` clicks and routes them through `lenis.scrollTo` with a `-72px` nav offset.
+- `app/globals.css` — `scroll-behavior: smooth` removed (Lenis owns scroll now).
+
+---
+
 ## [1.3.0] — 2026-05-20
 
 ### Added — SEO Optimization
