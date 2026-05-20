@@ -106,18 +106,9 @@ export default function RootLayout({ children }) {
         <meta name="msapplication-config" content="none" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload hint so browser fetches font CSS early */}
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Doto:ROND,wght@0,700&display=swap"
-          as="style"
-        />
-        {/* Non-render-blocking font load: print → all on load */}
         <link
           href="https://fonts.googleapis.com/css2?family=Doto:ROND,wght@0,700&display=swap"
           rel="stylesheet"
-          media="print"
-          onLoad="this.media='all'"
         />
       </head>
       <body>
