@@ -81,6 +81,12 @@ The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<me
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
 
+## About section — position context
+The `.section` global class does NOT have `position: relative`. The About section uses its own `.about` class (in `About.module.css`) which sets `position: relative; overflow: hidden`. This is required for the absolute-positioned gradient orb to be anchored inside the section. **Any section that needs absolutely-positioned children must either use `.section-bg` or add its own `position: relative` class — do not rely on `.section` for this.**
+
+## BookingModal loading state
+`BookingModal.jsx` now tracks `loaded` state. The Calendly iframe starts hidden (`.frameHidden`) and fades in (`.frameVisible`) once `onLoad` fires. A `.loader` div with a spinning cyan `.spinner` is shown while loading. Close button auto-focuses on open via `closeRef`.
+
 ## DotGrid visibility — which sections show it
 The canvas sits behind all content. Sections block it by declaring `background: var(--black)`. Current state:
 - **Dot grid visible:** Hero, About, Works

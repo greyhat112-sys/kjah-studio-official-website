@@ -4,6 +4,37 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.4.1] — 2026-05-20
+
+### Fixed — Mobile nav em-dash encoding
+- `components/Nav/Nav.jsx` — em dash `—` in the mobile section label was corrupted to `â€"` during a prior PowerShell `Set-Content` operation. Restored correct U+2014 character via byte-level char code replacement.
+- `components/Footer/Footer.module.css` — footer inner container now center-aligns on mobile (`align-items: center; text-align: center`); nav links justified center.
+
+---
+
+## [1.4.0] — 2026-05-20
+
+### Fixed — Audit: accessibility, memory leak, performance, UX
+
+- **`components/ui/Cursor.jsx`** — `mouseenter`/`mouseleave` listeners on interactive elements (`a, button, [role="button"]`) are now stored in a variable and removed in the `useEffect` cleanup. Previously they accumulated on every mount without being cleaned up.
+- **`components/ui/Counter.jsx`** — respects `prefers-reduced-motion`: if the user has reduced motion enabled, the counter jumps directly to its final value instead of animating.
+- **`components/BookingModal/BookingModal.jsx`** — added loading state with a cyan spinner while the Calendly iframe loads; `frameHidden`/`frameVisible` classes fade the iframe in once ready. Added `role="dialog"`, `aria-modal="true"`, `aria-label` for screen readers. Close button auto-focuses on modal open via `closeRef`.
+- **`components/BookingModal/BookingModal.module.css`** — added `.loader`, `.spinner`, `.frameHidden`, `.frameVisible` styles and `@keyframes spin`.
+- **`components/Nav/Nav.jsx`** — added `sizes="32px"` to logo `<Image>` component.
+- **`components/Footer/Footer.jsx`** — added `sizes="24px"` to logo `<Image>` component.
+- **`app/globals.css`** — added `:focus-visible` rule with 2px cyan outline and 3px offset for keyboard navigation visibility.
+
+---
+
+## [1.3.5] — 2026-05-20
+
+### Fixed — About section gradient orb not rendering
+- Root cause: the global `.section` class has no `position: relative`, so `position: absolute` children are positioned relative to `.page-content` (the nearest positioned ancestor) — placing the orb at the bottom of the entire page instead of inside the About section.
+- **`components/About/About.jsx`** — added `styles.about` to the section's className alongside the global classes.
+- **`components/About/About.module.css`** — added `.about { position: relative; overflow: hidden; }` to anchor the orb correctly. Orb matches the hero orb exactly: `38vw / 480px`, `opacity: 0.15`, `blur(80px)`, positioned `left: -5%; bottom: -10%`.
+
+---
+
 ## [1.3.4] — 2026-05-20
 
 ### Performance — Image Optimization & Core Web Vitals
