@@ -1,25 +1,25 @@
-'use client';
+﻿'use client';
 import Image from 'next/image';
 import styles from './About.module.css';
 
 const team = [
-  { portrait: '/assets/team/designer-2.png', role: 'Client Success', title: 'Project Manager', spec: 'Strategy · Delivery' },
-  { portrait: '/assets/team/designer-1.png', role: 'Design + Dev', title: 'Funnel Specialist', spec: 'UI · Funnels · Automation' },
-  { portrait: '/assets/team/designer-3.png', role: 'Design + Dev', title: 'Web Specialist', spec: 'UI · Websites · Automation' },
-  { portrait: '/assets/team/designer-4.png', role: 'Design + Dev', title: 'Automation Expert', spec: 'Backend · Integrations' },
+  { portrait: '/assets/team/designer-2.png', role: 'Client Success', title: 'Project Manager', spec: 'Strategy Â· Delivery' },
+  { portrait: '/assets/team/designer-1.png', role: 'Design + Dev', title: 'Funnel Specialist', spec: 'UI Â· Funnels Â· Automation' },
+  { portrait: '/assets/team/designer-3.png', role: 'Design + Dev', title: 'Web Specialist', spec: 'UI Â· Websites Â· Automation' },
+  { portrait: '/assets/team/designer-4.png', role: 'Design + Dev', title: 'Automation Expert', spec: 'Backend Â· Integrations' },
 ];
 
 export default function About() {
   return (
-    <section className="section section-transparent" id="about">
+    <section className={`section section-transparent ${styles.about}`} id="about">
       <div className={styles.orb} aria-hidden="true" />
       <div className="wrap">
-        <p className="s-tag">— Who we are</p>
+        <p className="s-tag">â€” Who we are</p>
         <div className={styles.layout}>
           <div className={styles.copy}>
             <h2 className="s-head">Four experts.<br />One studio.</h2>
-            <p>KJAH Studio is a team of <strong>four core specialists</strong> — formerly solo professionals, each a proven expert in their field. We came together to build something stronger than any of us alone.</p>
-            <p>We specialize in <strong>fully functional websites and sales funnels</strong> with complete back-end automation: domain configuration, email automation, third-party software integration, and workflow logic — all handled end-to-end.</p>
+            <p>KJAH Studio is a team of <strong>four core specialists</strong> â€” formerly solo professionals, each a proven expert in their field. We came together to build something stronger than any of us alone.</p>
+            <p>We specialize in <strong>fully functional websites and sales funnels</strong> with complete back-end automation: domain configuration, email automation, third-party software integration, and workflow logic â€” all handled end-to-end.</p>
             <p>Beyond the technical work, <strong>design quality is non-negotiable</strong>. Every project we ship is technically sound, visually polished, modern, and built to convert.</p>
           </div>
 
