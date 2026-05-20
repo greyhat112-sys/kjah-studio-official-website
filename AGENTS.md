@@ -98,7 +98,7 @@ On desktop the grid fades in via a CSS `@keyframes termFadeIn` animation (1.2s, 
 The canvas dot grid is `opacity: 0.6` on desktop and `opacity: 0.25` on mobile (≤900px) via a media query in `DotGrid.module.css`.
 
 ## Hero gradient orb
-`.orb` in `Hero.module.css` is `position: absolute; right: -5%; top: -10%` — bleeds off the top-right corner. `opacity: 0.07` (intentionally subtle). Hidden on mobile (`display: none` at ≤900px). Do not increase opacity past 0.1 or recentre it — it's a background accent, not a feature.
+`.orb` in `Hero.module.css` is `position: absolute; left: -5%; top: -10%` — bleeds off the top-left corner. `opacity: 0.07` (intentionally subtle). Hidden on mobile (`display: none` at ≤900px). Do not increase opacity past 0.1 or recentre it — it's a background accent, not a feature.
 
 ## Typography
 | Role | Font | Usage |

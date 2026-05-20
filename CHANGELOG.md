@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.1] — 2026-05-20
+
+### Changed
+- **Hero gradient orb** — moved from top-right (`right: -5%`) to top-left (`left: -5%`); top offset and opacity unchanged.
+
+---
+
 ## [1.2.0] — 2026-05-20
 
 ### Added — Calendly Booking Modal
