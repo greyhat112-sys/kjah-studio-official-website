@@ -6,6 +6,11 @@ export default function Counter({ value, suffix = '', delay = 0 }) {
   const numericValue = parseFloat(value);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplay(numericValue);
+      return;
+    }
+
     const duration = 1400;
     const fps = 30;
     const totalFrames = Math.ceil(duration / (1000 / fps));

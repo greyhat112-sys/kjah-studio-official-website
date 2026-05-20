@@ -24,6 +24,11 @@ html { scroll-behavior: auto; }
 @media (hover: hover) {
   html, a, button, [role="button"] { cursor: none !important; }
 }
+:focus-visible {
+  outline: 2px solid var(--kjah-cyan);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 body {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   background: var(--black);

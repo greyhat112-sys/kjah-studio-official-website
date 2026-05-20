@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -50,7 +50,7 @@ export default function Nav() {
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
-          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" priority />
+          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" priority sizes="32px" />
           <span className={styles.wordmark}>KJAH Studio</span>
         </Link>
 
@@ -75,7 +75,7 @@ export default function Nav() {
             <MagneticButton onClick={openBooking} className="btn-p">Book a Call</MagneticButton>
           </span>
           {activeLabel && (
-            <span className={styles.sectionLabel}>— {activeLabel}</span>
+            <span className={styles.sectionLabel}>â€” {activeLabel}</span>
           )}
         </div>
       </div>
