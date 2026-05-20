@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.5] — 2026-05-20
+
+### Added — Lenis Smooth Scrolling
+- **`lenis`** added as a dependency (`^1.3.1`).
+- **`components/ui/SmoothScroll.jsx`** — client component that initialises Lenis on mount. Settings: `duration: 1.2`, exponential ease, `smoothWheel: true`, `smoothTouch: false` (iOS/touch stays native to avoid Safari issues). Intercepts all `a[href^="#"]` clicks and routes them through `lenis.scrollTo` with a `-72px` offset to clear the fixed nav.
+- `app/layout.js` — `<SmoothScroll />` mounted inside `<BookingProvider>`.
+- `app/globals.css` — `scroll-behavior: smooth` removed (was conflicting with Lenis; Lenis owns scroll now).
+
+---
+
 ## [1.2.4] — 2026-05-20
 
 ### Fixed
