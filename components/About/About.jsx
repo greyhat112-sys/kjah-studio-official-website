@@ -11,8 +11,8 @@ const team = [
 
 export default function About() {
   return (
-    <section className="section section-transparent section-bg" id="about">
-      <div className="s-orb" aria-hidden="true" />
+    <section className="section section-transparent" id="about">
+      <div className={styles.orb} aria-hidden="true" />
       <div className="wrap">
         <p className="s-tag">— Who we are</p>
         <div className={styles.layout}>
