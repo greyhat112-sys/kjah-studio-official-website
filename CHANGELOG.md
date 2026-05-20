@@ -4,6 +4,22 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.2.0] — 2026-05-20
+
+### Added — Calendly Booking Modal
+
+- **`contexts/BookingContext.jsx`** — React context exposing `isOpen`, `openBooking`, `closeBooking`. Wraps the full app via `BookingProvider` in `app/layout.js` so any component can open the modal.
+- **`components/BookingModal/BookingModal.jsx`** — centered overlay with a Calendly inline iframe (`kjahstudio-support/30min`). Themed black/cyan to match the site. Closes on backdrop click, ✕ button, or `Escape`. Locks body scroll while open.
+- **`components/BookingModal/BookingModal.module.css`** — `fadeIn` + `slideUp` entrance animations, `backdrop-filter: blur(6px)`, `border: 1px solid var(--border-vis)`.
+
+### Changed
+- **Nav "Book a Call"** — now calls `openBooking()` instead of linking to `#contact`.
+- **CTA "Book a Free Call"** — converted from `<Link href="#">` to `<button onClick={openBooking}>`.
+- **CTA email** — updated from `hello@kjahstudio.com` → `support@kjahstudio.com`.
+- **Hero gradient orb** — repositioned from `right: 16%; top: 50%` (centered-right) to `right: -5%; top: -10%` (top-right bleed); opacity reduced `0.12 → 0.07` for a more subtle accent.
+
+---
+
 ## [1.1.0] — 2026-05-20
 
 ### Changed — Full Mobile & Tablet Responsiveness

@@ -36,14 +36,17 @@ components/
   Pricing/        — two-tier pricing
   Works/          — 18-card portfolio grid
   Testimonials/   — review cards
-  CTA/            — call-to-action
+  CTA/            — call-to-action with booking + email buttons
   Footer/
+  BookingModal/   — Calendly iframe modal (kjahstudio-support/30min)
   ui/
     Cursor.jsx        — custom cursor (hidden on touch devices)
     DotGrid.jsx       — canvas dot grid background (fixed, z-index 0)
     Counter.jsx       — animated number counter (setInterval-based)
     MagneticButton.jsx
     TerminalTile.jsx
+contexts/
+  BookingContext.jsx — shared isOpen state for the booking modal
 ```
 
 ## Key decisions
