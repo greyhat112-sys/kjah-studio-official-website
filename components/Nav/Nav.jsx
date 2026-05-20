@@ -75,7 +75,7 @@ export default function Nav() {
             <MagneticButton onClick={openBooking} className="btn-p">Book a Call</MagneticButton>
           </span>
           {activeLabel && (
-            <span className={styles.sectionLabel}>â€” {activeLabel}</span>
+            <span className={styles.sectionLabel}>— {activeLabel}</span>
           )}
         </div>
       </div>
