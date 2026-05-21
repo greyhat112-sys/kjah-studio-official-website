@@ -13,10 +13,6 @@
   border-bottom-color: var(--border);
 }
 
-@media (prefers-color-scheme: light) {
-  .nav { background: rgba(245,245,245,0.6); }
-  .nav.scrolled { background: rgba(245,245,245,0.92); }
-}
 
 .inner {
   display: flex; align-items: center;
