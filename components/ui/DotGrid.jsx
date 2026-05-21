@@ -16,6 +16,7 @@ const K = 8e-4;           // Perlin noise time speed
 const BASE  = [51,  51,  51 ];
 const COL_A = [77,  223, 240];   // --kjah-cyan
 const COL_B = [253, 208, 60 ];   // --kjah-amber
+const BASE_STYLE = `rgb(${BASE[0]},${BASE[1]},${BASE[2]})`;
 
 // ── Perlin noise (ported 1:1 from Stitch source) ───────────────────
 const GRAD = [[1,1],[-1,1],[1,-1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]];
@@ -52,7 +53,6 @@ export default function DotGrid() {
     const canvas = canvasRef.current;
     const ctx    = canvas.getContext('2d');
 
-    // Each dot: { gx, gy } grid origin + { dx, dy } lerped displacement
     let dots  = [];
     let mouse = null;
     let rafId = null;
@@ -62,7 +62,6 @@ export default function DotGrid() {
       VW = w; VH = h;
       const cols = Math.ceil(w / S) + 1;
       const rows = Math.ceil(h / S) + 1;
-      // Reuse existing dots array so lerp state survives resize
       const needed = cols * rows;
       while (dots.length < needed) dots.push({ gx: 0, gy: 0, dx: 0, dy: 0 });
       dots.length = needed;
@@ -87,19 +86,33 @@ export default function DotGrid() {
       buildDots(w, h);
     }
 
+    // Reusable array to avoid GC pressure
+    const specialDots = [];
+
     function draw() {
       ctx.clearRect(0, 0, VW, VH);
 
       const wSq    = W * W;
       const phaseY = window.scrollY % S;
       const time   = performance.now() * K;
+      const fadeStart = VH * 0.75;
+
+      specialDots.length = 0;
+
+      // Single batched path for all plain base-colour dots
+      ctx.beginPath();
 
       for (const dot of dots) {
-        // Viewport-space origin (page-anchored via scroll phase)
         const ox = dot.gx;
         const oy = dot.gy - phaseY;
 
-        // Target displacement (zero = rest at grid origin)
+        // Skip off-screen dots — still lerp back to rest
+        if (oy < -S || oy > VH + S) {
+          dot.dx += (0 - dot.dx) * E;
+          dot.dy += (0 - dot.dy) * E;
+          continue;
+        }
+
         let tdx = 0, tdy = 0, proximity = 0;
 
         if (mouse) {
@@ -110,11 +123,9 @@ export default function DotGrid() {
           if (distSq < wSq && distSq > 0) {
             const dist = Math.sqrt(distSq);
             proximity  = 1 - dist / W;
-            const disp = proximity * proximity * proximity * T;  // cubic easing
+            const disp = proximity * proximity * proximity * T;
             tdx = (diffX / dist) * disp;
             tdy = (diffY / dist) * disp;
-
-            // Perlin noise for organic jitter on displaced dots
             const nx  = noise(dot.gx * O,       dot.gy * O       + time);
             const ny  = noise(dot.gx * O + 100, dot.gy * O + 100 + time);
             const amp = proximity * proximity * D;
@@ -123,34 +134,45 @@ export default function DotGrid() {
           }
         }
 
-        // Lerp displacement toward target — this is Stitch's exact physics
         dot.dx += (tdx - dot.dx) * E;
         dot.dy += (tdy - dot.dy) * E;
 
         const px = ox + dot.dx;
         const py = oy + dot.dy;
 
-        // Opacity: fade near bottom + fade near cursor
-        let alpha = 1;
-        const fadeStart = VH * 0.75;
-        if (oy > fadeStart) alpha *= 1 - (oy - fadeStart) / (VH - fadeStart);
-        if (proximity > 0) alpha *= 1 - proximity * proximity * 0.85;
+        // Dots needing custom colour or alpha → deferred
+        const needsAlpha = oy > fadeStart;
+        if (proximity > 0 || needsAlpha) {
+          specialDots.push({ px, py, proximity, ox, oy });
+          continue;
+        }
 
-        // Colour: shift from grey toward cyan/amber near cursor
+        // Fast path: plain base colour, full opacity — add to batch
+        ctx.rect(px - C, py - C, C * 2, C * 2);
+      }
+
+      // One fill call for all base dots
+      ctx.fillStyle = BASE_STYLE;
+      ctx.fill();
+
+      // Individual draws for cursor-influenced or fading dots
+      for (const dot of specialDots) {
+        let alpha = 1;
+        if (dot.oy > fadeStart) alpha *= 1 - (dot.oy - fadeStart) / (VH - fadeStart);
+        if (dot.proximity > 0)  alpha *= 1 - dot.proximity * dot.proximity * 0.85;
+
         let cr = BASE[0], cg = BASE[1], cb = BASE[2];
-        if (proximity > 0) {
-          const angle = Math.atan2(oy - mouse.y, ox - mouse.x);
+        if (dot.proximity > 0 && mouse) {
+          const angle = Math.atan2(dot.oy - mouse.y, dot.ox - mouse.x);
           const t     = (Math.sin(angle * 2 + time * 3) + 1) * 0.5;
-          const prox2 = proximity * proximity;
+          const prox2 = dot.proximity * dot.proximity;
           cr = Math.round(mix(BASE[0], mix(COL_A[0], COL_B[0], t), prox2));
           cg = Math.round(mix(BASE[1], mix(COL_A[1], COL_B[1], t), prox2));
           cb = Math.round(mix(BASE[2], mix(COL_A[2], COL_B[2], t), prox2));
         }
 
-        ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, C, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha.toFixed(2)})`;
+        ctx.fillRect(dot.px - C, dot.py - C, C * 2, C * 2);
       }
 
       rafId = requestAnimationFrame(draw);
