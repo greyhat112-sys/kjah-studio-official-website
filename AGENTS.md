@@ -81,6 +81,15 @@ The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<me
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
 
+## Encoding — never use PowerShell Set-Content on JSX files with special chars
+PowerShell 5.1 `Get-Content -Raw` + `Set-Content -Encoding utf8` can double-encode multi-byte UTF-8 characters (em dashes `—`, middle dots `·`, curly quotes). Use the `Edit` or `Write` tool instead. If corruption occurs, fix with byte-level char code replacement: `$c.Replace([string][char]226 + [string][char]8364 + [string][char]8221, [string][char]8212)`.
+
+## Nav anchor links — use plain `<a>` not `<Link>`
+Hash-only anchor links (`#section`) in Nav and Footer use plain `<a>` tags, not Next.js `<Link>`. `<Link>` routes through the router and bypasses CSS `scroll-behavior: smooth`. The logo (`/`) stays as `<Link>`.
+
+## Hero mobile layout
+On mobile (≤900px): terminal grid is `display: none`. The gradient orb is visible at top-right (`right: -5%; top: -10%; opacity: 0.1`). The interactive DotGrid canvas is the primary background. Do not re-enable the terminal silhouette on mobile.
+
 ## About section — position context
 The `.section` global class does NOT have `position: relative`. The About section uses its own `.about` class (in `About.module.css`) which sets `position: relative; overflow: hidden`. This is required for the absolute-positioned gradient orb to be anchored inside the section. **Any section that needs absolutely-positioned children must either use `.section-bg` or add its own `position: relative` class — do not rely on `.section` for this.**
 

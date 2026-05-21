@@ -4,6 +4,31 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.4.4] — 2026-05-21
+
+### Fixed — About encoding, Hero eyebrow, mobile hero
+- **`components/About/About.jsx`** — full rewrite to fix corrupted UTF-8 characters (`â€"` → `—`, `Â·` → `·`) caused by prior PowerShell `Set-Content` operations. Removed `â€"` prefix from "Who we are" section tag.
+- **`components/Hero/Hero.module.css`** — removed `.eyebrow::before` rule (20px cyan line displaying as an unsupported dash before "Digital Studio").
+- **`components/Hero/Hero.module.css`** — on mobile (≤900px): terminal grid now fully hidden (`display: none`). Orb repositioned to top-right (`right: -5%; top: -10%`) and shown at `opacity: 0.1` so the dot grid canvas is the main background.
+
+---
+
+## [1.4.3] — 2026-05-21
+
+### Fixed — Nav white background on iOS light mode
+- **`components/Nav/Nav.module.css`** — removed `@media (prefers-color-scheme: light)` block that was overriding the nav background to `rgba(245,245,245,...)` on devices in system light mode. Nav stays dark (`rgba(0,0,0,...)`) regardless of OS setting.
+
+---
+
+## [1.4.2] — 2026-05-21
+
+### Fixed — Nav anchor smooth scroll
+- **`components/Nav/Nav.jsx`** — replaced `<Link>` with `<a>` tags for all hash-only nav links (`#services`, `#about`, etc.). Next.js `<Link>` routes through the router and bypasses CSS `scroll-behavior: smooth`. Plain `<a>` tags respect it correctly.
+- **`components/Footer/Footer.jsx`** — same fix; all hash links converted to `<a>` tags. Removed now-unused `Link` import.
+- **`app/globals.css`** — `scroll-behavior` changed from `auto` → `smooth` (previously set to `auto` to avoid Lenis conflict; Lenis is now removed).
+
+---
+
 ## [1.4.1] — 2026-05-20
 
 ### Fixed — Mobile nav em-dash encoding
