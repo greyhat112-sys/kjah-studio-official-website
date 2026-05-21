@@ -4,6 +4,38 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.4.8] — 2026-05-21
+
+### Fixed — Hero subline sizing
+- **`components/Hero/Hero.module.css`** — `.hl` reduced to `font-size: 13px` (fixed, no clamp) and `max-width: 300px` so the subline aligns under the display headline and doesn't bleed toward the terminal grid.
+
+---
+
+## [1.4.7] — 2026-05-21
+
+### SEO — Hero value proposition
+- **`components/Hero/Hero.jsx`** — subline updated from `"Real growth. Zero headache."` to `"Websites, funnels & automation systems built for coaches, brands, and service businesses — 100% done for you."` Communicates service + audience immediately above the fold.
+- **`components/Hero/Hero.jsx`** — added visually hidden `.sr-only` paragraph after H1 containing full keyword phrase: `"KJAH Studio is a done-for-you digital agency specializing in website design, sales funnels, and marketing automation for coaches, e-commerce brands, and service businesses."` Readable by Google, invisible to users.
+- **`app/globals.css`** — added `.sr-only` utility class (clip-based absolute positioning, 1×1px, Google-readable).
+
+---
+
+## [1.4.6] — 2026-05-21
+
+### Fixed — Encoding cleanup
+- **`components/Footer/Footer.jsx`** — removed UTF-8 BOM (`0xEF BB BF`) introduced by PowerShell `Set-Content -Encoding utf8`. Rewrote file cleanly using the Write tool.
+- **`components/Testimonials/Testimonials.jsx`** — replaced `didn&apos;t` with `didn't` (actual apostrophe) for consistency.
+
+---
+
+## [1.4.5] — 2026-05-21
+
+### Fixed — iOS Safari orb blur rendering
+- **`components/Hero/Hero.module.css`** — added `-webkit-filter: blur(80px)` and `transform: translateZ(0)` to `.orb`. iOS Safari fails to apply `filter: blur()` inside `overflow: hidden` parents unless the element is on its own GPU compositing layer.
+- **`components/About/About.module.css`** — same fix applied to the About orb. Both orbs now render as soft glows instead of hard squares on real iOS Safari.
+
+---
+
 ## [1.4.4] — 2026-05-21
 
 ### Fixed — About encoding, Hero eyebrow, mobile hero

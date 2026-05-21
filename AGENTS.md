@@ -81,6 +81,15 @@ The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<me
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
 
+## iOS Safari — filter: blur() inside overflow: hidden
+iOS Safari does not apply `filter: blur()` correctly when a parent has `overflow: hidden`, unless the element is on its own GPU compositing layer. Fix: add `-webkit-filter: blur(Xpx)` AND `transform: translateZ(0)` to the blurred element. Applied to both Hero and About orbs.
+
+## SEO — .sr-only hidden content
+A `.sr-only` utility class exists in `globals.css` (clip-based, 1×1px absolute). Use it to add Google-readable keyword text that is invisible to users. A hidden `<p className="sr-only">` with the full keyword phrase sits after the H1 in Hero.jsx. Do not remove it.
+
+## Hero subline
+`.hl` is `font-size: 13px` fixed with `max-width: 300px` — aligned under the display headline, not stretching toward the terminal grid. Do not increase max-width past 320px or it will bleed into the terminal on desktop.
+
 ## Encoding — never use PowerShell Set-Content on JSX files with special chars
 PowerShell 5.1 `Get-Content -Raw` + `Set-Content -Encoding utf8` can double-encode multi-byte UTF-8 characters (em dashes `—`, middle dots `·`, curly quotes). Use the `Edit` or `Write` tool instead. If corruption occurs, fix with byte-level char code replacement: `$c.Replace([string][char]226 + [string][char]8364 + [string][char]8221, [string][char]8212)`.
 
