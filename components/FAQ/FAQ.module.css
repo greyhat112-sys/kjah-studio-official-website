@@ -1,6 +1,5 @@
 .list {
   margin-top: var(--sp-3xl);
-  max-width: 720px;
   display: flex;
   flex-direction: column;
   gap: 2px;
