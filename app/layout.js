@@ -109,15 +109,21 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Doto:ROND,wght@0,700&display=swap"
           rel="stylesheet"
         />
+        <link
+          rel="preload"
+          href="/assets/brand/gradient-orb.png"
+          as="image"
+          fetchPriority="high"
+        />
       </head>
       <body>
         <BookingProvider>
           <DotGrid />
           <Cursor />
           <BookingModal />
-          <div className="page-content">
+          <main id="main-content" className="page-content">
             {children}
-          </div>
+          </main>
         </BookingProvider>
       </body>
     </html>
