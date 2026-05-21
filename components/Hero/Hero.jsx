@@ -9,7 +9,7 @@ const lines = ['SMART', 'BUILDS.'];
 const stats = [
   { value: '4',   suffix: '',  label: 'Core Specialists', cyan: false },
   { value: '6',   suffix: '',  label: 'Platforms',        cyan: false },
-  { value: '100', suffix: '%', label: 'Done For You',     cyan: true  },
+  { value: '100', suffix: '%', label: 'Premium Builds',   cyan: true  },
   { value: '10',  suffix: '+', label: 'Projects Shipped', cyan: false },
 ];
 
@@ -47,10 +47,10 @@ export default function Hero() {
           </h1>
 
           <p className="sr-only">
-            KJAH Studio is a done-for-you digital agency specializing in website design, sales funnels, and marketing automation for coaches, e-commerce brands, and service businesses.
+            KJAH Studio builds premium websites, sales funnels, and marketing automation systems for coaches, e-commerce brands, and service businesses.
           </p>
 
-          <p className={styles.hl}>Websites, funnels &amp; automation systems built for coaches, brands, and service businesses &mdash; 100% done for you.</p>
+          <p className={styles.hl}>We build premium websites, funnels &amp; automation systems for coaches, brands, and service businesses.</p>
 
           <div className={styles.actions}>
             <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>

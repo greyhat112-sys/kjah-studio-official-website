@@ -5,7 +5,7 @@ import styles from './FAQ.module.css';
 const faqs = [
   {
     q: 'What does KJAH Studio do?',
-    a: 'We build done-for-you websites, sales funnels, and automation systems. We handle everything — design, development, domain setup, email automation, CRM integration, and third-party software — start to finish.',
+    a: 'We build premium websites, sales funnels, and automation systems. We handle everything — design, development, domain setup, email automation, CRM integration, and third-party software — start to finish.',
   },
   {
     q: 'Who do you work with?',
@@ -24,7 +24,7 @@ const faqs = [
     a: 'Most projects are delivered within 2–4 weeks from the start date, depending on scope and how quickly we receive your content and feedback.',
   },
   {
-    q: 'Is everything really done for me?',
+    q: 'Do you handle everything from start to finish?',
     a: 'Yes — 100%. Design, development, setup, automation, and handover. You focus on your business; we handle every technical detail.',
   },
   {

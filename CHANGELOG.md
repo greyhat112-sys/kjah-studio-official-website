@@ -4,6 +4,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.6.1] — 2026-05-22
+
+### Content — Replace "done-for-you" phrasing
+- **`components/Hero/Hero.jsx`** — stat label changed from `Done For You` to `Premium Builds`. Subheading rewritten from `"…— 100% done for you."` to `"We build premium websites, funnels & automation systems for coaches, brands, and service businesses."` Hidden SEO `.sr-only` text updated to match.
+- **`components/FAQ/FAQ.jsx`** — answer to "What does KJAH Studio do?" updated from `"done-for-you websites"` to `"premium websites"`. Question "Is everything really done for me?" renamed to `"Do you handle everything from start to finish?"`.
+
+---
+
 ## [1.6.0] — 2026-05-21
 
 ### Performance — PageSpeed critical fixes (mobile 65 → ~90 target)
