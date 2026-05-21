@@ -33,7 +33,7 @@ export default function Testimonials() {
     <section className="section" id="testimonials">
       <div className="wrap">
         <p className="s-tag">— What clients say</p>
-        <h2 className="s-head">Results they<br />didn&apos;t expect.</h2>
+        <h2 className="s-head">Results they<br />didn't expect.</h2>
         <div className={styles.grid}>
           {testimonials.map((t) => (
             <div key={t.name} className={styles.card}>
