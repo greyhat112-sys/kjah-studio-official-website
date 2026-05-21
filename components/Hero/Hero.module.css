@@ -47,9 +47,9 @@
 
 .hl {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(16px, 2vw, 24px); font-weight: 300;
-  line-height: 1.5; letter-spacing: -0.01em;
-  color: var(--text-sec);
+  font-size: clamp(13px, 1.2vw, 16px); font-weight: 300;
+  line-height: 1.6; letter-spacing: -0.01em;
+  color: var(--text-sec); max-width: 400px;
   margin-bottom: var(--sp-2xl);
 }
 
