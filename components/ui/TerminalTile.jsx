@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './TerminalTile.module.css';
 
 const tiles = [
@@ -83,13 +83,11 @@ function getLineText(line) {
   return `${line.tag}  ${line.rest}${line.s ? `  ${line.s}` : ''}`;
 }
 
-// Per-character delay — cmd feels like human typing, output like streaming
 function charDelay(line) {
-  if (line.type === 'cmd') return 48 + Math.random() * 72; // 48–120ms
-  return 16 + Math.random() * 24;                          // 16–40ms
+  if (line.type === 'cmd') return 48 + Math.random() * 72;
+  return 16 + Math.random() * 24;
 }
 
-// Pause after a line finishes typing — simulates actual work happening
 function lineDelay(line) {
   if (line.type === 'cmd')                                      return 180 + Math.random() * 260;
   if (line.type === 'done')                                     return 280 + Math.random() * 280;
@@ -119,54 +117,77 @@ function CompletedLine({ line, i }) {
 
 export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
   const tile = tiles[seqIndex % tiles.length];
-  const [done,   setDone]   = useState(0);
-  const [typing, setTyping] = useState('');
-  const [phase,  setPhase]  = useState('init');
-  // Random blink offset so cursors across tiles are never in sync
+
+  // State only changes at line/cycle boundaries — not per character
+  const [done,  setDone]  = useState(0);
+  const [phase, setPhase] = useState('init');
   const [blinkDelay] = useState(() => `${-(Math.random() * 1.4).toFixed(2)}s`);
 
-  const lineIdx = done;
-  const line    = tile.lines[lineIdx];
-  const full    = line ? getLineText(line) : '';
-  const isDone  = phase === 'complete';
+  // Refs for direct DOM updates during typing — avoids React re-renders per character
+  const typingTextRef = useRef(null);
+  const typingLineRef = useRef(null);
+  const cursorRowRef  = useRef(null);
 
-  // Initial start delay (first run only)
+  const isDone = phase === 'complete';
+
+  // Initial start delay
   useEffect(() => {
     if (phase !== 'init') return;
     const id = setTimeout(() => setPhase('typing'), startDelay);
     return () => clearTimeout(id);
   }, [phase, startDelay]);
 
-  // Type one character at a time
+  // Type one character at a time — direct DOM mutation, no setState per char
   useEffect(() => {
-    if (phase !== 'typing' || !line) return;
-    if (typing.length >= full.length) { setPhase('pause'); return; }
-    const id = setTimeout(
-      () => setTyping(full.slice(0, typing.length + 1)),
-      charDelay(line)
-    );
-    return () => clearTimeout(id);
-  }, [phase, typing, full, line]);
+    if (phase !== 'typing') return;
+    const line = tile.lines[done];
+    if (!line) return;
 
-  // Pause between lines (simulates actual work running)
+    const full = getLineText(line);
+
+    if (typingLineRef.current) typingLineRef.current.style.display = '';
+    if (cursorRowRef.current)  cursorRowRef.current.style.display  = 'none';
+    if (typingTextRef.current) typingTextRef.current.textContent   = '';
+
+    let charCount = 0;
+    let timerId;
+
+    function typeNext() {
+      charCount++;
+      if (typingTextRef.current) typingTextRef.current.textContent = full.slice(0, charCount);
+      if (charCount >= full.length) {
+        setPhase('pause');
+      } else {
+        timerId = setTimeout(typeNext, charDelay(line));
+      }
+    }
+
+    timerId = setTimeout(typeNext, charDelay(line));
+    return () => clearTimeout(timerId);
+  }, [phase, done, tile]);
+
+  // Pause between lines
   useEffect(() => {
-    if (phase !== 'pause' || !line) return;
+    if (phase !== 'pause') return;
+    const line = tile.lines[done];
+    if (!line) return;
     const id = setTimeout(() => {
       const next = done + 1;
+      if (typingLineRef.current) typingLineRef.current.style.display = 'none';
+      if (cursorRowRef.current)  cursorRowRef.current.style.display  = '';
+      if (typingTextRef.current) typingTextRef.current.textContent   = '';
       setDone(next);
-      setTyping('');
       setPhase(next >= tile.lines.length ? 'complete' : 'typing');
     }, lineDelay(line));
     return () => clearTimeout(id);
-  }, [phase, line, done, tile.lines.length]);
+  }, [phase, done, tile]);
 
   // Hold complete state, then restart
   useEffect(() => {
     if (phase !== 'complete') return;
     const id = setTimeout(() => {
       setDone(0);
-      setTyping('');
-      setPhase('typing'); // no startDelay on restart
+      setPhase('typing');
     }, 10000 + Math.random() * 8000);
     return () => clearTimeout(id);
   }, [phase]);
@@ -181,16 +202,14 @@ export default function TerminalTile({ seqIndex = 0, startDelay = 0 }) {
         {tile.lines.slice(0, done).map((l, i) => (
           <CompletedLine key={i} line={l} i={i} />
         ))}
-        {typing ? (
-          <div className={styles.typingLine}>
-            {typing}<span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
-          </div>
-        ) : (
-          <div className={styles.cursorRow}>
-            {isDone && <span className={styles.prompt}>{'>'}</span>}
-            <span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
-          </div>
-        )}
+        <div ref={typingLineRef} className={styles.typingLine} style={{ display: 'none' }}>
+          <span ref={typingTextRef} />
+          <span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
+        </div>
+        <div ref={cursorRowRef} className={styles.cursorRow}>
+          {isDone && <span className={styles.prompt}>{'>'}</span>}
+          <span className={styles.cursor} style={{ animationDelay: blinkDelay }} />
+        </div>
       </div>
     </div>
   );

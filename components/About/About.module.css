@@ -32,11 +32,9 @@
 }
 
 .card {
-  background: rgba(10, 10, 10, 0.82);
+  background: rgba(12, 12, 12, 0.97);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px; padding: var(--sp-md);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
