@@ -81,6 +81,9 @@ The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<me
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
 
+## FAQ section
+`components/FAQ/` — 9-item accordion, one open at a time. Placed between Testimonials and CTA in `page.js`. Both Nav and Footer link to `#faq`. `.list` and `.item` require explicit `width: 100%` — flex children do not stretch by default. Do not add `max-width` back to `.list`.
+
 ## iOS Safari — filter: blur() inside overflow: hidden
 iOS Safari does not apply `filter: blur()` correctly when a parent has `overflow: hidden`, unless the element is on its own GPU compositing layer. Fix: add `-webkit-filter: blur(Xpx)` AND `transform: translateZ(0)` to the blurred element. Applied to both Hero and About orbs.
 

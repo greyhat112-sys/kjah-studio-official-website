@@ -4,6 +4,31 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.5.2] — 2026-05-21
+
+### Fixed — FAQ full width
+- **`components/FAQ/FAQ.module.css`** — added `width: 100%` to `.list` and `.item`. Flex children don't stretch by default; explicit width forces accordion to span full content area.
+
+---
+
+## [1.5.1] — 2026-05-21
+
+### Fixed — FAQ max-width removed
+- **`components/FAQ/FAQ.module.css`** — removed `max-width: 720px` from `.list` so accordion stretches the full wrap width.
+
+---
+
+## [1.5.0] — 2026-05-21
+
+### Added — FAQ Section
+- **`components/FAQ/FAQ.jsx`** — 9-item accordion component. One item open at a time, `aria-expanded` on each button, cyan `+`/`−` icon. Questions cover services, pricing, platforms, timeline, revisions, and how to get started.
+- **`components/FAQ/FAQ.module.css`** — smooth `max-height` transition, dark card style consistent with site design, fully mobile responsive.
+- **`app/page.js`** — FAQ inserted between Testimonials and CTA (objection-killer placement before booking button).
+- **`components/Nav/Nav.jsx`** — added `#faq` link.
+- **`components/Footer/Footer.jsx`** — added `#faq` link.
+
+---
+
 ## [1.4.8] — 2026-05-21
 
 ### Fixed — Hero subline sizing
