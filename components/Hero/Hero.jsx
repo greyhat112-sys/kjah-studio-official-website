@@ -46,7 +46,11 @@ export default function Hero() {
             ))}
           </h1>
 
-          <p className={styles.hl}>Real growth. Zero headache.</p>
+          <p className="sr-only">
+            KJAH Studio is a done-for-you digital agency specializing in website design, sales funnels, and marketing automation for coaches, e-commerce brands, and service businesses.
+          </p>
+
+          <p className={styles.hl}>Websites, funnels &amp; automation systems built for coaches, brands, and service businesses &mdash; 100% done for you.</p>
 
           <div className={styles.actions}>
             <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>
