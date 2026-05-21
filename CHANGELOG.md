@@ -4,6 +4,23 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.6.0] — 2026-05-21
+
+### Performance — PageSpeed critical fixes (mobile 65 → ~90 target)
+- **`next.config.mjs`** — added `experimental.optimizeCss: true`. Installs Critters to inline critical CSS into the initial HTML, eliminating render-blocking CSS chunks that caused the hero orb LCP element render delay of 10.8s on mobile throttled Moto G.
+- **`app/layout.js`** — added `<link rel="preload" fetchPriority="high">` for `/assets/brand/gradient-orb.png`. Browser now discovers the LCP image from initial HTML instead of waiting for CSS chunk to parse (~340ms savings).
+- **`app/layout.js`** — changed `.page-content` wrapper from `<div>` to `<main id="main-content">` for ARIA landmark accessibility.
+- **`vercel.json`** — created with security headers: `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Strict-Transport-Security` with 1yr max-age + preload, `Cross-Origin-Opener-Policy: same-origin`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` disabling camera/mic/geolocation. Expected: Best Practices 96 → 100.
+- **`.browserslistrc`** — added targeting last 2 versions of Chrome/Firefox/Safari/Edge. Drops legacy polyfills (Array.at, Object.fromEntries, etc.) for ~14 KiB JS savings.
+- **`package.json`** — `critters` added as devDependency (required by `optimizeCss`).
+
+### Performance — Chrome desktop scroll lag (Hero + About sections)
+- **`components/ui/TerminalTile.jsx`** — rewrote character typing to update DOM directly via `useRef` instead of `setState`. Was calling `setTyping()` per character (~100+ React re-renders/sec across 6 tiles during typing phase); now only re-renders on line transitions (~7 per cycle). Eliminates main-thread React reconciliation competing with DotGrid rAF loop.
+- **`components/About/About.module.css`** — removed `backdrop-filter: blur(16px)` and `-webkit-backdrop-filter` from `.card`. Chrome forces full re-blur of all 4 cards on every scroll frame when a fixed element exists above them; replaced with `rgba(12,12,12,0.97)` solid background.
+- **`components/Nav/Nav.module.css`** — removed `backdrop-filter: blur(12px)` from nav. Same Chrome compositor issue — fixed nav with backdrop-filter forces re-blur on every scroll frame. Replaced with higher-opacity solid `rgba(0,0,0,0.75)` → `rgba(0,0,0,0.95)` on scroll.
+
+---
+
 ## [1.5.2] — 2026-05-21
 
 ### Fixed — FAQ full width

@@ -60,7 +60,7 @@ public/
 The site is always dark. `color-scheme: dark` on `:root` in `globals.css` + `<meta name="color-scheme" content="dark">` in `layout.js` prevent any browser/OS from applying light mode. Do not add `@media (prefers-color-scheme: light)` overrides.
 
 ## Smooth scroll
-`SmoothScroll.jsx` initialises Lenis with `smoothTouch: false` — iOS/touch scroll stays native. Anchor link clicks are intercepted at `document` level and routed through `lenis.scrollTo(href, { offset: -72 })`. `scroll-behavior: auto` is set on `html` (not `smooth`) to avoid double-scroll conflict with Lenis.
+CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.jsx` (Lenis) has been removed from `layout.js` — it was causing anchor links to stop working when `<Link>` was used. Hash anchor links use plain `<a>` tags (not Next.js `<Link>`) to respect CSS scroll-behavior.
 
 ## SEO
 - `app/layout.js` — full `metadata` export with `metadataBase`, OG, Twitter card, robots, canonical, keywords, icons, manifest, appleWebApp.
@@ -91,7 +91,7 @@ iOS Safari does not apply `filter: blur()` correctly when a parent has `overflow
 A `.sr-only` utility class exists in `globals.css` (clip-based, 1×1px absolute). Use it to add Google-readable keyword text that is invisible to users. A hidden `<p className="sr-only">` with the full keyword phrase sits after the H1 in Hero.jsx. Do not remove it.
 
 ## Hero subline
-`.hl` is `font-size: 13px` fixed with `max-width: 300px` — aligned under the display headline, not stretching toward the terminal grid. Do not increase max-width past 320px or it will bleed into the terminal on desktop.
+`.hl` is `font-size: 16px` with `max-width: 360px` — aligned under the display headline. Do not increase max-width past 360px or it will bleed into the terminal on desktop.
 
 ## Encoding — never use PowerShell Set-Content on JSX files with special chars
 PowerShell 5.1 `Get-Content -Raw` + `Set-Content -Encoding utf8` can double-encode multi-byte UTF-8 characters (em dashes `—`, middle dots `·`, curly quotes). Use the `Edit` or `Write` tool instead. If corruption occurs, fix with byte-level char code replacement: `$c.Replace([string][char]226 + [string][char]8364 + [string][char]8221, [string][char]8212)`.
@@ -120,7 +120,7 @@ The canvas sits behind all content. Sections block it by declaring `background: 
 
 ## Stacking context
 - `DotGrid` canvas: `z-index: 0` (fixed, behind everything)
-- `.page-content` wrapper: `z-index: 1` (all sections live here)
+- `<main id="main-content" className="page-content">`: `z-index: 1` (all sections live here — changed from `<div>` to `<main>` for a11y landmark)
 - `Cursor` dot/ring: `z-index: 9999/9998`
 
 ## Design tokens (globals.css)
@@ -176,3 +176,14 @@ Tile start offsets in `Hero.jsx`: `[0, 3200, 6800, 1600, 5100, 9400]`ms — wide
 | Display | Doto (ROND=0, wght=700) | Hero headline, stat numbers, pricing |
 | Body/UI | Space Grotesk 300–700 | Section headings, body, cards |
 | Labels | Space Mono 400/700 | ALL CAPS labels, nav, tags, buttons |
+
+## backdrop-filter — never use on fixed or scrolled elements
+**Do not add `backdrop-filter` or `-webkit-backdrop-filter` to any element that is `position: fixed` or that sits over a frequently-repainting layer (like the DotGrid canvas).** Chrome forces a full GPU re-blur on every scroll frame. This was the root cause of 24–30fps scroll lag in all three sections. Nav and About team cards have had their `backdrop-filter` removed. Replace with a higher-opacity solid background instead.
+
+## TerminalTile — ref-based typing
+`TerminalTile.jsx` updates character-by-character typing via `useRef` + direct `textContent` DOM mutation, NOT `setState`. React state only changes at line transitions (~7 per cycle). If you modify TerminalTile, preserve this pattern — switching back to `setTyping()` per character causes ~100+ React re-renders/sec across 6 tiles which competes with the DotGrid rAF loop and causes Hero section lag.
+
+## Performance config
+- `next.config.mjs` has `experimental.optimizeCss: true` (requires `critters` devDependency — already installed). Inlines critical CSS to eliminate render-blocking chunks.
+- `vercel.json` in project root sets security headers (X-Frame-Options, HSTS, COOP, nosniff, Referrer-Policy, Permissions-Policy). Do not remove it.
+- `.browserslistrc` targets last 2 versions of Chrome/Firefox/Safari/Edge. Do not widen targets — it reintroduces legacy polyfills.
