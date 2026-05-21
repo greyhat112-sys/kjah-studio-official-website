@@ -57,7 +57,7 @@ export default function Nav() {
         <ul className={styles.links}>
           {links.map((l) => (
             <li key={l.href}>
-              <Link
+              <a
                 href={l.href}
                 className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
               >
@@ -65,7 +65,7 @@ export default function Nav() {
                 {active === l.href.slice(1) && (
                   <motion.span className={styles.activeDot} layoutId="navDot" />
                 )}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>
