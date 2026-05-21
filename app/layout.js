@@ -3,7 +3,6 @@ import Cursor from '@/components/ui/Cursor';
 import DotGrid from '@/components/ui/DotGrid';
 import { BookingProvider } from '@/contexts/BookingContext';
 import BookingModal from '@/components/BookingModal/BookingModal';
-import SmoothScroll from '@/components/ui/SmoothScroll';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -113,7 +112,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <BookingProvider>
-          <SmoothScroll />
           <DotGrid />
           <Cursor />
           <BookingModal />
