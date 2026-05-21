@@ -35,7 +35,7 @@ export default function Hero() {
 
           {/* CSS animations — visible from first paint, no JS required */}
           <p className={styles.eyebrow}>
-            Digital Studio &mdash; Websites &middot; Funnels &middot; Automation
+            Websites &middot; Funnels &middot; Automation
           </p>
 
           <h1 className={styles.display} aria-label="Smart Builds.">

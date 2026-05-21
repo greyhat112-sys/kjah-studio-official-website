@@ -132,7 +132,7 @@
     left: auto; right: -5%; top: -10%;
     width: 60vw; max-width: 480px;
     height: 60vw; max-height: 480px;
-    opacity: 0.1;
+    opacity: 0.25;
     display: block;
   }
   .actions { margin-bottom: var(--sp-2xl); }
