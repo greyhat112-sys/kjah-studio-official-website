@@ -13,6 +13,7 @@ const links = [
   { href: '#pricing', label: 'Pricing' },
   { href: '#works', label: 'Works' },
   { href: '#testimonials', label: 'Reviews' },
+  { href: '#faq', label: 'FAQ' },
 ];
 
 export default function Nav() {

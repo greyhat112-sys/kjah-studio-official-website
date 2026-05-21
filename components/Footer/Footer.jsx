@@ -14,6 +14,7 @@ export default function Footer() {
           <li><a href="#pricing">Pricing</a></li>
           <li><a href="#works">Works</a></li>
           <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
