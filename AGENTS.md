@@ -8,6 +8,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
+## ⚠️ Site is currently in Coming Soon mode (v1.9.0)
+`middleware.js` redirects every public route to `/coming-soon`. The full marketing site (`app/page.js` + all section components) is untouched and will be served the moment the middleware file is deleted or renamed. The contact API (`/api/contact`) and static assets are excluded from the redirect.
+- **To launch:** `rm middleware.js` (or rename to `middleware.js.disabled`), commit, push.
+- **Holding page:** `app/coming-soon/page.js` + `page.module.css`. `metadata.robots: { index: false, follow: false }`.
+
 ## ⚠️ Critical — iOS Safari / mobile testing
 The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**
 
@@ -42,12 +47,15 @@ components/
     DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
     Grain.jsx           — canvas-generated film-grain overlay (z-index 50, fixed, mix-blend screen)
     Scramble.jsx        — text scramble effect; resolves random chars to real text left-to-right
+    LightRays.jsx       — conic-gradient ray fan; accepts origin="left" (Hero) or "bottom" (About)
     AnimatedSection.jsx — scroll-triggered fade+slide reveal wrapper
     Counter.jsx         — animated number counter
     MagneticButton.jsx  — cursor-following magnetic pull on hover; renders <a> with href or <button> with onClick
     TerminalWindow.jsx  — animated terminal (unused in hero; kept for reuse)
     TerminalTile.jsx    — typewriter terminal tile for the hero 2×3 grid (Blackbox-style)
     SmoothScroll.jsx    — Lenis smooth scroll init (desktop wheel only, smoothTouch: false)
+app/
+  coming-soon/page.js — holding page served while middleware.js is in place
 app/
   opengraph-image.jsx — edge-runtime ImageResponse, 1200×630 branded OG image
   sitemap.js          — generates /sitemap.xml (kjahstudio.com, weekly)

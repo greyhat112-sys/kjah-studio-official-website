@@ -4,6 +4,21 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.9.0] — 2026-06-04
+
+### Added — Coming Soon mode (site hidden behind a holding page)
+
+- **`app/coming-soon/page.js`** + **`page.module.css`** — focused holding page. Logo + wordmark, pulsing cyan "Status: Building" eyebrow, oversized Doto headline ("SOON."), short pitch, support email link, mini terminal-style status pill at the bottom. `metadata.robots = { index: false, follow: false }` so it doesn't get indexed.
+- **`middleware.js`** — Next.js middleware that 307-redirects every public route to `/coming-soon`. Matcher excludes `/api/*` (contact form still works), `/_next/static`, `/_next/image`, `/assets/*`, `/favicon.ico`, `/robots.txt`, `/sitemap.xml`, `/manifest.json`, `/opengraph-image`, and any path with a file extension.
+- **To launch the full site:** delete `middleware.js`. The original `app/page.js` (the full marketing site) is untouched and will be served immediately.
+
+### Aurora component removed
+- `components/ui/Aurora.jsx` / `Aurora.module.css` deleted (was a WebGL `ogl` SoftAurora). About section now uses `<LightRays origin="bottom" />` instead, which renders the same brand-color gradient via pure CSS conic-gradient (no canvas, no rAF loop).
+- **`ogl`** uninstalled — it was the only consumer.
+- **`components/ui/LightRays.jsx`** — now accepts an `origin` prop (`"left"` default | `"bottom"`). The bottom variant places the conic-gradient origin at `50% 100%`, fans cyan / amber / pink upward, and masks the top edge.
+
+---
+
 ## [1.8.1] — 2026-06-03
 
 ### Fixed — Grain too intense, Hero CTA still said "Book a Free Call"

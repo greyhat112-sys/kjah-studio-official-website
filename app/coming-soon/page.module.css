@@ -1,0 +1,139 @@
+.page {
+  min-height: 100vh;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  position: relative;
+}
+
+.inner {
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.logoRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 64px;
+}
+
+.wordmark {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-disp);
+}
+
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kjah-cyan);
+  margin-bottom: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--kjah-cyan);
+  box-shadow: 0 0 12px var(--kjah-cyan);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.headline {
+  font-family: 'Doto', 'Space Mono', monospace;
+  font-size: clamp(80px, 14vw, 160px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--text-disp);
+  margin: 0 0 40px;
+}
+
+.sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-sec);
+  max-width: 460px;
+  margin: 0 auto 64px;
+}
+
+.contactLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-off);
+  margin-bottom: 10px;
+}
+
+.email {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: var(--kjah-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 200ms ease-out;
+  margin-bottom: 96px;
+}
+
+.email:hover {
+  border-bottom-color: var(--kjah-cyan);
+}
+
+.terminalBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-off);
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.barLabel { color: var(--text-sec); }
+.barSep   { color: var(--text-off); }
+.barText  { color: var(--kjah-amber); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.9); }
+}
+
+@media (max-width: 540px) {
+  .logoRow { margin-bottom: 48px; }
+  .sub { margin-bottom: 48px; }
+  .email { margin-bottom: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner { animation: none; }
+  .statusDot { animation: none; }
+}
