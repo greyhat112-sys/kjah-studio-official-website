@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Aurora from '@/components/ui/Aurora';
 import styles from './About.module.css';
 
 const team = [
@@ -12,6 +13,7 @@ const team = [
 export default function About() {
   return (
     <section className={`section section-transparent ${styles.about}`} id="about">
+      <Aurora />
       <div className={styles.orb} aria-hidden="true" />
       <div className="wrap">
         <p className="s-tag">Who we are</p>
