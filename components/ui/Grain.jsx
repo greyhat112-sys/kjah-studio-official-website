@@ -13,7 +13,7 @@ export default function Grain() {
     const imageData = ctx.createImageData(size, size);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
-      const v = (Math.random() * 255) | 0;
+      const v = 90 + ((Math.random() * 100) | 0);
       data[i] = data[i + 1] = data[i + 2] = v;
       data[i + 3] = 255;
     }

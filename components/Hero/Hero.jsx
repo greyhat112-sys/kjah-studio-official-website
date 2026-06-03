@@ -3,6 +3,7 @@ import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
 import TerminalTile from '@/components/ui/TerminalTile';
 import Scramble from '@/components/ui/Scramble';
+import { useBooking } from '@/contexts/BookingContext';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
@@ -17,6 +18,8 @@ const stats = [
 const TILE_DELAYS = [0, 3200, 6800, 1600, 5100, 9400];
 
 export default function Hero() {
+  const { openBooking } = useBooking();
+
   return (
     <section className={styles.hero}>
       <div className={styles.orb} aria-hidden="true" />
@@ -54,7 +57,7 @@ export default function Hero() {
           <p className={styles.hl}>We build premium websites, funnels &amp; automation systems for coaches, brands, and service businesses.</p>
 
           <div className={styles.actions}>
-            <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>
+            <MagneticButton onClick={openBooking} className="btn-p">Contact Us</MagneticButton>
             <MagneticButton href="#works"   className="btn-s">View Our Work</MagneticButton>
           </div>
 
