@@ -1,18 +1,29 @@
 .container {
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+}
+
+.container.left {
   -webkit-mask-image: linear-gradient(to right, black 0%, black 55%, transparent 95%);
   mask-image: linear-gradient(to right, black 0%, black 55%, transparent 95%);
 }
 
+.container.bottom {
+  -webkit-mask-image: linear-gradient(to top, black 0%, black 55%, transparent 95%);
+  mask-image: linear-gradient(to top, black 0%, black 55%, transparent 95%);
+}
+
 .rays {
   position: absolute;
+  filter: blur(50px);
+  -webkit-filter: blur(50px);
+  will-change: transform, opacity;
+}
+
+.rays.left {
   left: -10%;
   top: -50%;
   width: 110%;
@@ -31,21 +42,47 @@
     rgba(206, 82, 115, 0) 114deg,
     transparent 130deg
   );
-  filter: blur(50px);
-  -webkit-filter: blur(50px);
   transform-origin: 0 50%;
   transform: translateZ(0) rotate(-4deg);
-  will-change: transform, opacity;
-  animation: raySweep 16s ease-in-out infinite alternate;
+  animation: raySweepLeft 16s ease-in-out infinite alternate;
 }
 
-@keyframes raySweep {
+.rays.bottom {
+  left: -10%;
+  bottom: -10%;
+  width: 120%;
+  height: 130%;
+  background: conic-gradient(
+    from -60deg at 50% 100%,
+    transparent 0deg,
+    rgba(90, 233, 253, 0) 6deg,
+    rgba(90, 233, 253, 0.30) 24deg,
+    rgba(90, 233, 253, 0) 42deg,
+    rgba(255, 216, 75, 0) 52deg,
+    rgba(255, 216, 75, 0.22) 60deg,
+    rgba(255, 216, 75, 0) 68deg,
+    rgba(206, 82, 115, 0) 78deg,
+    rgba(206, 82, 115, 0.18) 96deg,
+    rgba(206, 82, 115, 0) 114deg,
+    transparent 120deg
+  );
+  transform-origin: 50% 100%;
+  transform: translateZ(0) rotate(-3deg);
+  animation: raySweepBottom 18s ease-in-out infinite alternate;
+}
+
+@keyframes raySweepLeft {
   0%   { transform: translateZ(0) rotate(-4deg); opacity: 0.85; }
   100% { transform: translateZ(0) rotate(4deg);  opacity: 1; }
 }
 
+@keyframes raySweepBottom {
+  0%   { transform: translateZ(0) rotate(-3deg); opacity: 0.85; }
+  100% { transform: translateZ(0) rotate(3deg);  opacity: 1; }
+}
+
 @media (max-width: 900px) {
-  .container { width: 100%; }
+  .container.left { width: 100%; }
   .rays {
     filter: blur(70px);
     -webkit-filter: blur(70px);

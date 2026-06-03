@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import Aurora from '@/components/ui/Aurora';
+import LightRays from '@/components/ui/LightRays';
 import styles from './About.module.css';
 
 const team = [
@@ -13,11 +13,7 @@ const team = [
 export default function About() {
   return (
     <section className={`section section-transparent ${styles.about}`} id="about">
-      <Aurora
-        brightness={0.375}
-        color1="#5AE9FD"
-        color2="#CE5273"
-      />
+      <LightRays origin="bottom" />
       <div className="wrap">
         <p className="s-tag">Who we are</p>
         <div className={styles.layout}>
