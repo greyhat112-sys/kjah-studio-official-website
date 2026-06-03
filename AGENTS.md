@@ -18,7 +18,7 @@ The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safar
 ## Architecture
 ```
 app/
-  layout.js       — root layout: fonts, DotGrid, Cursor, BookingProvider, BookingModal, page-content wrapper
+  layout.js       — root layout: fonts, DotGrid, Cursor, BookingProvider, BookingModal, page-content wrapper, Grain overlay
   page.js         — composes all 10 section components
   globals.css     — design tokens, reset, shared utilities
 contexts/
@@ -40,6 +40,8 @@ components/
   ui/
     Cursor.jsx          — custom cyan cursor with lagging ring (z-index 9999/9998)
     DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
+    Grain.jsx           — canvas-generated film-grain overlay (z-index 50, fixed, mix-blend screen)
+    Scramble.jsx        — text scramble effect; resolves random chars to real text left-to-right
     AnimatedSection.jsx — scroll-triggered fade+slide reveal wrapper
     Counter.jsx         — animated number counter
     MagneticButton.jsx  — cursor-following magnetic pull on hover; renders <a> with href or <button> with onClick
@@ -126,7 +128,19 @@ The canvas sits behind all content. Sections block it by declaring `background: 
 ## Stacking context
 - `DotGrid` canvas: `z-index: 0` (fixed, behind everything)
 - `<main id="main-content" className="page-content">`: `z-index: 1` (all sections live here — changed from `<div>` to `<main>` for a11y landmark)
+- `Grain` overlay: `z-index: 50` (fixed, above content, below nav; `pointer-events: none`, `mix-blend-mode: screen`)
+- `Nav`: `z-index: 200`
+- `BookingModal` backdrop: `z-index: 1000`
 - `Cursor` dot/ring: `z-index: 9999/9998`
+
+## Grain overlay
+`components/ui/Grain.jsx` generates a 128×128 noise tile via canvas on mount (encoded to data URL), then renders a `position: fixed` element with that as a repeating background. Noise values are clamped to **90–189** (not full 0–255) so the brightest dots stay grey rather than pure white. Opacity: **0.022 desktop / 0.014 mobile / 0.012 reduced-motion**. Sits at `z-index: 50` so it textures the content but not the nav, modal, or cursor. Do not raise opacity above 0.03 — the noise visually competes with the DotGrid canvas at higher values.
+
+## Scramble component
+`components/ui/Scramble.jsx` — accepts `text`, `delay` (ms), `duration` (ms, default 1100). SSR-safe: `useState(text)` renders the real text on the server. On mount, a rAF loop replaces alphanumerics with random `A–Z 0–9` chars, resolving left-to-right. Non-alphanumeric characters (spaces, punctuation like `.`) are preserved unchanged. Respects `prefers-reduced-motion`. Used in `Hero.jsx` to scramble "SMART" (delay 0) and "BUILDS." (delay 220ms).
+
+## Spotlight cards
+`components/Works/Works.jsx` — each `WorkCard` tracks the cursor via `onMouseMove`, setting `--spot-x` / `--spot-y` CSS custom properties on its root. A `.spotlight` element renders a cyan radial gradient at those coordinates with `mix-blend-mode: screen`. Disabled on touch via `@media (hover: hover)`. To reuse on Services or About cards: add `position: relative; isolation: isolate;` to the card, attach the mouseMove handler, and copy the `.spotlight` CSS.
 
 ## Design tokens (globals.css)
 ```css

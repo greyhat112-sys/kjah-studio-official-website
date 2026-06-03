@@ -4,6 +4,30 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.8.1] — 2026-06-03
+
+### Fixed — Grain too intense, Hero CTA still said "Book a Free Call"
+- **`components/ui/Grain.module.css`** — opacity reduced from `0.06` → `0.022` (desktop), `0.04` → `0.014` (mobile), `0.03` → `0.012` (reduced motion). Was too visually dominant at the original values.
+- **`components/ui/Grain.jsx`** — noise generator clamped from full 0–255 range to 90–189. Removes the pure-white sparkle dots that read as visual noise rather than film texture.
+- **`components/Hero/Hero.jsx`** — Hero CTA renamed from `Book a Free Call` → `Contact Us`. Now calls `openBooking()` directly (opens the contact-form modal) instead of scrolling to `#contact`. Matches the Nav CTA behavior; added `useBooking` import.
+
+### Note on Works.jsx
+`Book Launch Funnel` / `Book Funnel` labels on the Jim Kwik and Tarek El Moussa cards are factual project-type descriptions (real book launches), not call-to-action copy. Left as-is.
+
+---
+
+## [1.8.0] — 2026-06-03
+
+### Added — React Bits-style polish: film grain, text scramble, spotlight cards
+- **`components/ui/Grain.jsx` / `Grain.module.css`** — global film-grain overlay. Canvas generates a 128×128 noise tile on mount, encodes to data URL, applied as a `position: fixed` repeating background at `z-index: 50` (above content, below nav). `mix-blend-mode: screen` makes the bright noise dots show on the dark background. Renders nothing on the server (`useState(null)` until canvas is ready) — safe SSR.
+- **`components/ui/Scramble.jsx`** — text scramble effect. `useState(text)` for SSR-safe initial render; on mount, runs a rAF loop that replaces alphanumerics with random `A–Z 0–9` chars, resolving left-to-right over `duration` ms (default 1100). Preserves spaces and punctuation. Honors `prefers-reduced-motion: reduce`.
+- **`components/Hero/Hero.jsx`** — wrapped each headline word in `<Scramble />`. Line 1 (`SMART`) at `delay={0}`; line 2 (`BUILDS.`) at `delay={220}` for natural staggering. Existing CSS `heroFadeUp` keyframes still drive the entrance, so the scramble plays during the fade-up.
+- **`components/Works/Works.jsx`** — Work cards now track cursor position via `onMouseMove` and set `--spot-x` / `--spot-y` CSS custom properties on the card root. A new `.spotlight` element renders a `radial-gradient` using those vars.
+- **`components/Works/Works.module.css`** — `.card` gained `position: relative; isolation: isolate;`. New `.spotlight` class: absolute-positioned, `pointer-events: none`, `mix-blend-mode: screen`, cyan radial gradient at the mouse position. Hidden on touch via `@media (hover: hover)`.
+- **`app/layout.js`** — `<Grain />` added after `<main>` so it overlays the page content. Imports updated.
+
+---
+
 ## [1.7.0] — 2026-06-03
 
 ### Changed — Replace Calendly with Contact Form
