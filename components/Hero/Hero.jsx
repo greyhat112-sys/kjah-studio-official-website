@@ -3,6 +3,7 @@ import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
 import TerminalTile from '@/components/ui/TerminalTile';
 import Scramble from '@/components/ui/Scramble';
+import LightRays from '@/components/ui/LightRays';
 import { useBooking } from '@/contexts/BookingContext';
 import styles from './Hero.module.css';
 
@@ -23,6 +24,7 @@ export default function Hero() {
   return (
     <section className={styles.hero}>
       <div className={styles.orb} aria-hidden="true" />
+      <LightRays />
 
       {/* Terminal grid — faint silhouette on mobile, full opacity on desktop */}
       <div className={styles.termGridWrapper} aria-hidden="true">
