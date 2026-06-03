@@ -16,7 +16,39 @@ This version has breaking changes — APIs, conventions, and file structure may 
   - `app/robots.js` — `Disallow: /` for all bots, sitemap reference dropped.
   - `app/coming-soon/page.js` — `metadata.robots: { index: false, follow: false }`.
 - **The full marketing site (`app/page.js` + all section components) is untouched.** Deleting `middleware.js` restores public access immediately.
-- **To launch:** `rm middleware.js`, restore `app/sitemap.js` and `app/robots.js` to their pre-1.9.0 contents (single URL + allow `/`), commit, push.
+
+### Launch checklist (do this when ready to go live)
+1. **Delete the middleware:** `rm middleware.js`
+2. **Restore `app/sitemap.js`** to exactly this:
+   ```js
+   export default function sitemap() {
+     return [
+       {
+         url: 'https://kjahstudio.com',
+         lastModified: new Date(),
+         changeFrequency: 'weekly',
+         priority: 1,
+       },
+     ];
+   }
+   ```
+3. **Restore `app/robots.js`** to exactly this:
+   ```js
+   export default function robots() {
+     return {
+       rules: [{ userAgent: '*', allow: '/' }],
+       sitemap: 'https://kjahstudio.com/sitemap.xml',
+     };
+   }
+   ```
+4. **Commit and push:**
+   ```
+   git add -A
+   git commit -m "chore: launch — disable coming-soon mode"
+   git push origin master:main
+   ```
+5. **Verify on Vercel (~2 min after push):** `kjahstudio.com` loads the full site (no redirect), `/sitemap.xml` lists the URL, `/robots.txt` shows `Allow: /`.
+6. **Optional post-launch:** submit sitemap to Google Search Console; delete `app/coming-soon/` if not keeping the holding page.
 
 ## ⚠️ Critical — iOS Safari / mobile testing
 The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**
