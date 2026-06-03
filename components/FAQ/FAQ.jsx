@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: 'How much does it cost?',
-    a: 'We have two tiers. $1,000 covers a website (up to 5 pages) or funnel (up to 3 pages). $2,000 covers e-commerce (up to 50 products), a larger website (up to 10 pages), or a full funnel (up to 7 pages). Book a free call and we\'ll tell you exactly which package fits your project.',
+    a: 'We have two tiers. $1,000 covers a website (up to 5 pages) or funnel (up to 3 pages). $2,000 covers e-commerce (up to 50 products), a larger website (up to 10 pages), or a full funnel (up to 7 pages). Send us a message and we\'ll tell you exactly which package fits your project.',
   },
   {
     q: 'What platforms do you build on?',
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: 'How do I get started?',
-    a: 'Book a free 30-minute call at kjahstudio.com. We\'ll understand your goals, answer your questions, and give you a clear recommendation — no pressure, no sales pitch.',
+    a: 'Send us a message through the contact form at kjahstudio.com. We\'ll understand your goals, answer your questions, and give you a clear recommendation — no pressure, no sales pitch.',
   },
 ];
 
