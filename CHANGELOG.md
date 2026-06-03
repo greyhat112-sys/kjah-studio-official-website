@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.7.0] — 2026-06-03
+
+### Changed — Replace Calendly with Contact Form
+- **`components/BookingModal/BookingModal.jsx`** — removed Calendly iframe entirely. Replaced with a name / email / message contact form. Includes loading state while submitting, success screen on delivery, and error message on failure. Form resets on modal close.
+- **`components/BookingModal/BookingModal.module.css`** — rewrote styles for the form layout. Added `.form`, `.label`, `.heading`, `.field`, `.fieldLabel`, `.input`, `.textarea`, `.submit`, `.errorMsg`, `.success`, `.successIcon`, `.successTitle`, `.successSub`, `.doneBtn`. Removed `.loader`, `.spinner`, `.frame`, `.frameHidden`, `.frameVisible` (Calendly-specific). Modal width reduced from `min(900px, 95vw)` to `min(540px, 95vw)` (form doesn't need the wide iframe space).
+- **`app/api/contact/route.js`** — new Next.js App Router POST handler. Validates name/email/message, sends to `support@kjahstudio.com` via Resend with `replyTo` set to the sender's email. Returns `{ success: true }` or `{ error }` with appropriate HTTP status.
+- **`package.json` / `package-lock.json`** — added `resend` as a dependency.
+
+### Required env var (Vercel)
+- `RESEND_API_KEY` — get from resend.com. Set in Vercel → project → Settings → Environment Variables.
+- Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
+
+---
+
 ## [1.6.1] — 2026-05-22
 
 ### Content — Replace "done-for-you" phrasing

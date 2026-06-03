@@ -34,7 +34,9 @@ components/
   Testimonials/   — 5-card testimonial grid
   CTA/            — call-to-action; "Book a Free Call" opens BookingModal, email → support@kjahstudio.com
   Footer/         — logo + nav links
-  BookingModal/   — Calendly iframe (kjahstudio-support/30min) in a full-screen overlay
+  BookingModal/   — contact form (name/email/message) in a full-screen overlay; submits to /api/contact
+  api/
+    contact/route.js — POST handler; sends email to support@kjahstudio.com via Resend (RESEND_API_KEY env var)
   ui/
     Cursor.jsx          — custom cyan cursor with lagging ring (z-index 9999/9998)
     DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
@@ -69,8 +71,11 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 - `app/page.js` — `ProfessionalService` JSON-LD schema with offer catalog.
 - Submit sitemap to Google Search Console: `https://kjahstudio.com/sitemap.xml`.
 
-## Booking modal
-`contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The Calendly embed URL is themed with `background_color=000000&text_color=ffffff&primary_color=4ddff0`.
+## Booking modal / contact form
+`contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The modal now renders a contact form (name / email / message) that POSTs to `/api/contact`. On success it shows a confirmation screen; on error it shows an inline message. Calendly has been removed entirely.
+
+## Contact API route
+`app/api/contact/route.js` — Next.js App Router POST handler. Uses the `resend` npm package to send submissions to `support@kjahstudio.com`. `replyTo` is set to the sender's email. Requires `RESEND_API_KEY` environment variable (set in Vercel project settings). Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
 
 ## DotGrid — how it works
 `components/ui/DotGrid.jsx` is a `position: fixed` canvas covering the full viewport. Physics are ported 1:1 from Google Stitch's production source:
