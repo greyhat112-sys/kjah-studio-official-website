@@ -13,7 +13,11 @@ const team = [
 export default function About() {
   return (
     <section className={`section section-transparent ${styles.about}`} id="about">
-      <Aurora />
+      <Aurora
+        brightness={0.375}
+        color1="#5AE9FD"
+        color2="#CE5273"
+      />
       <div className="wrap">
         <p className="s-tag">Who we are</p>
         <div className={styles.layout}>
