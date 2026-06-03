@@ -4,6 +4,17 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.9.1] — 2026-06-04
+
+### Hardened — Coming Soon lockdown
+
+- **`middleware.js`** — every response (redirects and the holding page itself) now carries strict no-cache headers: `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0`, plus `CDN-Cache-Control`, `Vercel-CDN-Cache-Control`, `Pragma`, and `Expires: 0`. Browsers and the Vercel edge cache can no longer hold a copy of the redirect or holding page that could leak the underlying site.
+- **`app/sitemap.js`** — now returns `[]`. No URLs are advertised to crawlers.
+- **`app/robots.js`** — `Disallow: /` for all user agents, sitemap reference dropped. Combined with the holding page's existing `robots: { index: false, follow: false }`, search engines have no entry point.
+- Redirect status set explicitly to `307` (temporary) so when the middleware is removed the redirect stops immediately — no stale 301 cache.
+
+---
+
 ## [1.9.0] — 2026-06-04
 
 ### Added — Coming Soon mode (site hidden behind a holding page)

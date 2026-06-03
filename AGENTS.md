@@ -8,10 +8,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
-## ⚠️ Site is currently in Coming Soon mode (v1.9.0)
-`middleware.js` redirects every public route to `/coming-soon`. The full marketing site (`app/page.js` + all section components) is untouched and will be served the moment the middleware file is deleted or renamed. The contact API (`/api/contact`) and static assets are excluded from the redirect.
-- **To launch:** `rm middleware.js` (or rename to `middleware.js.disabled`), commit, push.
-- **Holding page:** `app/coming-soon/page.js` + `page.module.css`. `metadata.robots: { index: false, follow: false }`.
+## ⚠️ Site is currently in Coming Soon mode (v1.9.1)
+`middleware.js` redirects every public route to `/coming-soon` and emits strict no-cache headers (`Cache-Control: no-store, no-cache, must-revalidate`, `CDN-Cache-Control: no-store`, `Vercel-CDN-Cache-Control: no-store`, `Pragma: no-cache`, `Expires: 0`) so neither browsers nor the Vercel edge cache can serve a stale main-site response.
+- **Lockdown stack:**
+  - `middleware.js` — 307 redirect to `/coming-soon` for every public path (matcher excludes `/api/*`, `/_next/*`, `/assets/*`, opengraph-image, and dotted file paths).
+  - `app/sitemap.js` — returns `[]` (no URLs advertised).
+  - `app/robots.js` — `Disallow: /` for all bots, sitemap reference dropped.
+  - `app/coming-soon/page.js` — `metadata.robots: { index: false, follow: false }`.
+- **The full marketing site (`app/page.js` + all section components) is untouched.** Deleting `middleware.js` restores public access immediately.
+- **To launch:** `rm middleware.js`, restore `app/sitemap.js` and `app/robots.js` to their pre-1.9.0 contents (single URL + allow `/`), commit, push.
 
 ## ⚠️ Critical — iOS Safari / mobile testing
 The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**
