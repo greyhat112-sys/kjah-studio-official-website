@@ -1,6 +1,7 @@
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import Cursor from '@/components/ui/Cursor';
 import DotGrid from '@/components/ui/DotGrid';
+import Grain from '@/components/ui/Grain';
 import { BookingProvider } from '@/contexts/BookingContext';
 import BookingModal from '@/components/BookingModal/BookingModal';
 import './globals.css';
@@ -124,6 +125,7 @@ export default function RootLayout({ children }) {
           <main id="main-content" className="page-content">
             {children}
           </main>
+          <Grain />
         </BookingProvider>
       </body>
     </html>

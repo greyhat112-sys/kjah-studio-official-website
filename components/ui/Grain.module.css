@@ -1,0 +1,22 @@
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.06;
+  mix-blend-mode: screen;
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+@media (max-width: 540px) {
+  .grain {
+    opacity: 0.04;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    opacity: 0.03;
+  }
+}

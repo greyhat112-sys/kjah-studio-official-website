@@ -18,6 +18,34 @@
   background: var(--surface);
   border: 1px solid var(--border); border-radius: 8px;
   overflow: hidden; transition: border-color 200ms ease-out;
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    320px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(77, 223, 240, 0.18),
+    rgba(77, 223, 240, 0.05) 30%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 280ms ease-out;
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+@media (hover: hover) {
+  .card:hover .spotlight {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight { transition: none; }
 }
 
 @media (hover: hover) {

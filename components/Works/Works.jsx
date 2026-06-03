@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import { useRef } from 'react';
 import styles from './Works.module.css';
 
 const works = [
@@ -24,8 +25,18 @@ const works = [
 ];
 
 function WorkCard({ w }) {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
-    <article className={styles.card}>
+    <article ref={cardRef} className={styles.card} onMouseMove={handleMouseMove}>
       <div className={styles.thumb}>
         <Image
           src={`/assets/works/${w.img}.jpg`}
@@ -46,6 +57,7 @@ function WorkCard({ w }) {
         <div className={styles.title}>{w.title}</div>
         <div className={styles.type}>{w.type}</div>
       </div>
+      <div className={styles.spotlight} aria-hidden="true" />
     </article>
   );
 }

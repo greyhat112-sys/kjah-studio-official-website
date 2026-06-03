@@ -2,6 +2,7 @@
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
 import TerminalTile from '@/components/ui/TerminalTile';
+import Scramble from '@/components/ui/Scramble';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
@@ -41,7 +42,7 @@ export default function Hero() {
           <h1 className={styles.display} aria-label="Smart Builds.">
             {lines.map((word, wi) => (
               <span key={wi} className={styles[`displayLine${wi}`]} style={{ display: 'block', whiteSpace: 'nowrap' }}>
-                {word}
+                <Scramble text={word} delay={wi * 220} duration={1100} />
               </span>
             ))}
           </h1>
