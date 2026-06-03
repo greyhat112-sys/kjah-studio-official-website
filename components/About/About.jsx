@@ -14,7 +14,6 @@ export default function About() {
   return (
     <section className={`section section-transparent ${styles.about}`} id="about">
       <Aurora />
-      <div className={styles.orb} aria-hidden="true" />
       <div className="wrap">
         <p className="s-tag">Who we are</p>
         <div className={styles.layout}>

@@ -2,18 +2,6 @@
   position: relative; overflow: hidden;
 }
 
-.orb {
-  position: absolute; left: -5%; bottom: -10%;
-  width: 38vw; max-width: 480px; height: 38vw; max-height: 480px;
-  background-image: url('/assets/brand/gradient-orb.png');
-  background-size: contain; background-repeat: no-repeat;
-  background-position: center;
-  -webkit-filter: blur(80px);
-  filter: blur(80px);
-  transform: translateZ(0);
-  opacity: 0.15; pointer-events: none;
-}
-
 .layout {
   display: grid; grid-template-columns: 1.1fr 0.9fr;
   gap: var(--sp-4xl); margin-top: var(--sp-3xl);
