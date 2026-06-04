@@ -55,7 +55,7 @@
 
 .headline {
   font-family: 'Doto', 'Space Mono', monospace;
-  font-size: clamp(36px, 10vw, 160px);
+  font-size: clamp(32px, 7.5vw, 72px);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.02em;
