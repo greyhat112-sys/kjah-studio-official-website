@@ -1,9 +1,10 @@
-'use client';
+﻿'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
+import { useBooking } from '@/contexts/BookingContext';
 import styles from './Nav.module.css';
 
 const links = [
@@ -12,14 +13,19 @@ const links = [
   { href: '#pricing', label: 'Pricing' },
   { href: '#works', label: 'Works' },
   { href: '#testimonials', label: 'Reviews' },
+  { href: '#faq', label: 'FAQ' },
 ];
 
 export default function Nav() {
   const [active, setActive] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const { openBooking } = useBooking();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      if (window.scrollY < window.innerHeight * 0.5) setActive('');
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -39,22 +45,20 @@ export default function Nav() {
     return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
+  const activeLabel = links.find((l) => l.href.slice(1) === active)?.label ?? '';
+
   return (
-    <motion.nav
-      className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
-      initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-    >
+    <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
-          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" />
+          <Image src="/assets/brand/logo.png" width={32} height={32} alt="KJAH Studio" priority sizes="32px" />
           <span className={styles.wordmark}>KJAH Studio</span>
         </Link>
+
         <ul className={styles.links}>
           {links.map((l) => (
             <li key={l.href}>
-              <Link
+              <a
                 href={l.href}
                 className={`${styles.link} ${active === l.href.slice(1) ? styles.active : ''}`}
               >
@@ -62,12 +66,20 @@ export default function Nav() {
                 {active === l.href.slice(1) && (
                   <motion.span className={styles.activeDot} layoutId="navDot" />
                 )}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>
-        <MagneticButton href="#contact" className="btn-p">Book a Call</MagneticButton>
+
+        <div className={styles.navRight}>
+          <span className={styles.ctaWrap}>
+            <MagneticButton onClick={openBooking} className="btn-p">Contact Us</MagneticButton>
+          </span>
+          {activeLabel && (
+            <span className={styles.sectionLabel}>— {activeLabel}</span>
+          )}
+        </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 }

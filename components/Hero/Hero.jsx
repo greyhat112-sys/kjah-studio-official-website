@@ -1,108 +1,78 @@
 'use client';
-import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
-import TerminalBackground from '@/components/ui/TerminalBackground';
+import TerminalTile from '@/components/ui/TerminalTile';
+import Scramble from '@/components/ui/Scramble';
+import LightRays from '@/components/ui/LightRays';
+import { useBooking } from '@/contexts/BookingContext';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.4 } },
-};
-
-const charVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } },
-};
-
-const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay } },
-});
-
 const stats = [
-  { value: '4', suffix: '', label: 'Core Specialists', cyan: false },
-  { value: '6', suffix: '', label: 'Platforms', cyan: false },
-  { value: '100', suffix: '%', label: 'Done For You', cyan: true },
-  { value: '10', suffix: '+', label: 'Projects Shipped', cyan: false },
+  { value: '4',   suffix: '',  label: 'Core Specialists', cyan: false },
+  { value: '6',   suffix: '',  label: 'Platforms',        cyan: false },
+  { value: '100', suffix: '%', label: 'Premium Builds',   cyan: true  },
+  { value: '10',  suffix: '+', label: 'Projects Shipped', cyan: false },
 ];
 
+const TILE_DELAYS = [0, 3200, 6800, 1600, 5100, 9400];
+
 export default function Hero() {
+  const { openBooking } = useBooking();
+
   return (
     <section className={styles.hero}>
-      <div className={styles.dots} aria-hidden="true" />
       <div className={styles.orb} aria-hidden="true" />
-      <TerminalBackground />
+      <LightRays />
+
+      {/* Terminal grid — faint silhouette on mobile, full opacity on desktop */}
+      <div className={styles.termGridWrapper} aria-hidden="true">
+        <div className={styles.termGrid}>
+          {TILE_DELAYS.map((delay, i) => (
+            <TerminalTile key={i} seqIndex={i} startDelay={delay} />
+          ))}
+        </div>
+        <div className={styles.termGridVignette} />
+      </div>
+
       <div className={styles.inner}>
         <div className={styles.left}>
 
-          <motion.p
-            className={styles.eyebrow}
-            variants={fadeUp(0.1)}
-            initial="hidden"
-            animate="visible"
-          >
-            Digital Studio &mdash; Websites &middot; Funnels &middot; Automation
-          </motion.p>
+          {/* CSS animations — visible from first paint, no JS required */}
+          <p className={styles.eyebrow}>
+            Websites &middot; Funnels &middot; Automation
+          </p>
 
-          <motion.h1
-            className={styles.display}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            aria-label="Smart Builds."
-          >
+          <h1 className={styles.display} aria-label="Smart Builds.">
             {lines.map((word, wi) => (
-              <div key={wi} style={{ display: 'block', whiteSpace: 'nowrap' }}>
-                {word.split('').map((char, ci) => (
-                  <motion.span
-                    key={ci}
-                    variants={charVariants}
-                    style={{ display: 'inline-block' }}
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </div>
+              <span key={wi} className={styles[`displayLine${wi}`]} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+                <Scramble text={word} delay={wi * 220} duration={1100} />
+              </span>
             ))}
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            className={styles.hl}
-            variants={fadeUp(0.9)}
-            initial="hidden"
-            animate="visible"
-          >
-            Real growth. Zero headache.
-          </motion.p>
+          <p className="sr-only">
+            KJAH Studio builds premium websites, sales funnels, and marketing automation systems for coaches, e-commerce brands, and service businesses.
+          </p>
 
-          <motion.div
-            className={styles.actions}
-            variants={fadeUp(1.1)}
-            initial="hidden"
-            animate="visible"
-          >
-            <MagneticButton href="#contact" className="btn-p">Book a Free Call</MagneticButton>
-            <MagneticButton href="#works" className="btn-s">View Our Work</MagneticButton>
-          </motion.div>
+          <p className={styles.hl}>We build premium websites, funnels &amp; automation systems for coaches, brands, and service businesses.</p>
 
-          <motion.div
-            className={styles.stats}
-            variants={fadeUp(1.3)}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className={styles.actions}>
+            <MagneticButton onClick={openBooking} className="btn-p">Contact Us</MagneticButton>
+            <MagneticButton href="#works"   className="btn-s">View Our Work</MagneticButton>
+          </div>
+
+          <div className={styles.stats}>
             {stats.map((s) => (
               <div key={s.label}>
                 <div className={`${styles.statVal} ${s.cyan ? styles.statCyan : ''}`}>
-                  <Counter value={s.value} suffix={s.suffix} delay={1.4} />
+                  <Counter value={s.value} suffix={s.suffix} delay={1.8} />
                 </div>
                 <div className={styles.statLbl}>{s.label}</div>
               </div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import styles from './Works.module.css';
 
@@ -25,19 +24,19 @@ const works = [
   { img: 'lox-stylist-business', alt: 'Lox Stylist Business coaching funnel', niche: 'Beauty / Coaching', title: 'Lox Stylist Business', type: 'Coaching Funnel · ClickFunnels' },
 ];
 
-const gridVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
-};
-
 function WorkCard({ w }) {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
-    <motion.article className={styles.card} variants={cardVariants}>
+    <article ref={cardRef} className={styles.card} onMouseMove={handleMouseMove}>
       <div className={styles.thumb}>
         <Image
           src={`/assets/works/${w.img}.jpg`}
@@ -46,6 +45,7 @@ function WorkCard({ w }) {
           height={540}
           className={styles.img}
           loading="lazy"
+          sizes="(max-width: 540px) calc(100vw - 32px), (max-width: 900px) calc(50vw - 24px), calc(33vw - 24px)"
         />
         <div className={styles.overlay}>
           <span className={styles.overlayNiche}>{w.niche}</span>
@@ -57,16 +57,14 @@ function WorkCard({ w }) {
         <div className={styles.title}>{w.title}</div>
         <div className={styles.type}>{w.type}</div>
       </div>
-    </motion.article>
+      <div className={styles.spotlight} aria-hidden="true" />
+    </article>
   );
 }
 
 export default function Works() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
-
   return (
-    <section className="section" id="works">
+    <section className="section section-transparent" id="works">
       <div className="wrap">
         <div className={styles.header}>
           <div>
@@ -75,15 +73,9 @@ export default function Works() {
           </div>
           <p className={styles.count}>{works.length} projects</p>
         </div>
-        <motion.div
-          ref={ref}
-          className={styles.grid}
-          variants={gridVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-        >
+        <div className={styles.grid}>
           {works.map((w) => <WorkCard key={w.img} w={w} />)}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

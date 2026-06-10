@@ -1,39 +1,41 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { useInView } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function Counter({ value, suffix = '', delay = 0 }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
   const [display, setDisplay] = useState(0);
   const numericValue = parseFloat(value);
 
   useEffect(() => {
-    if (!inView) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplay(numericValue);
+      return;
+    }
+
     const duration = 1400;
+    const fps = 30;
+    const totalFrames = Math.ceil(duration / (1000 / fps));
+    let frame = 0;
+    let intervalId = null;
 
     const run = () => {
-      const start = performance.now();
-      const tick = (now) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
+      intervalId = setInterval(() => {
+        frame++;
+        const progress = Math.min(frame / totalFrames, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         setDisplay(Math.round(numericValue * eased));
-        if (progress < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
+        if (frame >= totalFrames) {
+          clearInterval(intervalId);
+          setDisplay(numericValue);
+        }
+      }, 1000 / fps);
     };
 
-    if (delay > 0) {
-      const id = setTimeout(run, delay * 1000);
-      return () => clearTimeout(id);
-    }
-    run();
-  }, [inView, numericValue, delay]);
+    const timerId = setTimeout(run, delay * 1000);
+    return () => {
+      clearTimeout(timerId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [numericValue, delay]);
 
-  return (
-    <span ref={ref}>
-      {display}{suffix}
-    </span>
-  );
+  return <span>{display}{suffix}</span>;
 }

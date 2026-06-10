@@ -36,7 +36,8 @@ export default function Cursor() {
     };
 
     window.addEventListener('mousemove', onMove);
-    document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
+    const interactives = document.querySelectorAll('a, button, [role="button"]');
+    interactives.forEach((el) => {
       el.addEventListener('mouseenter', onEnter);
       el.addEventListener('mouseleave', onLeave);
     });
@@ -45,6 +46,10 @@ export default function Cursor() {
     return () => {
       window.removeEventListener('mousemove', onMove);
       cancelAnimationFrame(raf);
+      interactives.forEach((el) => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
+      });
     };
   }, []);
 

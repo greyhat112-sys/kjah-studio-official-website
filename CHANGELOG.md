@@ -4,6 +4,377 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.9.1] — 2026-06-04
+
+### Hardened — Coming Soon lockdown
+
+- **`middleware.js`** — every response (redirects and the holding page itself) now carries strict no-cache headers: `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0`, plus `CDN-Cache-Control`, `Vercel-CDN-Cache-Control`, `Pragma`, and `Expires: 0`. Browsers and the Vercel edge cache can no longer hold a copy of the redirect or holding page that could leak the underlying site.
+- **`app/sitemap.js`** — now returns `[]`. No URLs are advertised to crawlers.
+- **`app/robots.js`** — `Disallow: /` for all user agents, sitemap reference dropped. Combined with the holding page's existing `robots: { index: false, follow: false }`, search engines have no entry point.
+- Redirect status set explicitly to `307` (temporary) so when the middleware is removed the redirect stops immediately — no stale 301 cache.
+
+---
+
+## [1.9.0] — 2026-06-04
+
+### Added — Coming Soon mode (site hidden behind a holding page)
+
+- **`app/coming-soon/page.js`** + **`page.module.css`** — focused holding page. Logo + wordmark, pulsing cyan "Status: Building" eyebrow, oversized Doto headline ("SOON."), short pitch, support email link, mini terminal-style status pill at the bottom. `metadata.robots = { index: false, follow: false }` so it doesn't get indexed.
+- **`middleware.js`** — Next.js middleware that 307-redirects every public route to `/coming-soon`. Matcher excludes `/api/*` (contact form still works), `/_next/static`, `/_next/image`, `/assets/*`, `/favicon.ico`, `/robots.txt`, `/sitemap.xml`, `/manifest.json`, `/opengraph-image`, and any path with a file extension.
+- **To launch the full site:** delete `middleware.js`. The original `app/page.js` (the full marketing site) is untouched and will be served immediately.
+
+### Aurora component removed
+- `components/ui/Aurora.jsx` / `Aurora.module.css` deleted (was a WebGL `ogl` SoftAurora). About section now uses `<LightRays origin="bottom" />` instead, which renders the same brand-color gradient via pure CSS conic-gradient (no canvas, no rAF loop).
+- **`ogl`** uninstalled — it was the only consumer.
+- **`components/ui/LightRays.jsx`** — now accepts an `origin` prop (`"left"` default | `"bottom"`). The bottom variant places the conic-gradient origin at `50% 100%`, fans cyan / amber / pink upward, and masks the top edge.
+
+---
+
+## [1.8.1] — 2026-06-03
+
+### Fixed — Grain too intense, Hero CTA still said "Book a Free Call"
+- **`components/ui/Grain.module.css`** — opacity reduced from `0.06` → `0.022` (desktop), `0.04` → `0.014` (mobile), `0.03` → `0.012` (reduced motion). Was too visually dominant at the original values.
+- **`components/ui/Grain.jsx`** — noise generator clamped from full 0–255 range to 90–189. Removes the pure-white sparkle dots that read as visual noise rather than film texture.
+- **`components/Hero/Hero.jsx`** — Hero CTA renamed from `Book a Free Call` → `Contact Us`. Now calls `openBooking()` directly (opens the contact-form modal) instead of scrolling to `#contact`. Matches the Nav CTA behavior; added `useBooking` import.
+
+### Note on Works.jsx
+`Book Launch Funnel` / `Book Funnel` labels on the Jim Kwik and Tarek El Moussa cards are factual project-type descriptions (real book launches), not call-to-action copy. Left as-is.
+
+---
+
+## [1.8.0] — 2026-06-03
+
+### Added — React Bits-style polish: film grain, text scramble, spotlight cards
+- **`components/ui/Grain.jsx` / `Grain.module.css`** — global film-grain overlay. Canvas generates a 128×128 noise tile on mount, encodes to data URL, applied as a `position: fixed` repeating background at `z-index: 50` (above content, below nav). `mix-blend-mode: screen` makes the bright noise dots show on the dark background. Renders nothing on the server (`useState(null)` until canvas is ready) — safe SSR.
+- **`components/ui/Scramble.jsx`** — text scramble effect. `useState(text)` for SSR-safe initial render; on mount, runs a rAF loop that replaces alphanumerics with random `A–Z 0–9` chars, resolving left-to-right over `duration` ms (default 1100). Preserves spaces and punctuation. Honors `prefers-reduced-motion: reduce`.
+- **`components/Hero/Hero.jsx`** — wrapped each headline word in `<Scramble />`. Line 1 (`SMART`) at `delay={0}`; line 2 (`BUILDS.`) at `delay={220}` for natural staggering. Existing CSS `heroFadeUp` keyframes still drive the entrance, so the scramble plays during the fade-up.
+- **`components/Works/Works.jsx`** — Work cards now track cursor position via `onMouseMove` and set `--spot-x` / `--spot-y` CSS custom properties on the card root. A new `.spotlight` element renders a `radial-gradient` using those vars.
+- **`components/Works/Works.module.css`** — `.card` gained `position: relative; isolation: isolate;`. New `.spotlight` class: absolute-positioned, `pointer-events: none`, `mix-blend-mode: screen`, cyan radial gradient at the mouse position. Hidden on touch via `@media (hover: hover)`.
+- **`app/layout.js`** — `<Grain />` added after `<main>` so it overlays the page content. Imports updated.
+
+---
+
+## [1.7.0] — 2026-06-03
+
+### Changed — Replace Calendly with Contact Form
+- **`components/BookingModal/BookingModal.jsx`** — removed Calendly iframe entirely. Replaced with a name / email / message contact form. Includes loading state while submitting, success screen on delivery, and error message on failure. Form resets on modal close.
+- **`components/BookingModal/BookingModal.module.css`** — rewrote styles for the form layout. Added `.form`, `.label`, `.heading`, `.field`, `.fieldLabel`, `.input`, `.textarea`, `.submit`, `.errorMsg`, `.success`, `.successIcon`, `.successTitle`, `.successSub`, `.doneBtn`. Removed `.loader`, `.spinner`, `.frame`, `.frameHidden`, `.frameVisible` (Calendly-specific). Modal width reduced from `min(900px, 95vw)` to `min(540px, 95vw)` (form doesn't need the wide iframe space).
+- **`app/api/contact/route.js`** — new Next.js App Router POST handler. Validates name/email/message, sends to `support@kjahstudio.com` via Resend with `replyTo` set to the sender's email. Returns `{ success: true }` or `{ error }` with appropriate HTTP status.
+- **`package.json` / `package-lock.json`** — added `resend` as a dependency.
+
+### Required env var (Vercel)
+- `RESEND_API_KEY` — get from resend.com. Set in Vercel → project → Settings → Environment Variables.
+- Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
+
+---
+
+## [1.6.1] — 2026-05-22
+
+### Content — Replace "done-for-you" phrasing
+- **`components/Hero/Hero.jsx`** — stat label changed from `Done For You` to `Premium Builds`. Subheading rewritten from `"…— 100% done for you."` to `"We build premium websites, funnels & automation systems for coaches, brands, and service businesses."` Hidden SEO `.sr-only` text updated to match.
+- **`components/FAQ/FAQ.jsx`** — answer to "What does KJAH Studio do?" updated from `"done-for-you websites"` to `"premium websites"`. Question "Is everything really done for me?" renamed to `"Do you handle everything from start to finish?"`.
+
+---
+
+## [1.6.0] — 2026-05-21
+
+### Performance — PageSpeed critical fixes (mobile 65 → ~90 target)
+- **`next.config.mjs`** — added `experimental.optimizeCss: true`. Installs Critters to inline critical CSS into the initial HTML, eliminating render-blocking CSS chunks that caused the hero orb LCP element render delay of 10.8s on mobile throttled Moto G.
+- **`app/layout.js`** — added `<link rel="preload" fetchPriority="high">` for `/assets/brand/gradient-orb.png`. Browser now discovers the LCP image from initial HTML instead of waiting for CSS chunk to parse (~340ms savings).
+- **`app/layout.js`** — changed `.page-content` wrapper from `<div>` to `<main id="main-content">` for ARIA landmark accessibility.
+- **`vercel.json`** — created with security headers: `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Strict-Transport-Security` with 1yr max-age + preload, `Cross-Origin-Opener-Policy: same-origin`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` disabling camera/mic/geolocation. Expected: Best Practices 96 → 100.
+- **`.browserslistrc`** — added targeting last 2 versions of Chrome/Firefox/Safari/Edge. Drops legacy polyfills (Array.at, Object.fromEntries, etc.) for ~14 KiB JS savings.
+- **`package.json`** — `critters` added as devDependency (required by `optimizeCss`).
+
+### Performance — Chrome desktop scroll lag (Hero + About sections)
+- **`components/ui/TerminalTile.jsx`** — rewrote character typing to update DOM directly via `useRef` instead of `setState`. Was calling `setTyping()` per character (~100+ React re-renders/sec across 6 tiles during typing phase); now only re-renders on line transitions (~7 per cycle). Eliminates main-thread React reconciliation competing with DotGrid rAF loop.
+- **`components/About/About.module.css`** — removed `backdrop-filter: blur(16px)` and `-webkit-backdrop-filter` from `.card`. Chrome forces full re-blur of all 4 cards on every scroll frame when a fixed element exists above them; replaced with `rgba(12,12,12,0.97)` solid background.
+- **`components/Nav/Nav.module.css`** — removed `backdrop-filter: blur(12px)` from nav. Same Chrome compositor issue — fixed nav with backdrop-filter forces re-blur on every scroll frame. Replaced with higher-opacity solid `rgba(0,0,0,0.75)` → `rgba(0,0,0,0.95)` on scroll.
+
+---
+
+## [1.5.2] — 2026-05-21
+
+### Fixed — FAQ full width
+- **`components/FAQ/FAQ.module.css`** — added `width: 100%` to `.list` and `.item`. Flex children don't stretch by default; explicit width forces accordion to span full content area.
+
+---
+
+## [1.5.1] — 2026-05-21
+
+### Fixed — FAQ max-width removed
+- **`components/FAQ/FAQ.module.css`** — removed `max-width: 720px` from `.list` so accordion stretches the full wrap width.
+
+---
+
+## [1.5.0] — 2026-05-21
+
+### Added — FAQ Section
+- **`components/FAQ/FAQ.jsx`** — 9-item accordion component. One item open at a time, `aria-expanded` on each button, cyan `+`/`−` icon. Questions cover services, pricing, platforms, timeline, revisions, and how to get started.
+- **`components/FAQ/FAQ.module.css`** — smooth `max-height` transition, dark card style consistent with site design, fully mobile responsive.
+- **`app/page.js`** — FAQ inserted between Testimonials and CTA (objection-killer placement before booking button).
+- **`components/Nav/Nav.jsx`** — added `#faq` link.
+- **`components/Footer/Footer.jsx`** — added `#faq` link.
+
+---
+
+## [1.4.8] — 2026-05-21
+
+### Fixed — Hero subline sizing
+- **`components/Hero/Hero.module.css`** — `.hl` reduced to `font-size: 13px` (fixed, no clamp) and `max-width: 300px` so the subline aligns under the display headline and doesn't bleed toward the terminal grid.
+
+---
+
+## [1.4.7] — 2026-05-21
+
+### SEO — Hero value proposition
+- **`components/Hero/Hero.jsx`** — subline updated from `"Real growth. Zero headache."` to `"Websites, funnels & automation systems built for coaches, brands, and service businesses — 100% done for you."` Communicates service + audience immediately above the fold.
+- **`components/Hero/Hero.jsx`** — added visually hidden `.sr-only` paragraph after H1 containing full keyword phrase: `"KJAH Studio is a done-for-you digital agency specializing in website design, sales funnels, and marketing automation for coaches, e-commerce brands, and service businesses."` Readable by Google, invisible to users.
+- **`app/globals.css`** — added `.sr-only` utility class (clip-based absolute positioning, 1×1px, Google-readable).
+
+---
+
+## [1.4.6] — 2026-05-21
+
+### Fixed — Encoding cleanup
+- **`components/Footer/Footer.jsx`** — removed UTF-8 BOM (`0xEF BB BF`) introduced by PowerShell `Set-Content -Encoding utf8`. Rewrote file cleanly using the Write tool.
+- **`components/Testimonials/Testimonials.jsx`** — replaced `didn&apos;t` with `didn't` (actual apostrophe) for consistency.
+
+---
+
+## [1.4.5] — 2026-05-21
+
+### Fixed — iOS Safari orb blur rendering
+- **`components/Hero/Hero.module.css`** — added `-webkit-filter: blur(80px)` and `transform: translateZ(0)` to `.orb`. iOS Safari fails to apply `filter: blur()` inside `overflow: hidden` parents unless the element is on its own GPU compositing layer.
+- **`components/About/About.module.css`** — same fix applied to the About orb. Both orbs now render as soft glows instead of hard squares on real iOS Safari.
+
+---
+
+## [1.4.4] — 2026-05-21
+
+### Fixed — About encoding, Hero eyebrow, mobile hero
+- **`components/About/About.jsx`** — full rewrite to fix corrupted UTF-8 characters (`â€"` → `—`, `Â·` → `·`) caused by prior PowerShell `Set-Content` operations. Removed `â€"` prefix from "Who we are" section tag.
+- **`components/Hero/Hero.module.css`** — removed `.eyebrow::before` rule (20px cyan line displaying as an unsupported dash before "Digital Studio").
+- **`components/Hero/Hero.module.css`** — on mobile (≤900px): terminal grid now fully hidden (`display: none`). Orb repositioned to top-right (`right: -5%; top: -10%`) and shown at `opacity: 0.1` so the dot grid canvas is the main background.
+
+---
+
+## [1.4.3] — 2026-05-21
+
+### Fixed — Nav white background on iOS light mode
+- **`components/Nav/Nav.module.css`** — removed `@media (prefers-color-scheme: light)` block that was overriding the nav background to `rgba(245,245,245,...)` on devices in system light mode. Nav stays dark (`rgba(0,0,0,...)`) regardless of OS setting.
+
+---
+
+## [1.4.2] — 2026-05-21
+
+### Fixed — Nav anchor smooth scroll
+- **`components/Nav/Nav.jsx`** — replaced `<Link>` with `<a>` tags for all hash-only nav links (`#services`, `#about`, etc.). Next.js `<Link>` routes through the router and bypasses CSS `scroll-behavior: smooth`. Plain `<a>` tags respect it correctly.
+- **`components/Footer/Footer.jsx`** — same fix; all hash links converted to `<a>` tags. Removed now-unused `Link` import.
+- **`app/globals.css`** — `scroll-behavior` changed from `auto` → `smooth` (previously set to `auto` to avoid Lenis conflict; Lenis is now removed).
+
+---
+
+## [1.4.1] — 2026-05-20
+
+### Fixed — Mobile nav em-dash encoding
+- `components/Nav/Nav.jsx` — em dash `—` in the mobile section label was corrupted to `â€"` during a prior PowerShell `Set-Content` operation. Restored correct U+2014 character via byte-level char code replacement.
+- `components/Footer/Footer.module.css` — footer inner container now center-aligns on mobile (`align-items: center; text-align: center`); nav links justified center.
+
+---
+
+## [1.4.0] — 2026-05-20
+
+### Fixed — Audit: accessibility, memory leak, performance, UX
+
+- **`components/ui/Cursor.jsx`** — `mouseenter`/`mouseleave` listeners on interactive elements (`a, button, [role="button"]`) are now stored in a variable and removed in the `useEffect` cleanup. Previously they accumulated on every mount without being cleaned up.
+- **`components/ui/Counter.jsx`** — respects `prefers-reduced-motion`: if the user has reduced motion enabled, the counter jumps directly to its final value instead of animating.
+- **`components/BookingModal/BookingModal.jsx`** — added loading state with a cyan spinner while the Calendly iframe loads; `frameHidden`/`frameVisible` classes fade the iframe in once ready. Added `role="dialog"`, `aria-modal="true"`, `aria-label` for screen readers. Close button auto-focuses on modal open via `closeRef`.
+- **`components/BookingModal/BookingModal.module.css`** — added `.loader`, `.spinner`, `.frameHidden`, `.frameVisible` styles and `@keyframes spin`.
+- **`components/Nav/Nav.jsx`** — added `sizes="32px"` to logo `<Image>` component.
+- **`components/Footer/Footer.jsx`** — added `sizes="24px"` to logo `<Image>` component.
+- **`app/globals.css`** — added `:focus-visible` rule with 2px cyan outline and 3px offset for keyboard navigation visibility.
+
+---
+
+## [1.3.5] — 2026-05-20
+
+### Fixed — About section gradient orb not rendering
+- Root cause: the global `.section` class has no `position: relative`, so `position: absolute` children are positioned relative to `.page-content` (the nearest positioned ancestor) — placing the orb at the bottom of the entire page instead of inside the About section.
+- **`components/About/About.jsx`** — added `styles.about` to the section's className alongside the global classes.
+- **`components/About/About.module.css`** — added `.about { position: relative; overflow: hidden; }` to anchor the orb correctly. Orb matches the hero orb exactly: `38vw / 480px`, `opacity: 0.15`, `blur(80px)`, positioned `left: -5%; bottom: -10%`.
+
+---
+
+## [1.3.4] — 2026-05-20
+
+### Performance — Image Optimization & Core Web Vitals
+- **`next.config.mjs`** — removed `unoptimized: true`; enabled AVIF + WebP formats. Next.js now serves compressed images automatically on Vercel. Team portraits drop from 300–420KB PNG → ~30–50KB WebP (~90% reduction). Works images drop from 80–108KB JPEG → ~20–35KB WebP (~70% reduction).
+- **Works images** — added `sizes` prop: `(max-width: 540px) calc(100vw - 32px), (max-width: 900px) calc(50vw - 24px), calc(33vw - 24px)`. Browser now downloads correctly-sized images instead of the full 960px source.
+- **About portraits** — added `sizes` and explicit `loading="lazy"`; fixed empty `alt=""` → `alt={m.title}`.
+- **Nav logo** — added `priority` prop (above-fold, preloaded by browser immediately).
+- **Doto font** — reverted `media="print"` async trick; `onLoad` string attributes are not supported in React JSX. Kept as standard blocking stylesheet with `font-display: swap`.
+
+---
+
+## [1.3.3] — 2026-05-20
+
+### Fixed — About card background
+- `About.module.css` — card background changed from `rgba(255,255,255,0.04)` (invisible against transparent section) to `rgba(10,10,10,0.82)`. Cards are now clearly visible with the DotGrid canvas showing through.
+
+---
+
+## [1.3.2] — 2026-05-20
+
+### Added — Favicon set, Web App Manifest, PWA meta tags
+- **`public/favicon.ico`**, **`public/apple-touch-icon.png`** (180×180), **`public/android-chrome-192x192.png`**, **`public/android-chrome-512x512.png`** — full favicon set added to `/public/`.
+- **`public/manifest.json`** — updated icons to reference proper android-chrome files with `maskable` purpose.
+- **`app/layout.js` metadata** — `icons` field updated to point to real favicon files; added `applicationName`, `appleWebApp` (capable, title, statusBarStyle), `formatDetection: { telephone: false }`, `manifest` link.
+- **`<head>`** — added `theme-color: #000000`, `msapplication-TileColor`, `msapplication-config: none`.
+
+---
+
+## [1.3.1] — 2026-05-20
+
+### Added — Lenis Smooth Scrolling
+- **`lenis`** added as a dependency (`^1.3.1`).
+- **`components/ui/SmoothScroll.jsx`** — client component that initialises Lenis on mount. Settings: `duration: 1.2`, exponential ease, `smoothWheel: true`, `smoothTouch: false` (iOS/touch stays native). Intercepts all `a[href^="#"]` clicks and routes them through `lenis.scrollTo` with a `-72px` nav offset.
+- `app/globals.css` — `scroll-behavior: smooth` removed (Lenis owns scroll now).
+
+---
+
+## [1.3.0] — 2026-05-20
+
+### Added — SEO Optimization
+
+- **`app/layout.js`** — expanded `metadata` export: `metadataBase`, title template, keywords array, `alternates.canonical`, full `openGraph` block (type, locale, url, siteName, image), `twitter` card, `robots` / `googleBot` directives.
+- **`app/opengraph-image.jsx`** — edge-runtime `ImageResponse` generates a 1200×630 OG image on demand. Black background, KJAH cyan accent, headline, subline, service tags, domain watermark. Used by both OG and Twitter card.
+- **`app/sitemap.js`** — generates `/sitemap.xml` pointing to `https://kjahstudio.com` with weekly change frequency.
+- **`app/robots.js`** — generates `/robots.txt`: allow all, sitemap reference.
+- **`app/page.js`** — `ProfessionalService` JSON-LD structured data injected via `<script type="application/ld+json">`. Includes name, url, logo, email, priceRange, areaServed, serviceType, and `hasOfferCatalog` with three service offers.
+
+---
+
+## [1.2.5] — 2026-05-20
+
+### Added — Lenis Smooth Scrolling
+- **`lenis`** added as a dependency (`^1.3.1`).
+- **`components/ui/SmoothScroll.jsx`** — client component that initialises Lenis on mount. Settings: `duration: 1.2`, exponential ease, `smoothWheel: true`, `smoothTouch: false` (iOS/touch stays native to avoid Safari issues). Intercepts all `a[href^="#"]` clicks and routes them through `lenis.scrollTo` with a `-72px` offset to clear the fixed nav.
+- `app/layout.js` — `<SmoothScroll />` mounted inside `<BookingProvider>`.
+- `app/globals.css` — `scroll-behavior: smooth` removed (was conflicting with Lenis; Lenis owns scroll now).
+
+---
+
+## [1.2.4] — 2026-05-20
+
+### Fixed
+- **Cursor blink sync** — each `TerminalTile` now generates a random `animationDelay` on mount (`-(0–1.4s)`) applied to its cursor element. Cursors across all 6 tiles blink out of phase naturally.
+- **Terminal opacity** — `termFadeIn` keyframe `to` value reduced from `opacity: 1` → `opacity: 0.45` so the grid reads as background context, not foreground UI.
+- **About section dot grid** — removed `section-bg` + gradient orb; replaced with `section-transparent` so the interactive DotGrid canvas shows through the Who We Are section.
+- **iOS Safari light mode** — removed `@media (prefers-color-scheme: light)` token override that was inverting the entire colour scheme on devices with system light mode. Added `color-scheme: dark` to `:root` in `globals.css` and `<meta name="color-scheme" content="dark">` in `layout.js`. Site now stays dark regardless of device system setting.
+
+---
+
+## [1.2.3] — 2026-05-20
+
+### Changed — Terminal Typewriter Effect
+- **TerminalTile** — rewrote animation as a character-by-character typewriter. Each line types out one char at a time before colour/styling applies. `cmd` lines feel like human typing (48–120ms/char); output lines stream faster (16–40ms/char). Cursor tracks at the end of the line being typed. When a line finishes typing, the process pause (lineDelay) happens before the next line starts — so BUILD/DEPLOY steps visibly wait 0.7–2.1s between output, making it feel like real work.
+- Completed lines snap from plain mono text → full styled colour on completion (tag cyan, rest grey, ok cyan).
+- Removed `lineIn` CSS animation from completed lines — typewriter replaces it.
+- Added `.typingLine` CSS class for the in-progress line.
+
+---
+
+## [1.2.2] — 2026-05-20
+
+### Changed — Terminal & Orb Polish
+- **Terminal timing** — rewrote per-line delay logic in `TerminalTile.jsx`. Lines now wait a random amount based on type: BUILD/DEPLOY steps 1.1–2.9s, INTG/SCAN 0.8–2.0s, INIT/CHECK 0.6–1.4s, cmd 0.4–0.9s. Sequences feel like real work instead of a scripted slideshow.
+- **Terminal restart delay** — done state now holds for 10–18 seconds (was 3.2s) before restarting, so tiles spend meaningful time in their completed state.
+- **Tile start offsets** — `TILE_DELAYS` widened from `[0,700,1400,350,1050,1750]` to `[0,3200,6800,1600,5100,9400]`ms so tiles are never in sync and drift further apart over time.
+- **Line reveal animation** — slowed from `0.1s` to `0.3s` ease-out for a softer appearance.
+- **Hero gradient orb** — reduced size from `60vw / 780px` to `38vw / 480px`.
+
+---
+
+## [1.2.1] — 2026-05-20
+
+### Changed
+- **Hero gradient orb** — moved from top-right (`right: -5%`) to top-left (`left: -5%`); top offset and opacity unchanged.
+
+---
+
+## [1.2.0] — 2026-05-20
+
+### Added — Calendly Booking Modal
+
+- **`contexts/BookingContext.jsx`** — React context exposing `isOpen`, `openBooking`, `closeBooking`. Wraps the full app via `BookingProvider` in `app/layout.js` so any component can open the modal.
+- **`components/BookingModal/BookingModal.jsx`** — centered overlay with a Calendly inline iframe (`kjahstudio-support/30min`). Themed black/cyan to match the site. Closes on backdrop click, ✕ button, or `Escape`. Locks body scroll while open.
+- **`components/BookingModal/BookingModal.module.css`** — `fadeIn` + `slideUp` entrance animations, `backdrop-filter: blur(6px)`, `border: 1px solid var(--border-vis)`.
+
+### Changed
+- **Nav "Book a Call"** — now calls `openBooking()` instead of linking to `#contact`.
+- **CTA "Book a Free Call"** — converted from `<Link href="#">` to `<button onClick={openBooking}>`.
+- **CTA email** — updated from `hello@kjahstudio.com` → `support@kjahstudio.com`.
+- **Hero gradient orb** — repositioned from `right: 16%; top: 50%` (centered-right) to `right: -5%; top: -10%` (top-right bleed); opacity reduced `0.12 → 0.07` for a more subtle accent.
+
+---
+
+## [1.1.0] — 2026-05-20
+
+### Changed — Full Mobile & Tablet Responsiveness
+
+- **Mobile hamburger nav** — `Nav.jsx` + `Nav.module.css` rewritten. At ≤900px the desktop link list and CTA button hide; a hamburger button (3-bars → X on open) appears. Tapping opens a full-screen overlay (`position: fixed; top: 60px`) with large Space Grotesk section links and a cyan "BOOK A CALL" CTA. `AnimatePresence` fade+slide entrance/exit. Body scroll is locked while the menu is open.
+- **Section padding** — global `.section` mobile padding reduced from `--sp-3xl` (64px) to `--sp-2xl` (48px) at ≤540px. Cuts ~576px of dead vertical space across all 9 sections.
+- **Hero stats grid** — fixed column gap: changed `gap: var(--sp-lg) 0` → `gap: var(--sp-lg) var(--sp-md)` at ≤540px so the 2×2 stat grid has breathing room between columns.
+- **Works grid** — kept 2-column layout at ≤540px (`1fr 1fr` with `gap: var(--sp-sm)`) instead of collapsing to 1-column. Reduces the 18-card Works section height by ~2700px on mobile.
+- **About team grid** — kept 2-column at ≤540px (was collapsing to 1-col). Portrait cards are compact enough to read at 2-col on 390px screens.
+- **Pricing grid** — added `margin-inline: auto` to center the max-width: 860px grid within its wrapper at all breakpoints.
+- **Page height** — total mobile page height reduced from 14,277px → 9,604px (32% reduction).
+
+---
+
+## [1.0.9] — 2026-05-19
+
+### Changed
+- **Section backgrounds** — All sections except Hero and Works now carry an explicit `background: var(--black)` so the interactive DotGrid canvas only shows through the Hero and Works (client portfolio) sections. Sections affected: Platforms, Services, About, Pricing, Testimonials, CTA, Footer.
+- `app/globals.css` — added `background: var(--black)` to `.section` (covers Services, About, Pricing, Testimonials) and a `.section-transparent` utility override.
+- `components/Works/Works.jsx` — section uses `className="section section-transparent"` to stay see-through against the canvas.
+- `components/Platforms/Platforms.module.css`, `components/CTA/CTA.module.css`, `components/Footer/Footer.module.css` — `background: var(--black)` added to each root class.
+
+---
+
+## [1.0.8] — 2026-05-19
+
+### Changed
+- **Hero terminal scene → Blackbox-style 2-column grid** — replaced the single layered `TerminalWindow` depth effect with a 2×3 grid of compact `TerminalTile` components covering the right half of the hero viewport, inspired by Blackbox AI's hero section.
+
+### Added
+- `components/ui/TerminalTile.jsx` — compact terminal tile component. Six agents run in parallel (WEBSITE, FUNNEL, AUTOMATION, DEPLOY, CRM, EMAIL) with staggered `startDelay` offsets so they're always at different points in their sequence. Status dot: cyan while running, shifts to amber on sequence complete, then auto-restarts after 3.2s pause.
+- `components/ui/TerminalTile.module.css` — flat grid-cell style: no border-radius, 10px Space Mono, compact header with right-aligned status dot.
+
+### Hero layout changes
+- `components/Hero/Hero.jsx` — removed `terminalScene` / `TerminalWindow` imports. Terminal grid is now a `motion.div` (`termGridWrapper`) positioned `position: absolute; left: 50%; right: 0; top: 0; bottom: 0` inside the hero, rendering 6 `TerminalTile` instances with `TILE_DELAYS = [0, 700, 1400, 350, 1050, 1750]ms`.
+- `components/Hero/Hero.module.css` — removed `.terminalScene`, `.termMain`, `.termBg1`, `.termBg2`, `.vignette`. Added `.termGridWrapper`, `.termGrid` (2-col × 3-row CSS grid filling full height), `.termGridVignette` (left + top/bottom gradient fades). `.inner` simplified to single-column with `max-width: 560px` on `.left`.
+
+---
+
+## [1.0.7] — 2026-05-19
+
+### Added
+- **Interactive DotGrid component** (`components/ui/DotGrid.jsx`) — replaces the static CSS `radial-gradient` dot pattern with a canvas-based implementation using physics ported 1:1 from Google Stitch's production source. Algorithm: lerp factor `E=0.035` (each frame dots move 3.5% toward target — produces the signature float/lag), repel radius `W=725px`, cubic displacement easing (`proximity³ × T`), Perlin noise layered on displaced dots for organic jitter, colour shift from `--border-vis` grey toward `--kjah-cyan` / `--kjah-amber` as proximity increases, opacity fade near bottom of viewport and near cursor. Canvas is `position: fixed` full-viewport; dots are page-anchored via `scrollY % S` phase offset. Per-dot state stores displacement `dx/dy` rather than absolute positions so scroll doesn't corrupt lerp continuity.
+- `components/ui/DotGrid.module.css` — `position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.6`.
+
+### Changed
+- `app/layout.js` — `<DotGrid />` inserted before `<Cursor />`; `{children}` wrapped in `<div className="page-content">` (z-index: 1) so page content sits above the canvas layer.
+- `app/globals.css` — removed `.section-bg::before` static dot grid. Added `.page-content { position: relative; z-index: 1; }`.
+- `components/Hero/Hero.jsx` — removed `<div className={styles.dots} />` element.
+- `components/Hero/Hero.module.css` — removed `.dots` rule.
+
+### Dependencies
+- `puppeteer` added as devDependency (used during development to screenshot pages; not used at runtime).
+
+---
+
 ## [1.0.6] — 2026-05-19
 
 ### Fixed

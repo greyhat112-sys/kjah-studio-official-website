@@ -1,6 +1,7 @@
 .grid {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: var(--sp-md); margin-top: var(--sp-3xl); max-width: 860px;
+  gap: var(--sp-md); margin-top: var(--sp-3xl);
+  max-width: 860px; margin-inline: auto;
 }
 
 .card {
@@ -79,7 +80,7 @@
 .inclAmber { color: var(--kjah-amber); }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; max-width: 480px; }
+  .grid { grid-template-columns: 1fr; max-width: 480px; gap: var(--sp-2xl); }
 }
 
 @media (max-width: 540px) {

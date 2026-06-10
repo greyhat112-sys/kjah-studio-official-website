@@ -1,22 +1,16 @@
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 200;
   height: 60px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.75);
   border-bottom: 1px solid transparent;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   transition: background 300ms ease-out, border-color 300ms ease-out;
 }
 
 .nav.scrolled {
-  background: rgba(0,0,0,0.88);
+  background: rgba(0,0,0,0.95);
   border-bottom-color: var(--border);
 }
 
-@media (prefers-color-scheme: light) {
-  .nav { background: rgba(245,245,245,0.6); }
-  .nav.scrolled { background: rgba(245,245,245,0.92); }
-}
 
 .inner {
   display: flex; align-items: center;
@@ -57,7 +51,22 @@
   background: var(--kjah-cyan); position: absolute; bottom: -8px;
 }
 
+/* ── Right side wrapper ─────────────────── */
+.navRight {
+  display: flex; align-items: center; gap: var(--sp-sm);
+}
+
+/* ── Mobile section label ───────────────── */
+.sectionLabel {
+  display: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--kjah-cyan);
+}
+
 @media (max-width: 900px) {
   .links { display: none; }
   .inner { padding: 0 var(--sp-md); }
+  .ctaWrap { display: none; }
+  .sectionLabel { display: block; }
 }

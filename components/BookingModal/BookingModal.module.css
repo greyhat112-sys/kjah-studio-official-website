@@ -1,0 +1,232 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  position: relative;
+  width: min(540px, 95vw);
+  background: #0a0a0a;
+  border: 1px solid var(--border-vis);
+  border-radius: 4px;
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 10;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-vis);
+  color: var(--text-sec);
+  font-size: 14px;
+  line-height: 1;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.close:hover {
+  color: var(--text-pri);
+  border-color: var(--kjah-cyan);
+}
+
+/* ── Form ── */
+.form {
+  padding: 48px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--kjah-cyan);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-pri);
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-sec);
+}
+
+.input,
+.textarea {
+  background: var(--surface);
+  border: 1px solid var(--border-vis);
+  border-radius: 3px;
+  color: var(--text-pri);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  transition: border-color 0.15s;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--kjah-cyan);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-off);
+}
+
+.input:disabled,
+.textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.errorMsg {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--kjah-pink);
+  margin: 0;
+}
+
+.submit {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--kjah-cyan);
+  color: #000;
+  border: none;
+  border-radius: 3px;
+  padding: 13px 28px;
+  cursor: pointer;
+  font-weight: 700;
+  align-self: flex-start;
+  transition: opacity 0.15s;
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+/* ── Success state ── */
+.success {
+  padding: 64px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.successIcon {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--kjah-cyan);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kjah-cyan);
+  font-size: 20px;
+}
+
+.successTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-pri);
+  margin: 0;
+}
+
+.successSub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--text-sec);
+  margin: 0;
+}
+
+.doneBtn {
+  margin-top: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border-vis);
+  color: var(--text-sec);
+  border-radius: 3px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.doneBtn:hover {
+  border-color: var(--kjah-cyan);
+  color: var(--text-pri);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .form {
+    padding: 48px 24px 32px;
+  }
+
+  .success {
+    padding: 48px 24px;
+  }
+}
