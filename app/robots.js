@@ -1,5 +1,6 @@
 export default function robots() {
   return {
-    rules: [{ userAgent: '*', disallow: '/' }],
+    rules: [{ userAgent: '*', allow: '/' }],
+    sitemap: 'https://kjahstudio.com/sitemap.xml',
   };
 }
