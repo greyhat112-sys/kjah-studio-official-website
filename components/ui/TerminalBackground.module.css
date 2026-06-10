@@ -1,0 +1,137 @@
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 3-col grid offset to the right — terminals start at ~40% from left */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 28px;
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 38%;
+  right: 0;
+  padding: 72px 48px 72px 24px;
+  align-content: center;
+}
+
+/* ── Panel ─────────────────────────────── */
+.panel {
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.8;
+  overflow: hidden;
+  max-height: 210px;
+  background: #0c0c0c;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+
+/* ── Lines ──────────────────────────────── */
+.lineCmd {
+  color: #2a2a2a;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.line {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.lineDone {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* ── Text colours (very dim) ─────────────── */
+.tag {
+  color: #0f5560;
+  flex-shrink: 0;
+  min-width: 64px;
+  letter-spacing: 0.02em;
+}
+
+.rest {
+  color: #2c2c2c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ok {
+  color: #0f5560;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.tagDone {
+  color: #5c4a10;
+  flex-shrink: 0;
+  min-width: 64px;
+  letter-spacing: 0.02em;
+}
+
+.restDone {
+  color: #5c4a10;
+}
+
+/* ── Cursor ────────────────────────────── */
+.cursor {
+  display: inline-block;
+  width: 5px;
+  height: 10px;
+  background: #0f5560;
+  vertical-align: middle;
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Edge fades ─────────────────────────── */
+.fadeLeft {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 56%;
+  background: linear-gradient(to right, var(--black) 52%, transparent);
+  pointer-events: none;
+}
+
+.fadeRight {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 14%;
+  background: linear-gradient(to left, var(--black), transparent);
+  pointer-events: none;
+}
+
+.fadeTop {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 18%;
+  background: linear-gradient(to bottom, var(--black), transparent);
+  pointer-events: none;
+}
+
+.fadeBottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 18%;
+  background: linear-gradient(to top, var(--black), transparent);
+  pointer-events: none;
+}

@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
-import TerminalWindow from '@/components/ui/TerminalWindow';
+import TerminalBackground from '@/components/ui/TerminalBackground';
 import styles from './Hero.module.css';
 
 const lines = ['SMART', 'BUILDS.'];
@@ -34,6 +34,7 @@ export default function Hero() {
     <section className={styles.hero}>
       <div className={styles.dots} aria-hidden="true" />
       <div className={styles.orb} aria-hidden="true" />
+      <TerminalBackground />
       <div className={styles.inner}>
         <div className={styles.left}>
 
@@ -104,25 +105,6 @@ export default function Hero() {
           </motion.div>
 
         </div>
-        <motion.div
-          className={styles.right}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
-        >
-          <div className={styles.terminalScene}>
-            <div className={styles.termBg1} aria-hidden="true">
-              <TerminalWindow initialSeq={1} initialLine={5} />
-            </div>
-            <div className={styles.termBg2} aria-hidden="true">
-              <TerminalWindow initialSeq={2} initialLine={3} />
-            </div>
-            <div className={styles.termMain}>
-              <TerminalWindow />
-            </div>
-            <div className={styles.vignette} aria-hidden="true" />
-          </div>
-        </motion.div>
       </div>
     </section>
   );
