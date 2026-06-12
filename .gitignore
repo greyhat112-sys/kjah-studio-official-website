@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore everything outside the project folder
+/*
+!/OneDrive
+/OneDrive/*
+!/OneDrive/Documents
+/OneDrive/Documents/*
+!/OneDrive/Documents/harvey
+/OneDrive/Documents/harvey/*
+!/OneDrive/Documents/harvey/KJAH
+/OneDrive/Documents/harvey/KJAH/*
+!/OneDrive/Documents/harvey/KJAH/prospect pipeline
