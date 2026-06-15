@@ -27,13 +27,13 @@ export const metadata = {
     template: '%s | KJAH Studio',
   },
   description:
-    'KJAH Studio builds done-for-you websites, sales funnels, and automation systems for coaches, e-commerce brands, and service businesses. Attract more leads, convert more clients, and grow online — without the tech headache.',
+    'KJAH Studio builds premium websites, sales funnels, and automation systems for coaches, e-commerce brands, and service businesses. Attract more leads, convert more clients, and grow online — without the tech headache.',
   keywords: [
     'website design agency',
     'sales funnel builder',
     'marketing automation agency',
-    'done for you website',
-    'done for you funnel',
+    'custom website design',
+    'sales funnel design',
     'HighLevel agency',
     'ClickFunnels expert',
     'email automation',
@@ -56,13 +56,13 @@ export const metadata = {
     siteName: 'KJAH Studio',
     title: 'KJAH Studio — Websites, Funnels & Automation',
     description:
-      'Done-for-you websites, sales funnels, and automation systems. We build digital engines that attract leads, convert clients, and grow your business.',
+      'Premium websites, sales funnels, and automation systems. We build digital engines that attract leads, convert clients, and grow your business.',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'KJAH Studio — Smart Websites, Funnels & Automation' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'KJAH Studio — Websites, Funnels & Automation',
-    description: 'Done-for-you websites, sales funnels, and automation systems that grow your business.',
+    description: 'Premium websites, sales funnels, and automation systems that grow your business.',
     images: ['/opengraph-image'],
   },
   robots: {

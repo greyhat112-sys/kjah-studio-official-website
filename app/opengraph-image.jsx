@@ -42,7 +42,7 @@ export default function Image() {
 
         {/* Subline */}
         <div style={{ color: '#999999', fontSize: 26, lineHeight: 1.5, maxWidth: 680 }}>
-          Done-for-you websites, funnels & automation systems
+          Premium websites, funnels & automation systems
           for businesses that want to grow online.
         </div>
 

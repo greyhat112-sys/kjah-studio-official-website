@@ -19,7 +19,7 @@ const jsonLd = {
   logo: 'https://kjahstudio.com/assets/brand/logo-with-text.png',
   image: 'https://kjahstudio.com/opengraph-image',
   description:
-    'KJAH Studio builds done-for-you websites, sales funnels, and marketing automation systems for coaches, e-commerce brands, and service businesses.',
+    'KJAH Studio builds premium websites, sales funnels, and marketing automation systems for coaches, e-commerce brands, and service businesses.',
   email: 'support@kjahstudio.com',
   priceRange: '$$$',
   areaServed: 'Worldwide',
