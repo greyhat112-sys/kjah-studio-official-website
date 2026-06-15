@@ -90,11 +90,12 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 `contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The modal now renders a contact form (name / email / message) that POSTs to `/api/contact`. On success it shows a confirmation screen; on error it shows an inline message. Calendly has been removed entirely.
 
 ## Contact API route
-`app/api/contact/route.js` — Next.js App Router POST handler. Fires two Resend emails sequentially:
-1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body with name/email/message.
-2. **Auto-reply to submitter** → sender's email, branded dark HTML email ("We got your message. We typically respond within 24 hours."), sent immediately after form submission.
+`app/api/contact/route.js` — Next.js App Router POST handler. Fires three operations in parallel via `Promise.all`:
+1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body.
+2. **Auto-reply to submitter** → branded dark HTML email, 24hr response expectation.
+3. **Pipeline insert** → Supabase `prospects` table via service role key. Creates a `cold_lead` tagged `inbound` with `source: website`. Deduplicates by email — repeat submissions are skipped silently. Logs all failures to Vercel function logs.
 
-Requires `RESEND_API_KEY` environment variable (set in Vercel project settings). Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
+Required env vars in Vercel: `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_OWNER_USER_ID`. All confirmed working 2026-06-15.
 
 ## DotGrid — how it works
 `components/ui/DotGrid.jsx` is a `position: fixed` canvas covering the full viewport. Physics are ported 1:1 from Google Stitch's production source:
