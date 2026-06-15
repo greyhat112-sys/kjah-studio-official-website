@@ -5,7 +5,10 @@ const SUPABASE_URL = 'https://jczwufibjejzxnrlyjdz.supabase.co';
 async function upsertProspect(name, email, message) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const userId = process.env.SUPABASE_OWNER_USER_ID;
-  if (!key || !userId) return;
+  if (!key || !userId) {
+    console.error('[contact] Supabase env vars missing — SUPABASE_SERVICE_ROLE_KEY:', !!key, 'SUPABASE_OWNER_USER_ID:', !!userId);
+    return;
+  }
 
   const headers = {
     apikey: key,
@@ -19,9 +22,12 @@ async function upsertProspect(name, email, message) {
     { headers: { ...headers, Accept: 'application/json' } }
   );
   const rows = await existing.json();
-  if (Array.isArray(rows) && rows.length > 0) return;
+  if (Array.isArray(rows) && rows.length > 0) {
+    console.log('[contact] Prospect already exists for', email, '— skipping insert');
+    return;
+  }
 
-  await fetch(`${SUPABASE_URL}/rest/v1/prospects`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/prospects`, {
     method: 'POST',
     headers: { ...headers, Prefer: 'return=minimal' },
     body: JSON.stringify({
@@ -34,6 +40,11 @@ async function upsertProspect(name, email, message) {
       user_id: userId,
     }),
   });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error('[contact] Supabase insert failed:', res.status, body);
+  }
 }
 
 export async function POST(req) {
