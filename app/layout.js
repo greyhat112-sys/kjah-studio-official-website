@@ -48,6 +48,7 @@ export const metadata = {
   creator: 'KJAH Studio',
   publisher: 'KJAH Studio',
   alternates: { canonical: 'https://kjahstudio.com' },
+  verification: { google: 'd4xdHeK7TQ7HLs8G_AkWR3Vth7q5VqvByzf9941SnlY' },
   openGraph: {
     type: 'website',
     locale: 'en_US',
