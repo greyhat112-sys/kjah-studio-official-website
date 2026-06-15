@@ -8,15 +8,21 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
-## Site is LIVE (launched v1.9.1)
+## Site is LIVE
 `middleware.js` has been deleted. The full marketing site is publicly accessible at kjahstudio.com. `app/sitemap.js` and `app/robots.js` are restored to their live state (Allow: /, sitemap URL advertised).
 
 The `app/coming-soon/` holding page is still present in the codebase but is no longer reachable. Delete it when convenient.
 
+**SEO status (as of 2026-06-16):**
+- Google Search Console: verified via `metadata.verification.google` in `layout.js`. Sitemap submitted, homepage indexed (live in Google results). GSC may show a cosmetic "couldn't fetch" on the sitemap for 24–48h — ignore it, the page is indexed.
+- Favicon in search results lags indexing by 1–4 weeks — Google processes it separately. Nothing to fix.
+
 **Post-launch tasks remaining:**
-- Submit sitemap to Google Search Console: `kjahstudio.com/sitemap.xml`
 - Create Google Business Profile: business.google.com
 - List on Clutch.co + DesignRush for backlinks
+
+## ⚠️ Copy rule — NEVER use "done-for-you"
+The phrase "done-for-you" (any casing/hyphenation) must not appear anywhere on the site — visible copy OR metadata/SEO. Use **"premium"** instead (matches the Hero: "KJAH Studio builds premium websites, sales funnels, and automation systems"). This was purged from all metadata in v2.1.0; do not reintroduce it.
 
 ## ⚠️ Critical — iOS Safari / mobile testing
 The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**

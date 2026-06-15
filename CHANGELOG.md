@@ -4,6 +4,23 @@ All notable changes to this project are documented here.
 
 ---
 
+## [2.1.0] — 2026-06-16
+
+### SEO — Google Search Console launch + "done-for-you" purge
+- **Google Search Console** — site verified via `metadata.verification.google` meta tag in `app/layout.js`. Sitemap submitted, homepage indexed (confirmed live in Google search results).
+- **`app/sitemap.js`** — `lastModified` changed from `new Date()` (full ISO timestamp with milliseconds) to `new Date().toISOString().split('T')[0]` (date-only). Cleaner sitemap; avoids GSC parser fussiness over sub-second precision.
+- **Removed "done-for-you" from ALL metadata** — `app/layout.js` (main description, OG description, Twitter description, two keyword entries → `custom website design` / `sales funnel design`), `app/opengraph-image.jsx` (subline), `app/page.js` (JSON-LD schema description). All now read **"premium"** to match the live Hero copy. The phrase must never appear anywhere on the site.
+
+## [2.0.0] — 2026-06-15
+
+### Launch — Coming Soon mode disabled, contact automation added
+- **`middleware.js` deleted** — full marketing site is now publicly live at kjahstudio.com. `app/sitemap.js` + `app/robots.js` restored (Allow: /, sitemap advertised).
+- **`app/api/contact/route.js` — auto-reply email.** On form submission, a branded dark HTML email now goes to the submitter ("We got your message — we typically respond within 24 hours") alongside the existing internal notification to `support@kjahstudio.com`.
+- **`app/api/contact/route.js` — pipeline auto-create.** Form submissions also insert a `cold_lead` prospect into the Prospect Pipeline Supabase `prospects` table (tagged `inbound`, source `website`), deduplicated by email. All three operations fire in parallel via `Promise.all`. Failures log to Vercel function logs.
+- **New env vars (Vercel):** `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_OWNER_USER_ID` — required for the pipeline insert. `RESEND_API_KEY` still required for email.
+
+---
+
 ## [1.9.1] — 2026-06-04
 
 ### Hardened — Coming Soon lockdown

@@ -38,7 +38,10 @@ components/
   Testimonials/   — review cards
   CTA/            — call-to-action with booking + email buttons
   Footer/
-  BookingModal/   — Calendly iframe modal (kjahstudio-support/30min)
+  BookingModal/   — contact form modal (name/email/message) → POST /api/contact
+  api/
+    contact/route.js — sends notification + auto-reply emails (Resend) and
+                       auto-creates an inbound prospect in the Prospect Pipeline
   ui/
     Cursor.jsx        — custom cursor (hidden on touch devices)
     DotGrid.jsx       — canvas dot grid background (fixed, z-index 0)
