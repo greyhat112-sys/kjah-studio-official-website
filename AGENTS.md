@@ -8,47 +8,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
-## ⚠️ Site is currently in Coming Soon mode (v1.9.1)
-`middleware.js` redirects every public route to `/coming-soon` and emits strict no-cache headers (`Cache-Control: no-store, no-cache, must-revalidate`, `CDN-Cache-Control: no-store`, `Vercel-CDN-Cache-Control: no-store`, `Pragma: no-cache`, `Expires: 0`) so neither browsers nor the Vercel edge cache can serve a stale main-site response.
-- **Lockdown stack:**
-  - `middleware.js` — 307 redirect to `/coming-soon` for every public path (matcher excludes `/api/*`, `/_next/*`, `/assets/*`, opengraph-image, and dotted file paths).
-  - `app/sitemap.js` — returns `[]` (no URLs advertised).
-  - `app/robots.js` — `Disallow: /` for all bots, sitemap reference dropped.
-  - `app/coming-soon/page.js` — `metadata.robots: { index: false, follow: false }`.
-- **The full marketing site (`app/page.js` + all section components) is untouched.** Deleting `middleware.js` restores public access immediately.
+## Site is LIVE (launched v1.9.1)
+`middleware.js` has been deleted. The full marketing site is publicly accessible at kjahstudio.com. `app/sitemap.js` and `app/robots.js` are restored to their live state (Allow: /, sitemap URL advertised).
 
-### Launch checklist (do this when ready to go live)
-1. **Delete the middleware:** `rm middleware.js`
-2. **Restore `app/sitemap.js`** to exactly this:
-   ```js
-   export default function sitemap() {
-     return [
-       {
-         url: 'https://kjahstudio.com',
-         lastModified: new Date(),
-         changeFrequency: 'weekly',
-         priority: 1,
-       },
-     ];
-   }
-   ```
-3. **Restore `app/robots.js`** to exactly this:
-   ```js
-   export default function robots() {
-     return {
-       rules: [{ userAgent: '*', allow: '/' }],
-       sitemap: 'https://kjahstudio.com/sitemap.xml',
-     };
-   }
-   ```
-4. **Commit and push:**
-   ```
-   git add -A
-   git commit -m "chore: launch — disable coming-soon mode"
-   git push origin master:main
-   ```
-5. **Verify on Vercel (~2 min after push):** `kjahstudio.com` loads the full site (no redirect), `/sitemap.xml` lists the URL, `/robots.txt` shows `Allow: /`.
-6. **Optional post-launch:** submit sitemap to Google Search Console; delete `app/coming-soon/` if not keeping the holding page.
+The `app/coming-soon/` holding page is still present in the codebase but is no longer reachable. Delete it when convenient.
+
+**Post-launch tasks remaining:**
+- Submit sitemap to Google Search Console: `kjahstudio.com/sitemap.xml`
+- Create Google Business Profile: business.google.com
+- List on Clutch.co + DesignRush for backlinks
 
 ## ⚠️ Critical — iOS Safari / mobile testing
 The Turbopack dev server (`npm run dev`) outputs modern JS syntax that iOS Safari's WebKit engine cannot parse. On real iOS devices, all JavaScript silently fails — `useEffect` never runs, state never updates, interactive features appear completely broken. Chrome DevTools mobile simulation is unaffected (V8 engine). **Always use `npm run build && npm start` when testing on a real device.**
@@ -78,7 +46,7 @@ components/
   Footer/         — logo + nav links
   BookingModal/   — contact form (name/email/message) in a full-screen overlay; submits to /api/contact
   api/
-    contact/route.js — POST handler; sends email to support@kjahstudio.com via Resend (RESEND_API_KEY env var)
+    contact/route.js — POST handler; sends notification to support@kjahstudio.com AND auto-reply to the submitter via Resend (RESEND_API_KEY env var)
   ui/
     Cursor.jsx          — custom cyan cursor with lagging ring (z-index 9999/9998)
     DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
@@ -122,7 +90,11 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 `contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The modal now renders a contact form (name / email / message) that POSTs to `/api/contact`. On success it shows a confirmation screen; on error it shows an inline message. Calendly has been removed entirely.
 
 ## Contact API route
-`app/api/contact/route.js` — Next.js App Router POST handler. Uses the `resend` npm package to send submissions to `support@kjahstudio.com`. `replyTo` is set to the sender's email. Requires `RESEND_API_KEY` environment variable (set in Vercel project settings). Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
+`app/api/contact/route.js` — Next.js App Router POST handler. Fires two Resend emails sequentially:
+1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body with name/email/message.
+2. **Auto-reply to submitter** → sender's email, branded dark HTML email ("We got your message. We typically respond within 24 hours."), sent immediately after form submission.
+
+Requires `RESEND_API_KEY` environment variable (set in Vercel project settings). Domain `kjahstudio.com` must be verified in Resend for `from: hello@kjahstudio.com` to work.
 
 ## DotGrid — how it works
 `components/ui/DotGrid.jsx` is a `position: fixed` canvas covering the full viewport. Physics are ported 1:1 from Google Stitch's production source:
