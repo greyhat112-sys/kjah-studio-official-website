@@ -33,7 +33,7 @@ components/
   Platforms/      — platform logo bar
   Services/       — 3-card service grid
   About/          — two-column about + team cards
-  Pricing/        — two-tier pricing
+  Pricing/        — tabbed pricing toggle (Web & Funnels / Graphic Design)
   Works/          — 18-card portfolio grid
   Testimonials/   — review cards
   CTA/            — call-to-action with booking + email buttons
@@ -73,3 +73,4 @@ public/
 - **DotGrid**: 60% opacity on desktop, 25% on mobile.
 - **Lenis**: smooth wheel scroll on desktop only (`smoothTouch: false`). Intercepts anchor clicks with `-72px` nav offset.
 - **Image optimization**: `next.config.mjs` serves AVIF/WebP. Always set `sizes` prop on `<Image>` components — without it Next.js defaults to the full `width` value regardless of display size.
+- **Pricing toggle**: `Pricing/` is a client component with a segmented toggle between **Web & Funnels** (one-time $1000/$2000) and **Graphic Design** (monthly $199/$249). Sliding pill is a CSS-only absolutely-positioned `.slider` — no `gap` on the toggle (breaks pill alignment), explicit `340px` desktop width (not `fit-content`). Graphic-design card copy is placeholder pending finalized content.

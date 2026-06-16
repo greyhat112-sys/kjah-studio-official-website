@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 
 ---
 
+## [2.2.0] — 2026-06-16
+
+### Added — Graphic Design pricing tier + tabbed Pricing toggle
+- **`components/Pricing/Pricing.jsx`** — converted to a client component (`'use client'` + `useState`) with a segmented toggle that swaps between two tabs:
+  - **Web & Funnels** (default) — existing one-time build tiers (Cyan $1000, Amber $2000), unchanged.
+  - **Graphic Design** — new monthly subscription tiers: **Essential $199/mo**, **Pro $249/mo**, with the same segmented-bar / feature-list card layout and an amber "Most Popular" badge on Pro.
+  - ⚠️ Graphic-design card content (active requests, turnaround, Pro extras) is **placeholder** pending finalized copy.
+- **All four "Get Started" buttons now call `openBooking()`** (were `<Link href="#contact">`) — consistent with every other CTA on the site.
+- **Sliding pill toggle** — absolutely-positioned `.slider` (`width: calc(50% - 4px)`) behind two `flex: 1` buttons; active tab applies `transform: translateX(100%)`. Explicit `340px` desktop width (not `fit-content`, which would make the differing-length labels unequal and misalign the pill); `width: 100%` / `max-width: 480px` on mobile.
+- **Mobile/touch hardening** — `:hover` wrapped in `@media (hover: hover)` (no latched highlight after tap); buttons set `-webkit-tap-highlight-color: transparent`, `touch-action: manipulation`, `user-select: none`.
+- **Card swap animation** — opacity-only `@keyframes pricingFade` re-runs on each tab mount (a `translateY` jittered against the section height change on mobile). `prefers-reduced-motion` disables both the pill transition and the fade.
+
+---
+
 ## [2.1.0] — 2026-06-16
 
 ### SEO — Google Search Console launch + "done-for-you" purge

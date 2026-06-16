@@ -45,7 +45,7 @@ components/
   Platforms/      — platform logo bar
   Services/       — 3-card service grid
   About/          — two-column about + glassmorphism team cards
-  Pricing/        — two-tier pricing with segmented progress bars
+  Pricing/        — tabbed pricing toggle (Web & Funnels / Graphic Design), segmented progress bars
   Works/          — 18-card works grid with hover overlay
   Testimonials/   — 5-card testimonial grid
   CTA/            — call-to-action; "Book a Free Call" opens BookingModal, email → support@kjahstudio.com
@@ -111,6 +111,20 @@ Required env vars in Vercel: `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUP
 - Perlin noise is added to displaced dots for organic jitter.
 - Dots shift colour toward `--kjah-cyan` / `--kjah-amber` near cursor.
 - Scroll is handled by a `scrollY % SPACING` phase offset on the viewport-space origin — do not store absolute page positions in dot state or lerp will break on scroll.
+
+## Pricing — tabbed toggle
+`components/Pricing/` is a **client component** (`'use client'` + `useState`) with a segmented toggle that swaps between two tabs:
+- **Web & Funnels** (default) — the original one-time build tiers: Cyan $1000, Amber $2000. Untouched.
+- **Graphic Design** — monthly subscription tiers: Essential $199/mo, Pro $249/mo.
+
+⚠️ The graphic-design card content (active requests, turnaround times, Pro extras) is **placeholder** pending finalized copy — do not treat those numbers as confirmed.
+
+Toggle mechanics (all CSS-driven, no layout libs):
+- The sliding pill is an absolutely-positioned `.slider` (`width: calc(50% - 4px)`) behind the two `flex: 1` buttons (buttons are `z-index: 1`, pill `z-index: 0`). Active tab applies `.sliderRight { transform: translateX(100%) }`. **Do not add `gap` to `.toggle`** — the pill math assumes no gap, and a gap reintroduces subpixel drift.
+- `.toggle` has an explicit `width: 340px` on desktop (NOT `fit-content` — the two labels differ in length, which would make the buttons unequal and misalign the 50% pill). Mobile drops to `width: 100%; max-width: 480px`.
+- `:hover` is wrapped in `@media (hover: hover)` so the highlight doesn't latch after a tap on touch devices. Buttons also set `-webkit-tap-highlight-color: transparent`, `touch-action: manipulation`, `user-select: none`.
+- Card grid fades in (`@keyframes pricingFade`, opacity-only) on each tab mount — the swap re-runs the animation because the conditional `&&` remounts the grid. Opacity-only is deliberate: a `translateY` jittered against the section's height change on mobile. `prefers-reduced-motion` disables both the pill transition and the fade.
+- All four "Get Started" buttons call `openBooking()` (were `<Link href="#contact">`).
 
 ## FAQ section
 `components/FAQ/` — 9-item accordion, one open at a time. Placed between Testimonials and CTA in `page.js`. Both Nav and Footer link to `#faq`. `.list` and `.item` require explicit `width: 100%` — flex children do not stretch by default. Do not add `max-width` back to `.list`.
