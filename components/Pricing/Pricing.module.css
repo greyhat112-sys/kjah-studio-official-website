@@ -5,7 +5,7 @@
   border: 1px solid var(--border-vis);
   border-radius: 999px;
   padding: 4px;
-  min-width: 300px;
+  width: 340px;
   margin: var(--sp-3xl) auto 0;
 }
 
@@ -40,9 +40,15 @@
   position: relative;
   z-index: 1;
   transition: color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.toggleBtn:hover { color: var(--text-pri); }
+@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text-pri); }
+}
 
 .toggleActive {
   color: #000 !important;
@@ -52,12 +58,12 @@
   display: grid; grid-template-columns: 1fr 1fr;
   gap: var(--sp-md); margin-top: var(--sp-xl);
   max-width: 860px; margin-inline: auto;
-  animation: pricingFade 0.35s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation: pricingFade 0.3s ease both;
 }
 
 @keyframes pricingFade {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .card {
@@ -137,7 +143,7 @@
 
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; max-width: 480px; gap: var(--sp-2xl); }
-  .toggle { width: 100%; max-width: 480px; min-width: unset; box-sizing: border-box; }
+  .toggle { width: 100%; max-width: 480px; }
 }
 
 @media (max-width: 540px) {
