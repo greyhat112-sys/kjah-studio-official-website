@@ -113,9 +113,13 @@
 
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; max-width: 480px; gap: var(--sp-2xl); }
+  .toggle { width: 100%; max-width: 480px; box-sizing: border-box; }
+  .toggleBtn { flex: 1; text-align: center; }
 }
 
 @media (max-width: 540px) {
   .card { padding: var(--sp-lg) var(--sp-md); }
   .grid { max-width: 100%; }
+  .toggle { max-width: 100%; }
+  .toggleBtn { padding: 8px 12px; font-size: 10px; }
 }
