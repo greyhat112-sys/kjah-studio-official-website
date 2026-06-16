@@ -26,6 +26,7 @@ export default function Pricing() {
         <p className="s-body">Flat-rate, all-inclusive. You get a fully built and configured digital system — not just a template.</p>
 
         <div className={styles.toggle}>
+          <div className={`${styles.slider} ${tab === 'graphic' ? styles.sliderRight : ''}`} />
           <button
             className={`${styles.toggleBtn} ${tab === 'web' ? styles.toggleActive : ''}`}
             onClick={() => setTab('web')}
