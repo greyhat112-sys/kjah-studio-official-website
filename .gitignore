@@ -51,3 +51,6 @@ next-env.d.ts
 !/OneDrive/Documents/harvey/KJAH
 /OneDrive/Documents/harvey/KJAH/*
 !/OneDrive/Documents/harvey/KJAH/prospect pipeline
+
+# Local Netlify folder
+.netlify

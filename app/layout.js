@@ -4,6 +4,7 @@ import DotGrid from '@/components/ui/DotGrid';
 import Grain from '@/components/ui/Grain';
 import { BookingProvider } from '@/contexts/BookingContext';
 import BookingModal from '@/components/BookingModal/BookingModal';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -128,6 +129,7 @@ export default function RootLayout({ children }) {
           </main>
           <Grain />
         </BookingProvider>
+        <GoogleAnalytics gaId="G-K134HQF9CV" />
       </body>
     </html>
   );
