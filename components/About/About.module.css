@@ -22,15 +22,15 @@
 .card {
   background: rgba(12, 12, 12, 0.97);
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: var(--sp-md);
+  border-radius: 12px; padding: var(--sp-lg) var(--sp-md);
   box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
-.portrait {
-  width: 100%; height: auto; aspect-ratio: 1/1;
-  object-fit: cover; object-position: top center;
-  border-radius: 6px; margin-bottom: var(--sp-sm);
-  display: block;
+.num {
+  font-family: 'Doto', monospace;
+  font-weight: 700; font-size: 40px; line-height: 1;
+  letter-spacing: 0.02em; color: var(--kjah-cyan);
+  margin-bottom: var(--sp-md);
 }
 
 .role {
@@ -57,5 +57,4 @@
   .teamGrid { grid-template-columns: 1fr 1fr; }
   .layout { margin-top: var(--sp-2xl); }
   .card { text-align: center; }
-  .portrait { margin-left: auto; margin-right: auto; }
 }

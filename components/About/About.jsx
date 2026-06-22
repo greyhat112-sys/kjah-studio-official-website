@@ -1,13 +1,12 @@
 'use client';
-import Image from 'next/image';
 import LightRays from '@/components/ui/LightRays';
 import styles from './About.module.css';
 
 const team = [
-  { portrait: '/assets/team/designer-2.png', role: 'Client Success', title: 'Project Manager', spec: 'Strategy · Delivery' },
-  { portrait: '/assets/team/designer-1.png', role: 'Design + Dev', title: 'Funnel Specialist', spec: 'UI · Funnels · Automation' },
-  { portrait: '/assets/team/designer-3.png', role: 'Design + Dev', title: 'Web Specialist', spec: 'UI · Websites · Automation' },
-  { portrait: '/assets/team/designer-4.png', role: 'Design + Dev', title: 'Automation Expert', spec: 'Backend · Integrations' },
+  { role: 'Client Success', title: 'Project Manager', spec: 'Strategy · Delivery' },
+  { role: 'Design + Dev', title: 'Funnel Specialist', spec: 'UI · Funnels · Automation' },
+  { role: 'Design + Dev', title: 'Web Specialist', spec: 'UI · Websites · Automation' },
+  { role: 'Design + Dev', title: 'Automation Expert', spec: 'Backend · Integrations' },
 ];
 
 export default function About() {
@@ -25,17 +24,9 @@ export default function About() {
           </div>
 
           <div className={styles.teamGrid}>
-            {team.map((m) => (
+            {team.map((m, i) => (
               <div key={m.title} className={styles.card}>
-                <Image
-                  src={m.portrait}
-                  alt={m.title}
-                  width={200}
-                  height={200}
-                  className={styles.portrait}
-                  loading="lazy"
-                  sizes="(max-width: 900px) 40vw, 160px"
-                />
+                <div className={styles.num}>{String(i + 1).padStart(2, '0')}</div>
                 <div className={styles.role}>{m.role}</div>
                 <div className={styles.title}>{m.title}</div>
                 <div className={styles.spec}>{m.spec}</div>
