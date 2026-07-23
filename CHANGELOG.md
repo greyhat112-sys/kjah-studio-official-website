@@ -13,7 +13,7 @@ All notable changes to this project are documented here.
 - **Copy / nav** — Nav CTA "Contact Us" → **"Book a Call"**; CTA heading/button → **"Book a Free Call"** + secondary **"Get a Free Audit"** (`#audit`). "Free Audit" link added to both Nav and Footer.
 - **Audit auto-reply rewritten** — the `type: 'audit'` confirmation email now reads as a genuine, personalized note: sets a **1–2 business day** expectation and explains the delay is a thorough, hands-on manual review (conversion/funnel, Core Web Vitals, mobile, SEO, design & trust signals) rather than an instant automated score. On-page success message updated to match.
 - **`app/api/contact/route.js` robustness** — moved `new Resend()` construction inside the `try` block (after validation). Previously a missing `RESEND_API_KEY` threw at the top of the handler and bypassed validation with an unhandled 500; now validation errors return proper 400s and send failures return the graceful 500 JSON.
-- **Social links** — Instagram + Facebook icons (inline SVG, `instagram.com/kjahstudio` / `facebook.com/kjahstudio`) added to the Footer; both added to the `ProfessionalService` JSON-LD `sameAs` array for entity SEO.
+- **Social links** — Instagram + Facebook icons (inline SVG, `instagram.com/kjahstudio` / `facebook.com/people/KJAH-Studio/61592219882233/`) added to the Footer; both added to the `ProfessionalService` JSON-LD `sameAs` array for entity SEO.
 
 ---
 

@@ -37,7 +37,7 @@ export default function Footer() {
           </li>
           <li>
             <a
-              href="https://facebook.com/kjahstudio"
+              href="https://www.facebook.com/people/KJAH-Studio/61592219882233/"
               className={styles.socialLink}
               target="_blank"
               rel="noopener noreferrer"

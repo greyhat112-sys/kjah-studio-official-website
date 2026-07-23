@@ -26,7 +26,7 @@ const jsonLd = {
   areaServed: 'Worldwide',
   sameAs: [
     'https://instagram.com/kjahstudio',
-    'https://facebook.com/kjahstudio',
+    'https://www.facebook.com/people/KJAH-Studio/61592219882233/',
   ],
   serviceType: ['Website Design', 'Sales Funnel', 'Marketing Automation', 'CRM Setup', 'Email Marketing'],
   hasOfferCatalog: {

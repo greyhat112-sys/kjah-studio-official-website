@@ -94,7 +94,7 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 - Submit sitemap to Google Search Console: `https://kjahstudio.com/sitemap.xml`.
 
 ## Social links
-Instagram (`instagram.com/kjahstudio`) + Facebook (`facebook.com/kjahstudio`) live in the **Footer only** as inline-SVG icons (Feather-style, `stroke: currentColor`, circular hover → cyan). They also appear in the `ProfessionalService` JSON-LD `sameAs` array in `app/page.js`. Only IG + FB exist so far — add new platforms to BOTH the Footer and `sameAs` together.
+Instagram (`instagram.com/kjahstudio`) + Facebook (`facebook.com/people/KJAH-Studio/61592219882233/`) live in the **Footer only** as inline-SVG icons (Feather-style, `stroke: currentColor`, circular hover → cyan). They also appear in the `ProfessionalService` JSON-LD `sameAs` array in `app/page.js`. Only IG + FB exist so far — add new platforms to BOTH the Footer and `sameAs` together.
 
 ## Booking modal — Calendly (calls) + Free Audit form (lead magnet)
 Two funnel entry points at different commitment levels:
