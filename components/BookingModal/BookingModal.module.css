@@ -79,6 +79,13 @@
   height: 100%;
   border: none;
   display: block;
+  /* Calendly free tier ignores dark-theme color params, so we fake dark mode
+     by inverting the (light) booking page. hue-rotate(180deg) keeps blues/cyans
+     roughly true instead of flipping to orange. Trade-off: the KJAH avatar and
+     any imagery render inverted. Remove this filter if the account upgrades to a
+     paid Calendly plan (then the color params do the theming natively). */
+  filter: invert(1) hue-rotate(180deg);
+  -webkit-filter: invert(1) hue-rotate(180deg);
 }
 
 @keyframes spin {

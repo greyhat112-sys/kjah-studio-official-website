@@ -4,6 +4,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## [2.3.1] — 2026-07-23
+
+### Booking modal — faux dark mode
+- **`components/BookingModal/`** — Calendly's free plan ignores the `background_color`/`text_color`/`primary_color` embed params (the booking page renders white) and won't let you remove the "Powered by Calendly" badge — both are paid features. Since the iframe is cross-origin (its internals can't be restyled), dark mode is now faked with `filter: invert(1) hue-rotate(180deg)` on `.frame` (the `hue-rotate` keeps blues/cyans roughly true). Dropped the dead color params from the iframe URL, leaving only `hide_gdpr_banner=1`.
+- **Known trade-offs:** the KJAH avatar + any imagery render inverted, and the badge is recolored rather than hidden. If the account upgrades to a paid Calendly plan, remove the filter and the color params work natively.
+
+---
+
 ## [2.3.0] — 2026-07-23
 
 ### Reverted — Calendly booking + added Free Website Audit lead magnet

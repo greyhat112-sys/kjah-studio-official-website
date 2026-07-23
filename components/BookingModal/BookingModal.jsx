@@ -40,7 +40,7 @@ export default function BookingModal() {
           </div>
         )}
         <iframe
-          src="https://calendly.com/kjahstudio-support/30min?background_color=000000&text_color=ffffff&primary_color=4ddff0&hide_gdpr_banner=1"
+          src="https://calendly.com/kjahstudio-support/30min?hide_gdpr_banner=1"
           title="Book a call with KJAH Studio"
           className={`${styles.frame} ${loaded ? styles.frameVisible : styles.frameHidden}`}
           frameBorder="0"
