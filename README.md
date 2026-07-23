@@ -39,7 +39,7 @@ components/
   Audit/          — "Free Website Audit" lead-magnet section (id="audit") →
                     inline form (name/email/website) → POST /api/contact (type:'audit')
   CTA/            — call-to-action: "Book a Free Call" + "Get a Free Audit" buttons
-  Footer/
+  Footer/         — logo, nav links, IG/FB social icons (inline SVG)
   BookingModal/   — Calendly booking iframe modal, opened via openBooking()
   api/
     contact/route.js — sends notification + auto-reply emails (Resend) and

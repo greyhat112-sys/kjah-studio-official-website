@@ -90,8 +90,11 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 - `app/layout.js` — full `metadata` export with `metadataBase`, OG, Twitter card, robots, canonical, keywords, icons, manifest, appleWebApp.
 - `app/opengraph-image.jsx` — edge-runtime branded OG image (1200×630).
 - `app/sitemap.js` / `app/robots.js` — auto-generate `/sitemap.xml` and `/robots.txt`.
-- `app/page.js` — `ProfessionalService` JSON-LD schema with offer catalog.
+- `app/page.js` — `ProfessionalService` JSON-LD schema with offer catalog + `sameAs` (Instagram + Facebook profiles) for entity SEO. Keep `sameAs` in sync with the Footer social links.
 - Submit sitemap to Google Search Console: `https://kjahstudio.com/sitemap.xml`.
+
+## Social links
+Instagram (`instagram.com/kjahstudio`) + Facebook (`facebook.com/kjahstudio`) live in the **Footer only** as inline-SVG icons (Feather-style, `stroke: currentColor`, circular hover → cyan). They also appear in the `ProfessionalService` JSON-LD `sameAs` array in `app/page.js`. Only IG + FB exist so far — add new platforms to BOTH the Footer and `sameAs` together.
 
 ## Booking modal — Calendly (calls) + Free Audit form (lead magnet)
 Two funnel entry points at different commitment levels:
@@ -103,7 +106,8 @@ Two funnel entry points at different commitment levels:
 ## Contact API route
 `app/api/contact/route.js` — Next.js App Router POST handler. Accepts `{ name, email, message, website, type }`. When `type === 'audit'`, `website` is required and `message` is optional; otherwise `message` is required. Fires three operations in parallel via `Promise.all`:
 1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body (includes the website URL for audits). Subject differs by type.
-2. **Auto-reply to submitter** → branded dark HTML email. Audit variant references the submitted URL + a 24–48h audit turnaround; generic variant is the 24hr response expectation.
+2. **Auto-reply to submitter** → branded dark HTML email. Audit variant is written to read as a genuine note: references the submitted URL, sets a **1–2 business day** expectation, and frames the wait as a thorough manual review (funnel, Core Web Vitals, mobile, SEO, trust signals) rather than an instant automated score. Generic variant is the 24hr response expectation. **Keep this copy in sync with the on-page success message in `Audit.jsx`.**
+   - `new Resend()` is constructed **inside** the `try` block, after validation — constructing it at the top of the handler throws on a missing `RESEND_API_KEY` and bypasses validation with an unhandled 500.
 3. **Pipeline insert** → Supabase `prospects` table via service role key. Creates a `cold_lead` with `source: website`, tagged `['inbound']` (generic) or `['inbound', 'audit-request']` (audit). Deduplicates by email — repeat submissions are skipped silently. Logs all failures to Vercel function logs.
    - Audit requests can be fulfilled semi-automatically with the `/prospect-audit` skill.
 
