@@ -16,7 +16,7 @@ export default function Footer() {
           <li><a href="#testimonials">Reviews</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#audit">Free Audit</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="mailto:support@kjahstudio.com">Contact</a></li>
         </ul>
 
         <ul className={styles.social}>

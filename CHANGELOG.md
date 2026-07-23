@@ -4,6 +4,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## [2.3.2] — 2026-07-23
+
+### Booking modal — drop the invert hack; footer Contact → mailto
+- **`components/BookingModal/BookingModal.module.css`** — removed the `filter: invert(1) hue-rotate(180deg)` hack from `.frame`. It made the calendar dark but inverted the KJAH avatar. The Calendly page now renders in its native light theme, framed by the dark modal chrome (`.modal`/`.backdrop` stay `#0a0a0a`). Native dark + badge removal require a paid Calendly plan (color params work only then); see AGENTS.md.
+- **`components/Footer/Footer.jsx`** — the footer "Contact" link changed from an `#contact` anchor to **`mailto:support@kjahstudio.com`**, so clicking it opens the visitor's email client addressed to support.
+
+---
+
 ## [2.3.1] — 2026-07-23
 
 ### Booking modal — faux dark mode
