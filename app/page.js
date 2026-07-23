@@ -7,6 +7,7 @@ import Pricing from '@/components/Pricing/Pricing';
 import Works from '@/components/Works/Works';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import FAQ from '@/components/FAQ/FAQ';
+import Audit from '@/components/Audit/Audit';
 import CTA from '@/components/CTA/CTA';
 import Footer from '@/components/Footer/Footer';
 
@@ -78,6 +79,7 @@ export default function Home() {
       <Works />
       <Testimonials />
       <FAQ />
+      <Audit />
       <CTA />
       <Footer />
     </>

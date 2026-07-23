@@ -36,12 +36,15 @@ components/
   Pricing/        — tabbed pricing toggle (Web & Funnels / Graphic Design)
   Works/          — 18-card portfolio grid
   Testimonials/   — review cards
-  CTA/            — call-to-action with booking + email buttons
+  Audit/          — "Free Website Audit" lead-magnet section (id="audit") →
+                    inline form (name/email/website) → POST /api/contact (type:'audit')
+  CTA/            — call-to-action: "Book a Free Call" + "Get a Free Audit" buttons
   Footer/
-  BookingModal/   — contact form modal (name/email/message) → POST /api/contact
+  BookingModal/   — Calendly booking iframe modal, opened via openBooking()
   api/
     contact/route.js — sends notification + auto-reply emails (Resend) and
                        auto-creates an inbound prospect in the Prospect Pipeline
+                       (handles both contact and audit-request submissions)
   ui/
     Cursor.jsx        — custom cursor (hidden on touch devices)
     DotGrid.jsx       — canvas dot grid background (fixed, z-index 0)

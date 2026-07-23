@@ -14,6 +14,7 @@ const links = [
   { href: '#works', label: 'Works' },
   { href: '#testimonials', label: 'Reviews' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#audit', label: 'Free Audit' },
 ];
 
 export default function Nav() {
@@ -73,7 +74,7 @@ export default function Nav() {
 
         <div className={styles.navRight}>
           <span className={styles.ctaWrap}>
-            <MagneticButton onClick={openBooking} className="btn-p">Contact Us</MagneticButton>
+            <MagneticButton onClick={openBooking} className="btn-p">Book a Call</MagneticButton>
           </span>
           {activeLabel && (
             <span className={styles.sectionLabel}>— {activeLabel}</span>

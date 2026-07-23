@@ -10,9 +10,10 @@ export default function CTA() {
       <div className="wrap">
         <p className="s-tag" style={{ display: 'block', textAlign: 'center' }}>— Ready to build?</p>
         <h2 className={styles.hl}>Let&apos;s build your<br />digital engine.</h2>
-        <p className={styles.sub}>Send us a message. We&apos;ll map out exactly what you need and how we&apos;ll build it — no commitment required.</p>
+        <p className={styles.sub}>Book a free call and we&apos;ll map out exactly what you need and how we&apos;ll build it — no commitment required.</p>
         <div className={styles.actions}>
-          <button onClick={openBooking} className="btn-p">Contact Us</button>
+          <button onClick={openBooking} className="btn-p">Book a Free Call</button>
+          <a href="#audit" className="btn-s">Get a Free Audit</a>
         </div>
       </div>
     </section>

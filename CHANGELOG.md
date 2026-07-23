@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ---
 
+## [2.3.0] — 2026-07-23
+
+### Reverted — Calendly booking + added Free Website Audit lead magnet
+- **`components/BookingModal/`** — reverted from the contact-form modal (v1.7.0) back to the **Calendly booking iframe** (`calendly.com/kjahstudio-support/30min`, cyan-themed). Loading spinner shows until `onLoad`, then the calendar fades in. Opened via `openBooking()` from the Nav CTA and CTA section.
+- **`components/Audit/` — new "Free Website Audit" section (`id="audit"`).** The primary lead magnet, placed between FAQ and CTA. Two-column layout (copy + perks / inline form). Form collects name, email, **website URL**, and an optional message, then POSTs to `/api/contact` with `type: 'audit'` and shows a success state. Casts a wider top-of-funnel net than "book a call" while still feeding the CRM.
+- **`app/api/contact/route.js`** — now accepts `{ name, email, message, website, type }`. For `type: 'audit'`, `website` is required / `message` optional; otherwise `message` is required. Internal notification + auto-reply copy branch on type (audit variant references the submitted URL and a 24–48h turnaround). Prospect insert tags audits `['inbound', 'audit-request']` (vs `['inbound']`), still deduped by email. **Lead capture into the pipeline was preserved** — the reverted calendar would have lost it.
+- **Copy / nav** — Nav CTA "Contact Us" → **"Book a Call"**; CTA heading/button → **"Book a Free Call"** + secondary **"Get a Free Audit"** (`#audit`). "Free Audit" link added to both Nav and Footer.
+
+---
+
 ## [2.2.0] — 2026-06-16
 
 ### Added — Graphic Design pricing tier + tabbed Pricing toggle

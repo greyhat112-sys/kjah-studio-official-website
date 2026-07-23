@@ -48,11 +48,12 @@ components/
   Pricing/        — tabbed pricing toggle (Web & Funnels / Graphic Design), segmented progress bars
   Works/          — 18-card works grid with hover overlay
   Testimonials/   — 5-card testimonial grid
-  CTA/            — call-to-action; "Book a Free Call" opens BookingModal, email → support@kjahstudio.com
+  Audit/          — "Free Website Audit" lead-magnet section (id="audit"): copy + perks, inline form (name/email/website/message) → /api/contact with type:'audit'
+  CTA/            — call-to-action; "Book a Free Call" opens BookingModal (Calendly), secondary "Get a Free Audit" → #audit
   Footer/         — logo + nav links
-  BookingModal/   — contact form (name/email/message) in a full-screen overlay; submits to /api/contact
+  BookingModal/   — Calendly booking iframe in a full-screen overlay (loading spinner → fade-in); opened via openBooking()
   api/
-    contact/route.js — POST handler; sends notification to support@kjahstudio.com AND auto-reply to the submitter via Resend (RESEND_API_KEY env var)
+    contact/route.js — POST handler; sends notification to support@kjahstudio.com AND auto-reply to the submitter via Resend (RESEND_API_KEY env var). Handles both generic contact and type:'audit' submissions.
   ui/
     Cursor.jsx          — custom cyan cursor with lagging ring (z-index 9999/9998)
     DotGrid.jsx         — canvas dot grid with Stitch-exact physics (z-index 0, fixed)
@@ -92,14 +93,19 @@ CSS-only: `scroll-behavior: smooth` on `html` in `globals.css`. `SmoothScroll.js
 - `app/page.js` — `ProfessionalService` JSON-LD schema with offer catalog.
 - Submit sitemap to Google Search Console: `https://kjahstudio.com/sitemap.xml`.
 
-## Booking modal / contact form
-`contexts/BookingContext.jsx` provides `openBooking` / `closeBooking` to any client component. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. Both the Nav CTA and CTA section button call `openBooking()`. The modal now renders a contact form (name / email / message) that POSTs to `/api/contact`. On success it shows a confirmation screen; on error it shows an inline message. Calendly has been removed entirely.
+## Booking modal — Calendly (calls) + Free Audit form (lead magnet)
+Two funnel entry points at different commitment levels:
+- **Book a Call → Calendly.** `contexts/BookingContext.jsx` provides `openBooking` / `closeBooking`. `BookingModal` lives in `app/layout.js` (outside `page-content`) so it overlays everything. It renders the Calendly booking iframe (`calendly.com/kjahstudio-support/30min`, cyan-themed) — a `.loader` spinner shows until `onLoad`, then the iframe fades in (`.frameHidden` → `.frameVisible`). Close button auto-focuses via `closeRef`; Esc + backdrop click close it. The **Nav CTA ("Book a Call")** and the **CTA section ("Book a Free Call")** both call `openBooking()`.
+- **Free Website Audit → form.** `components/Audit/` is a dedicated section (`id="audit"`, between FAQ and CTA) — the primary lead magnet. Left column: headline + perks; right column: inline form (name / email / **website URL** / optional message) that POSTs to `/api/contact` with `type: 'audit'`. Shows a success state on submit. Linked from Nav, Footer, and a secondary CTA button.
+
+⚠️ **Calendly was reverted (v2.3.0).** It had been replaced by a contact-form modal in v1.7.0; the calendar is back for bookings. The pipeline-feeding form lives on as the Free Audit section, so lead capture into the CRM was NOT lost.
 
 ## Contact API route
-`app/api/contact/route.js` — Next.js App Router POST handler. Fires three operations in parallel via `Promise.all`:
-1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body.
-2. **Auto-reply to submitter** → branded dark HTML email, 24hr response expectation.
-3. **Pipeline insert** → Supabase `prospects` table via service role key. Creates a `cold_lead` tagged `inbound` with `source: website`. Deduplicates by email — repeat submissions are skipped silently. Logs all failures to Vercel function logs.
+`app/api/contact/route.js` — Next.js App Router POST handler. Accepts `{ name, email, message, website, type }`. When `type === 'audit'`, `website` is required and `message` is optional; otherwise `message` is required. Fires three operations in parallel via `Promise.all`:
+1. **Internal notification** → `support@kjahstudio.com`, `replyTo` set to sender's email, plain text body (includes the website URL for audits). Subject differs by type.
+2. **Auto-reply to submitter** → branded dark HTML email. Audit variant references the submitted URL + a 24–48h audit turnaround; generic variant is the 24hr response expectation.
+3. **Pipeline insert** → Supabase `prospects` table via service role key. Creates a `cold_lead` with `source: website`, tagged `['inbound']` (generic) or `['inbound', 'audit-request']` (audit). Deduplicates by email — repeat submissions are skipped silently. Logs all failures to Vercel function logs.
+   - Audit requests can be fulfilled semi-automatically with the `/prospect-audit` skill.
 
 Required env vars in Vercel: `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_OWNER_USER_ID`. All confirmed working 2026-06-15.
 

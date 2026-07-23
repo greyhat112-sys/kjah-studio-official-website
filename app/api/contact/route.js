@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const SUPABASE_URL = 'https://jczwufibjejzxnrlyjdz.supabase.co';
 
-async function upsertProspect(name, email, message) {
+async function upsertProspect({ name, email, notes, tags }) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const userId = process.env.SUPABASE_OWNER_USER_ID;
   if (!key || !userId) {
@@ -33,10 +33,10 @@ async function upsertProspect(name, email, message) {
     body: JSON.stringify({
       title: name,
       email,
-      notes: `Inbound via website contact form:\n\n${message}`,
+      notes,
       stage: 'cold_lead',
       source: 'website',
-      tags: ['inbound'],
+      tags,
       user_id: userId,
     }),
   });
@@ -49,15 +49,63 @@ async function upsertProspect(name, email, message) {
 
 export async function POST(req) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const { name, email, message } = await req.json();
+  const { name, email, message, website, type } = await req.json();
 
-  if (!name?.trim() || !email?.trim() || !message?.trim()) {
+  const isAudit = type === 'audit';
+
+  if (!name?.trim() || !email?.trim()) {
+    return Response.json({ error: 'Name and email are required.' }, { status: 400 });
+  }
+  if (isAudit && !website?.trim()) {
+    return Response.json({ error: 'A website URL is required.' }, { status: 400 });
+  }
+  if (!isAudit && !message?.trim()) {
     return Response.json({ error: 'All fields are required.' }, { status: 400 });
   }
 
   const n = name.trim();
   const e = email.trim();
-  const m = message.trim();
+  const m = message?.trim() || '';
+  const w = website?.trim() || '';
+
+  // Internal notification content
+  const internalSubject = isAudit ? `New free audit request from ${n}` : `New message from ${n}`;
+  const internalText = [
+    `Name: ${n}`,
+    `Email: ${e}`,
+    w && `Website: ${w}`,
+    '',
+    m ? `Message:\n${m}` : (isAudit ? 'Message: (none — free audit request)' : ''),
+  ].filter((line) => line !== false && line !== null).join('\n');
+
+  // Prospect pipeline record
+  const notes = isAudit
+    ? `Free website audit request via website:\n\nWebsite: ${w}${m ? `\n\nMessage:\n${m}` : ''}`
+    : `Inbound via website contact form:\n\n${m}`;
+  const tags = isAudit ? ['inbound', 'audit-request'] : ['inbound'];
+
+  // Auto-reply content
+  const replySubject = isAudit ? 'Your free website audit is on the way' : 'We got your message — talk soon';
+  const replyText = isAudit
+    ? `Hey ${n},\n\nThanks for requesting a free website audit. We'll review ${w} and send over a personalized breakdown of what's working, what's costing you conversions, and the quickest wins — usually within 24-48 hours.\n\nWant to skip the wait? Book a free call at kjahstudio.com.\n\n— The KJAH Studio Team`
+    : `Hey ${n},\n\nThanks for reaching out. We've received your message and typically respond within 24 hours.\n\nIn the meantime, feel free to browse our work at kjahstudio.com.\n\n— The KJAH Studio Team`;
+  const replyHtml = isAudit
+    ? `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#0a0a0a;color:#e5e5e5;">
+  <p style="font-size:13px;letter-spacing:0.1em;color:#4DDFF0;text-transform:uppercase;margin:0 0 24px;">KJAH Studio</p>
+  <h1 style="font-size:22px;font-weight:600;margin:0 0 16px;color:#ffffff;">Your free audit is on the way.</h1>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 12px;">Hey ${n},</p>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 24px;">Thanks for requesting a free website audit. We'll review <strong style="color:#ffffff;">${w}</strong> and send over a personalized breakdown of what's working, what's costing you conversions, and the quickest wins — usually within <strong style="color:#ffffff;">24-48 hours</strong>.</p>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 32px;">Want to skip the wait? <a href="https://kjahstudio.com" style="color:#4DDFF0;text-decoration:none;">Book a free call</a>.</p>
+  <p style="font-size:14px;color:#525252;border-top:1px solid #1f1f1f;padding-top:20px;margin:0;">— The KJAH Studio Team</p>
+</div>`
+    : `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#0a0a0a;color:#e5e5e5;">
+  <p style="font-size:13px;letter-spacing:0.1em;color:#4DDFF0;text-transform:uppercase;margin:0 0 24px;">KJAH Studio</p>
+  <h1 style="font-size:22px;font-weight:600;margin:0 0 16px;color:#ffffff;">We got your message.</h1>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 12px;">Hey ${n},</p>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 24px;">Thanks for reaching out. We've received your message and typically respond within <strong style="color:#ffffff;">24 hours</strong>.</p>
+  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 32px;">In the meantime, feel free to browse our work at <a href="https://kjahstudio.com" style="color:#4DDFF0;text-decoration:none;">kjahstudio.com</a>.</p>
+  <p style="font-size:14px;color:#525252;border-top:1px solid #1f1f1f;padding-top:20px;margin:0;">— The KJAH Studio Team</p>
+</div>`;
 
   try {
     await Promise.all([
@@ -65,24 +113,17 @@ export async function POST(req) {
         from: 'KJAH Studio <hello@kjahstudio.com>',
         to: 'support@kjahstudio.com',
         replyTo: e,
-        subject: `New message from ${n}`,
-        text: `Name: ${n}\nEmail: ${e}\n\nMessage:\n${m}`,
+        subject: internalSubject,
+        text: internalText,
       }),
       resend.emails.send({
         from: 'KJAH Studio <hello@kjahstudio.com>',
         to: e,
-        subject: "We got your message — talk soon",
-        text: `Hey ${n},\n\nThanks for reaching out. We've received your message and typically respond within 24 hours.\n\nIn the meantime, feel free to browse our work at kjahstudio.com.\n\n— The KJAH Studio Team`,
-        html: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#0a0a0a;color:#e5e5e5;">
-  <p style="font-size:13px;letter-spacing:0.1em;color:#4DDFF0;text-transform:uppercase;margin:0 0 24px;">KJAH Studio</p>
-  <h1 style="font-size:22px;font-weight:600;margin:0 0 16px;color:#ffffff;">We got your message.</h1>
-  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 12px;">Hey ${n},</p>
-  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 24px;">Thanks for reaching out. We've received your message and typically respond within <strong style="color:#ffffff;">24 hours</strong>.</p>
-  <p style="font-size:15px;line-height:1.6;color:#a3a3a3;margin:0 0 32px;">In the meantime, feel free to browse our work at <a href="https://kjahstudio.com" style="color:#4DDFF0;text-decoration:none;">kjahstudio.com</a>.</p>
-  <p style="font-size:14px;color:#525252;border-top:1px solid #1f1f1f;padding-top:20px;margin:0;">— The KJAH Studio Team</p>
-</div>`,
+        subject: replySubject,
+        text: replyText,
+        html: replyHtml,
       }),
-      upsertProspect(n, e, m),
+      upsertProspect({ name: n, email: e, notes, tags }),
     ]);
 
     return Response.json({ success: true });

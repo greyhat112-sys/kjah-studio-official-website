@@ -1,6 +1,6 @@
 {
   "name": "kjah-studio",
-  "version": "1.6.1",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
