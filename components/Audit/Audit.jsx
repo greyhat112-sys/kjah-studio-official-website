@@ -60,7 +60,7 @@ export default function Audit() {
             <div className={styles.success}>
               <span className={styles.successIcon}>✓</span>
               <p className={styles.successTitle}>Audit requested.</p>
-              <p className={styles.successSub}>Check your inbox — we&rsquo;ll send your breakdown within 24&ndash;48 hours.</p>
+              <p className={styles.successSub}>Check your inbox for a confirmation. We manually review every site, so your breakdown lands within 1&ndash;2 business days.</p>
             </div>
           ) : (
             <form className={styles.form} onSubmit={handleSubmit} noValidate>

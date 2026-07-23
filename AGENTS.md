@@ -50,7 +50,7 @@ components/
   Testimonials/   — 5-card testimonial grid
   Audit/          — "Free Website Audit" lead-magnet section (id="audit"): copy + perks, inline form (name/email/website/message) → /api/contact with type:'audit'
   CTA/            — call-to-action; "Book a Free Call" opens BookingModal (Calendly), secondary "Get a Free Audit" → #audit
-  Footer/         — logo + nav links
+  Footer/         — logo + nav links + IG/FB social icons (inline SVG)
   BookingModal/   — Calendly booking iframe in a full-screen overlay (loading spinner → fade-in); opened via openBooking()
   api/
     contact/route.js — POST handler; sends notification to support@kjahstudio.com AND auto-reply to the submitter via Resend (RESEND_API_KEY env var). Handles both generic contact and type:'audit' submissions.

@@ -24,6 +24,10 @@ const jsonLd = {
   email: 'support@kjahstudio.com',
   priceRange: '$$$',
   areaServed: 'Worldwide',
+  sameAs: [
+    'https://instagram.com/kjahstudio',
+    'https://facebook.com/kjahstudio',
+  ],
   serviceType: ['Website Design', 'Sales Funnel', 'Marketing Automation', 'CRM Setup', 'Email Marketing'],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
