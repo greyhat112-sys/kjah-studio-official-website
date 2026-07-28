@@ -8,10 +8,18 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
-## Site is LIVE
-`middleware.js` has been deleted. The full marketing site is publicly accessible at kjahstudio.com. `app/sitemap.js` and `app/robots.js` are restored to their live state (Allow: /, sitemap URL advertised).
+## ⚠️ Site is TEMPORARILY OFFLINE (maintenance mode, since 2026-07-28)
+`proxy.js` in the project root 307-redirects every page route to `/coming-soon`. **To bring the site back online: delete `proxy.js` and redeploy.** That is the only step — nothing else was changed.
 
-The `app/coming-soon/` holding page is still present in the codebase but is no longer reachable. Delete it when convenient.
+Note the file name: Next 16 renamed the `middleware` file convention to **`proxy`**, and the exported function must be named `proxy` (or be the default export). A file named `middleware.js` is silently ignored in Next 16. See `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md`.
+
+Deliberately left alone so the SEO work survives a short pause:
+- `app/robots.js` still says **Allow: /** and `app/sitemap.js` still advertises the homepage. Do NOT flip robots to `disallow: /` for a short maintenance window — that blocks crawling outright and risks deindexing. `app/coming-soon/page.js` already exports `robots: { index: false, follow: false }`, so the holding page itself won't be indexed.
+- The redirect is **307 (temporary)**, not 308/301 — it signals to Google that the real page still owns the URL. If the pause stretches past ~2 weeks, revisit: that's when a `disallow` + longer-term holding strategy starts to make more sense than a 307.
+
+`/api/*` is excluded from the matcher, so the contact + audit form endpoint stays live and keeps feeding the pipeline while the site is dark. Static assets, `robots.txt`, `sitemap.xml`, `manifest.json`, and `opengraph-image` are excluded too. All responses carry `no-store` CDN headers so Vercel's edge doesn't cache the redirect (or a stale live page) past the window.
+
+The `app/coming-soon/` holding page is in active use again — do not delete it.
 
 **SEO status (as of 2026-06-16):**
 - Google Search Console: verified via `metadata.verification.google` in `layout.js`. Sitemap submitted, homepage indexed (live in Google results). GSC may show a cosmetic "couldn't fetch" on the sitemap for 24–48h — ignore it, the page is indexed.
