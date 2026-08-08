@@ -42,9 +42,6 @@ next-env.d.ts
 
 # Ignore everything outside the project folder
 /*
-# ...but proxy.js is a real project file (Next 16 maintenance-mode redirect).
-# It's new rather than pre-tracked, so the /* rule above would swallow it.
-!/proxy.js
 !/OneDrive
 /OneDrive/*
 !/OneDrive/Documents

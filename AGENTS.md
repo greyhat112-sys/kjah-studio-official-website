@@ -8,18 +8,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # KJAH Studio — Codebase Notes for Agents
 
-## ⚠️ Site is TEMPORARILY OFFLINE (maintenance mode, since 2026-07-28)
-`proxy.js` in the project root 307-redirects every page route to `/coming-soon`. **To bring the site back online: delete `proxy.js` and redeploy.** That is the only step — nothing else was changed.
+## Site is LIVE (maintenance mode lifted 2026-08-08)
+`proxy.js` has been deleted, ending the 307 redirect to `/coming-soon`. The full marketing site is publicly accessible at kjahstudio.com. `app/sitemap.js` and `app/robots.js` were never changed for the pause and remain in their live state (Allow: /, sitemap URL advertised).
 
-Note the file name: Next 16 renamed the `middleware` file convention to **`proxy`**, and the exported function must be named `proxy` (or be the default export). A file named `middleware.js` is silently ignored in Next 16. See `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md`.
+The `app/coming-soon/` holding page is still present in the codebase but is no longer reachable. **Keep it** — it is the holding page any future maintenance window redirects to.
 
-Deliberately left alone so the SEO work survives a short pause:
-- `app/robots.js` still says **Allow: /** and `app/sitemap.js` still advertises the homepage. Do NOT flip robots to `disallow: /` for a short maintenance window — that blocks crawling outright and risks deindexing. `app/coming-soon/page.js` already exports `robots: { index: false, follow: false }`, so the holding page itself won't be indexed.
-- The redirect is **307 (temporary)**, not 308/301 — it signals to Google that the real page still owns the URL. If the pause stretches past ~2 weeks, revisit: that's when a `disallow` + longer-term holding strategy starts to make more sense than a 307.
-
-`/api/*` is excluded from the matcher, so the contact + audit form endpoint stays live and keeps feeding the pipeline while the site is dark. Static assets, `robots.txt`, `sitemap.xml`, `manifest.json`, and `opengraph-image` are excluded too. All responses carry `no-store` CDN headers so Vercel's edge doesn't cache the redirect (or a stale live page) past the window.
-
-The `app/coming-soon/` holding page is in active use again — do not delete it.
+To re-enter maintenance mode: restore `proxy.js` at the project root (see commit `f6c3b52`) and re-add the `!/proxy.js` negation to `.gitignore` — the root `/*` rule swallows it otherwise. Note that Next 16 renamed the `middleware` file convention to **`proxy`**; a file named `middleware.js` is silently ignored, and the exported function must be named `proxy` (or be the default export).
 
 **SEO status (as of 2026-06-16):**
 - Google Search Console: verified via `metadata.verification.google` in `layout.js`. Sitemap submitted, homepage indexed (live in Google results). GSC may show a cosmetic "couldn't fetch" on the sitemap for 24–48h — ignore it, the page is indexed.
@@ -75,7 +69,7 @@ components/
     TerminalTile.jsx    — typewriter terminal tile for the hero 2×3 grid (Blackbox-style)
     SmoothScroll.jsx    — Lenis smooth scroll init (desktop wheel only, smoothTouch: false)
 app/
-  coming-soon/page.js — holding page served while middleware.js is in place
+  coming-soon/page.js — holding page served while proxy.js is in place (currently absent)
 app/
   opengraph-image.jsx — edge-runtime ImageResponse, 1200×630 branded OG image
   sitemap.js          — generates /sitemap.xml (kjahstudio.com, weekly)
